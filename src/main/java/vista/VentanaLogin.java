@@ -58,6 +58,14 @@ public class VentanaLogin {
 	}
 	
 	/**
+	 * 
+	 */
+	public void show() {
+		frameLogin.setLocationRelativeTo(null);
+		frameLogin.setVisible(true);
+	}
+	
+	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
@@ -88,7 +96,7 @@ public class VentanaLogin {
 		panelCentral.add(imagenAppChat, gbc_imagenAppChat);
 		
 		JLabel etiquetaTelefono = new JLabel("Teléfono");
-		etiquetaTelefono.setFont(new Font("Georgia Pro", Font.BOLD, 12));
+		etiquetaTelefono.setFont(new Font("Georgia", Font.BOLD, 12));
 		etiquetaTelefono.setHorizontalAlignment(SwingConstants.TRAILING);
 		GridBagConstraints gbc_etiquetaTelefono = new GridBagConstraints();
 		gbc_etiquetaTelefono.anchor = GridBagConstraints.EAST;
