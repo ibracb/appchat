@@ -306,7 +306,7 @@ public class Usuario implements Comparable<Usuario>{
 	 * Actualización de descuento, dependiendo de ciertas condiciones.
 	 */
 	public void updateDescuento() {
-		this.descuento = FactoriaDescuentos.createDescuento(this);
+		this.descuento = FactoriaDescuentos.getInstance().createDescuento(this);
 	}
 	
 	/**
