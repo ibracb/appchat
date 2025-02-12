@@ -235,7 +235,8 @@ public class VentanaRegistro {
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setMinimumSize(new Dimension(170, 170));
 		lblNewLabel.setMaximumSize(new Dimension(200, 200));
-		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\maria\\OneDrive\\Escritorio\\UNI\\3 Carrera\\1 Cuatrimestre\\TDS\\ProjectoTDS\\AppChat\\imagenes\\appchatLogoGrande3.PNG"));
+		ImageIcon imagen = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\appchatLogoGrande3.PNG").getImage());
+		lblNewLabel.setIcon(imagen);
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 5;

@@ -87,7 +87,8 @@ public class VentanaLogin {
 		
 		JLabel imagenAppChat = new JLabel("");
 		imagenAppChat.setMaximumSize(new Dimension(200, 200));
-		imagenAppChat.setIcon(new ImageIcon("C:\\Users\\maria\\OneDrive\\Escritorio\\UNI\\3 Carrera\\1 Cuatrimestre\\TDS\\ProjectoTDS\\AppChat\\imagenes\\appchatLogoGrande3.PNG"));
+		ImageIcon imagenLogo = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\appchatLogoGrande3.PNG").getImage());
+		imagenAppChat.setIcon(imagenLogo);
 		GridBagConstraints gbc_imagenAppChat = new GridBagConstraints();
 		gbc_imagenAppChat.gridwidth = 5;
 		gbc_imagenAppChat.insets = new Insets(10, 10, 10, 10);

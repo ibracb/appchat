@@ -83,12 +83,14 @@ public class VentanaPrincipal {
 		JMenuItem MContactos = new JMenuItem("Contactos");
 		MContactos.setFont(new Font("Georgia", Font.BOLD, 12));
 		MContactos.setMaximumSize(new Dimension(128, 128));
-		MContactos.setIcon(new ImageIcon("C:\\Users\\maria\\OneDrive\\Escritorio\\UNI\\3 Carrera\\1 Cuatrimestre\\TDS\\ProjectoTDS\\AppChat\\imagenes\\login.png"));
+		ImageIcon imagenPerfil = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\login.png").getImage());
+		MContactos.setIcon(imagenPerfil);
 		menuBar.add(MContactos);
 		
 		JMenuItem MBuscar = new JMenuItem("Buscar");
 		MBuscar.setFont(new Font("Georgia", Font.BOLD, 12));
-		MBuscar.setIcon(new ImageIcon("C:\\Users\\maria\\OneDrive\\Escritorio\\UNI\\3 Carrera\\1 Cuatrimestre\\TDS\\ProjectoTDS\\AppChat\\imagenes\\buscar.png"));
+		ImageIcon imagenBuscar = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\buscar.png").getImage());
+		MBuscar.setIcon(imagenBuscar);
 		MBuscar.setMaximumSize(new Dimension(128, 128));
 		menuBar.add(MBuscar);
 		
@@ -96,7 +98,8 @@ public class VentanaPrincipal {
 		MPremium.setFont(new Font("Georgia", Font.BOLD, 12));
 		MPremium.setMaximumSize(new Dimension(128, 128));
 		MPremium.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		MPremium.setIcon(new ImageIcon("C:\\Users\\maria\\OneDrive\\Escritorio\\UNI\\3 Carrera\\1 Cuatrimestre\\TDS\\ProjectoTDS\\AppChat\\imagenes\\premiumTick.png"));
+		ImageIcon imagenPremium = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\premiumTick.png").getImage());
+		MPremium.setIcon(imagenPremium);
 		MPremium.setActionCommand("MPremium");
 		menuBar.add(MPremium);
 		
