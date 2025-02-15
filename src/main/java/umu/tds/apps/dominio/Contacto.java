@@ -1,12 +1,9 @@
 package umu.tds.apps.dominio;
 
-import java.time.Month;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 import umu.tds.apps.utils.Utils;
 
 /**
@@ -27,7 +24,7 @@ public class Contacto implements Comparable<Contacto> {
 	/**
 	 * Usuario que crea el contacto.
 	 */
-	private final Usuario usuario;
+	private Usuario usuario;
 	
 	/**
 	 * Mensajes intercambiados entre el usuario y el contacto.
@@ -64,50 +61,11 @@ public class Contacto implements Comparable<Contacto> {
 	}
 	
 	/**
-	 * Filtra los mensajes intercambiados con el usuario, según un texto
-	 * @param texto - El texto a contener
-	 * @return los mensajes que contengan el texto.
+	 * Añade un mensaje a la lista de mensajes intercambiados entre usuario y contacto.
+	 * @param mensaje - El mensaje a añadir
 	 */
-	public Set<Mensaje> getMensajesPorTexto(String texto) {
-		return mensajes.stream()
-				.filter(mensaje -> mensaje.getTexto().contains(texto))
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Dado un número de teléfono móvil, devuelve los mensajes en los que el emisor o el receptor coincide con ese mismo teléfono móvil.
-	 * @param movil - El teléfono móvil , ya sea emisor o receptor, a coincidir.
-	 * @return los mensajes con algún participante con el número de teléfono móvil introducido como argumento.
-	 */
-	public Set<Mensaje> getMensajesPorMovil(String movil) {
-		return mensajes.stream()
-				.filter(mensaje -> mensaje.getEmisor().equals(movil) || mensaje.getReceptor().equals(movil))
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Dada una fecha, devuelve los mensajes que el contacto intercambió con el usuario en esa misma fecha.
-	 * @param dia - Día del mes con el que se quieren filtrar los mensajes.
-	 * @param mes - Mes del año con el que se quieren filtrar los mensajes.
-	 * @param año - Año con el que se quieren filtrar los mensajes.
-	 * @return los mensajes con la fecha de envío coincidente con los argumentos.
-	 */
-	public Set<Mensaje> getMensajesPorFecha(int dia, Month mes, int año) {
-		return mensajes.stream()
-				.filter(mensaje -> mensaje.getMomentoEnvio().getDayOfYear()==dia && mensaje.getMomentoEnvio().getMonth().equals(mes)
-					&& mensaje.getMomentoEnvio().getYear()==año)
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Devuelve los mensajes que el usuario envió al contacto en el mes actual.
-	 * @return los mensajes enviados en forma de colección.
-	 */
-	public int getSubTotalMensajesEnviadosUltimoMes() {
-		return (int) mensajes.stream()
-				.filter(mensaje -> mensaje.getMomentoEnvio().getMonth().equals(Utils.FECHA_ACTUAL.getMonth())
-						&& mensaje.getMomentoEnvio().getYear()==Utils.FECHA_ACTUAL.getYear() && mensaje.getTipo().equals(TipoMensaje.ENVIADO))
-				.count();	
+	public void addMensaje(Mensaje mensaje) {
+		mensajes.add(mensaje);
 	}
 	
 	/**
@@ -151,6 +109,14 @@ public class Contacto implements Comparable<Contacto> {
 	}
 	
 	/**
+	 * Establece un usuario al contacto.
+	 * @param usuario - usuario a asociar al contacto.
+	 */
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
+	/**
 	 * Devuelve los mensajes que el usuario ha intercambiado con el contacto.
 	 * @return los mensajes intercambiados.
 	 */
@@ -158,6 +124,14 @@ public class Contacto implements Comparable<Contacto> {
 		return Collections.unmodifiableSet(mensajes);
 	}
 	
+	/**
+	 * Establece una determinada colección de mensajes al contacto, intercambiados con el usuario.
+	 * @param mensajes - Colección de mensajes a asociar al contacto.
+	 */
+	public void setMensajes(Set<Mensaje> mensajes) {
+		this.mensajes = mensajes;
+	}
+
 	@Override
 	public int compareTo(Contacto o) {
 		return this.getNombre().compareTo(o.getNombre());

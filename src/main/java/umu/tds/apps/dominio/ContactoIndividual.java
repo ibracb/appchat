@@ -10,7 +10,7 @@ public class ContactoIndividual extends Contacto {
 	/**
 	 * Número de teléfono móvil del contacto.
 	 */
-	private final String movil;
+	private String movil;
 	
 	/**
 	 * Contructor de un contacto individual.
@@ -41,11 +41,19 @@ public class ContactoIndividual extends Contacto {
 	}
 	
 	/**
-	 * Devuelve el número de teléfono móvil del contacto. 
-	 * @return
+	 * Devuelve el número de teléfono móvil del contacto individual. 
+	 * @return el movil del contacto individual.
 	 */
 	public String getMovil() {
 		return movil;
+	}
+	
+	/**
+	 * Establece un número de teléfono móvil al contacto individual.
+	 * @param movil - Móvil a asociar al contacto individual.
+	 */
+	public void setMovil(String movil) {
+		this.movil = movil;
 	}
 	
 }

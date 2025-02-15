@@ -1,14 +1,11 @@
 package umu.tds.apps.dominio;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 import umu.tds.apps.dominio.descuentos.Descuento;
 import umu.tds.apps.dominio.descuentos.FactoriaDescuentos;
 import umu.tds.apps.utils.Utils;
@@ -16,7 +13,7 @@ import umu.tds.apps.utils.Utils;
 /**
  * Clase que representa a un usuario de AppChat.
  */
-public class Usuario implements Comparable<Usuario>{
+public class Usuario {
 	
 	/**
 	 * Identificador asociado a un usuario.
@@ -173,64 +170,6 @@ public class Usuario implements Comparable<Usuario>{
 	}
 	
 	/**
-	 * El usuario busca aquellos mensajes que contienen un texto.
-	 * @param texto - El texto a encontrar.
-	 * @return la colección de mensajes que contienen el texto.
-	 */
-	public Set<Mensaje> searchMensajesPorTexto(String texto) {
-		return contactos.stream()
-				.flatMap(contacto -> contacto.getMensajesPorTexto(texto).stream())
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * El usuario busca aquellos mensajes cuyo emisor o receptor es un contacto con el nombre pasado como asrgumento.
-	 * @param nombre - El nombre de contacto con el que filtrar.
-	 * @return los mensajes con ese nombre de contacto.
-	 */
-	public Set<Mensaje> searchMensajesPorNombreContacto(String nombre) {
-		return contactos.stream()
-				.filter(contacto -> contacto.getNombre().equals(nombre))
-				.flatMap(contacto -> contacto.getMensajes().stream())
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * El usuario busca aquellos mensaje donde el emisor o el receptor tiene un determinado número de teléfono móvil.
-	 * @param movil - El teléfono móvil con el que filtrar.
-	 * @return los mensajes donde el emisor o receptor tiene el número indicado.
-	 */
-	public Set<Mensaje> searchMensajesPorMovil(String movil) {
-		return contactos.stream()
-				.flatMap(contacto -> contacto.getMensajesPorMovil(movil).stream())
-				.collect(Collectors.toCollection(TreeSet::new));
-				
-	}
-	
-	/**
-	 * El usuario busca todos aquellos mensajes en los que se cumple una determinada fecha.
-	 * @param dia - El día del mes a filtrar.
-	 * @param mes - El mes del año a filtrar.
-	 * @param año - El año a filtrar.
-	 * @return la colección de mensajes comprendida en esa fecha.
-	 */
-	public Set<Mensaje> searchMensajesPorFecha(int dia, Month mes, int año) {
-		return contactos.stream()
-				.flatMap(contacto -> contacto.getMensajesPorFecha(dia, mes, año).stream())
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Devuelve cuántos mensajes el usuarió envió en el mes actual.
-	 * @return el total de mensajes enviados en el mes actual.
-	 */
-	public int getTotalMensajesEnviadosUltimoMes() {
-		return contactos.stream()
-				.map(contacto -> contacto.getSubTotalMensajesEnviadosUltimoMes())
-				.reduce(0, Integer::sum);
-	}
-	
-	/**
 	 * Devuelve el id asociado al usuario
 	 * @return el id.
 	 */
@@ -363,12 +302,6 @@ public class Usuario implements Comparable<Usuario>{
 	 */
 	public Set<Contacto> getContactos() {
 		return Collections.unmodifiableSet(contactos);
-	}
-	
-	
-	@Override
-	public int compareTo(Usuario o) {
-		return this.getMovil().compareTo(o.getMovil());
 	}
 	
 }

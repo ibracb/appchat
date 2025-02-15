@@ -3,6 +3,7 @@ package umu.tds.apps.persistencia;
 import java.util.Set;
 
 import umu.tds.apps.dominio.Mensaje;
+import umu.tds.apps.dominio.Usuario;
 
 /**
  * Interfaz para el manejo de la persistencia de los mensajes de AppChat.
@@ -22,8 +23,8 @@ public interface MensajeDAO {
 	void delete(Mensaje mensaje);
 	
 	/**
-	 * 
-	 * @param mensaje
+	 * Método para modificar un mensaje del sistema.
+	 * @param usuario - Mensaje a modificar.
 	 */
 	void update(Mensaje mensaje);
 	
