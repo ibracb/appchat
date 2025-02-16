@@ -25,7 +25,7 @@ public class Utils {
 	 * @param archivoImagen
 	 * @return
 	 */
-	public static String getRutaResourceFromFile(File archivoImagen) {	//Lo cogí de recursos de AV, pero de momento no sé usarlo para lo de las imágnes
+	public static String getRutaResourceFromFile(File archivoImagen) {	//Lo cogí de recursos de AV, pero de momento veremos si usarlo o no
 		// Define la ruta base del proyecto que debe apuntar a "src/main/resources"
 		Path rutaBase = Paths.get("src/main/resources").toAbsolutePath();
 
@@ -44,7 +44,7 @@ public class Utils {
 	 * @param source
 	 * @return
 	 */
-	public static String getRutaResourceFromString (String source) {	//Lo cogí de recursos de AV, pero de momento no sé usarlo para lo de las imágnes
+	public static String getRutaResourceFromString (String source) {	//Lo cogí de recursos de AV, pero de momento veremos si usarlo o no
 		String target = "";
 		if (source.contains("src\\main\\resources\\")) {
 			target = source.substring(source.indexOf("src\\main\\resources\\") + "src\\main\\resources\\".length());

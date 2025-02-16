@@ -1,5 +1,6 @@
 package umu.tds.apps.dominio.descuentos;
 
+import umu.tds.apps.dominio.RepositorioUsuarios;
 import umu.tds.apps.dominio.Usuario;
 
 /**
@@ -24,12 +25,12 @@ public class DescuentoPorMensaje implements Descuento {
 	
 	@Override
 	public boolean isAplicable(Usuario usuario) {
-		return usuario.getTotalMensajesEnviadosUltimoMes() >= NUM_MENSAJES_DESCUENTO_FIJO;
+		return RepositorioUsuarios.getInstance().getTotalMensajesEnviadosUltimoMes(usuario) >= NUM_MENSAJES_DESCUENTO_FIJO;
 	}
 	
 	@Override
 	public int getNumDescuentosAdicionales(Usuario usuario) {
-		return (usuario.getTotalMensajesEnviadosUltimoMes() - NUM_MENSAJES_DESCUENTO_FIJO) / 100;
+		return (RepositorioUsuarios.getInstance().getTotalMensajesEnviadosUltimoMes(usuario) - NUM_MENSAJES_DESCUENTO_FIJO) / 100; 
 	}
 	
 	@Override
