@@ -9,6 +9,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import java.awt.Color;
+
+import tds.BubbleText;
+
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import java.awt.Component;
@@ -18,10 +22,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import javax.swing.JScrollPane;
 
 public class VentanaPrincipal {
 
 	private JFrame frame;
+	private JPanel chat = new JPanel();
+	private JPanel contactos = new JPanel();
 
 	/**
 	 * Launch the application.
@@ -104,6 +111,31 @@ public class VentanaPrincipal {
 		menuBar.add(MPremium);
 		
 		
+		contactos.setPreferredSize(new Dimension(200, 700));
+		contactos.setLayout(new BoxLayout(contactos,BoxLayout.Y_AXIS));
+		frame.getContentPane().add(contactos, BorderLayout.WEST);
+		// Añadir contactos en el lado de los chats 
+		
+		
+		
+		chat.setLayout(new BoxLayout(chat,BoxLayout.Y_AXIS));
+		chat.setSize(400,700);
+		chat.setMinimumSize(new Dimension(400,700));
+		chat.setMaximumSize(new Dimension(400,700));
+		chat.setPreferredSize(new Dimension(400,700));
+		frame.getContentPane().add(chat, BorderLayout.CENTER);
+		
+		crearMensaje("Hola", "IBRA", BubbleText.SENT);
+		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
+		
 	}
+		
+		public void crearMensaje(String mensaje, String usuario, int tipo) {
+			Color color;
+			if (tipo == BubbleText.RECEIVED) {color = Color.PINK;} 
+			else { color = Color.CYAN;}	
+			BubbleText burbuja = new BubbleText(chat, mensaje, color, usuario, tipo);
+			chat.add(burbuja);
+		}
 
 }
