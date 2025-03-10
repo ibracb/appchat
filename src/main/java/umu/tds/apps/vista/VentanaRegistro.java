@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Toolkit;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -74,6 +76,7 @@ public class VentanaRegistro {
 		frameRegistro = new JFrame();
 		frameRegistro.getContentPane().setBackground(new Color(242, 216, 245));
 		frameRegistro.setBounds(100, 100, 613, 464);
+		frameRegistro.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
 		frameRegistro.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new JPanel();

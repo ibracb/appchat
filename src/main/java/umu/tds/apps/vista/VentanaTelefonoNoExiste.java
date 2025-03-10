@@ -1,86 +1,97 @@
 package umu.tds.apps.vista;
 
+import java.awt.EventQueue;
+import java.awt.Font;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
+
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Font;
-import javax.swing.ImageIcon;
 
-public class VentanaTelefonoNoExiste extends JDialog {
+public class VentanaTelefonoNoExiste {
 
-	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
+	private JFrame frame;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		try {
-			VentanaTelefonoNoExiste dialog = new VentanaTelefonoNoExiste();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaTelefonoNoExiste window = new VentanaTelefonoNoExiste();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**
-	 * Create the dialog.
+	 * Create the application.
 	 */
 	public VentanaTelefonoNoExiste() {
-		setTitle("Teléfono inexistente!!");
-		setBounds(100, 100, 451, 245);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPanel.setBackground(new Color(242, 216, 245));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		contentPanel.setLayout(gbl_contentPanel);
-		{
-			JLabel labelFoto = new JLabel("");
-			ImageIcon imagen = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\senalAdvertencia.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH));
-			labelFoto.setIcon(imagen);
-			GridBagConstraints gbc_labelFoto = new GridBagConstraints();
-			gbc_labelFoto.insets = new Insets(0, 0, 5, 5);
-			gbc_labelFoto.gridx = 3;
-			gbc_labelFoto.gridy = 3;
-			contentPanel.add(labelFoto, gbc_labelFoto);
-		}
-		{
-			JLabel labelMensaje = new JLabel("¡El teléfono indicado no existe!");
-			labelMensaje.setFont(new Font("Georgia", Font.BOLD, 12));
-			GridBagConstraints gbc_labelMensaje = new GridBagConstraints();
-			gbc_labelMensaje.insets = new Insets(0, 0, 5, 5);
-			gbc_labelMensaje.gridx = 4;
-			gbc_labelMensaje.gridy = 3;
-			contentPanel.add(labelMensaje, gbc_labelMensaje);
-		}
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			buttonPane.setBackground(new Color(242, 216, 245));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("Aceptar");
-				okButton.setFont(new Font("Georgia", Font.BOLD, 12));
-				okButton.setActionCommand("Aceptar");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-		}
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
+		frame.setTitle("Teléfono inexistente!!");
+		frame.setBounds(100, 100, 451, 245);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JPanel panelCentral = new JPanel();
+		panelCentral.setBackground(new Color(242, 216, 245));
+		frame.getContentPane().add(panelCentral, BorderLayout.CENTER);
+		GridBagLayout gbl_panelCentral = new GridBagLayout();
+		gbl_panelCentral.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panelCentral.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gbl_panelCentral.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelCentral.rowWeights = new double[]{1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		panelCentral.setLayout(gbl_panelCentral);
+		
+		JLabel labelFoto = new JLabel("");
+		ImageIcon imagen = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\senalAdvertencia.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH));
+		labelFoto.setIcon(imagen);
+		GridBagConstraints gbc_labelFoto = new GridBagConstraints();
+		gbc_labelFoto.gridheight = 2;
+		gbc_labelFoto.insets = new Insets(0, 0, 5, 5);
+		gbc_labelFoto.gridx = 3;
+		gbc_labelFoto.gridy = 1;
+		panelCentral.add(labelFoto, gbc_labelFoto);
+		
+		JLabel labelMensaje = new JLabel("¡El teléfono indicado no existe!");
+		labelMensaje.setFont(new Font("Georgia", Font.BOLD, 12));
+		GridBagConstraints gbc_labelMensaje = new GridBagConstraints();
+		gbc_labelMensaje.gridwidth = 2;
+		gbc_labelMensaje.insets = new Insets(0, 0, 5, 5);
+		gbc_labelMensaje.gridx = 4;
+		gbc_labelMensaje.gridy = 1;
+		panelCentral.add(labelMensaje, gbc_labelMensaje);
+		
+
+		JButton okButton = new JButton("Aceptar");
+		okButton.setFont(new Font("Georgia", Font.BOLD, 12));
+		okButton.setActionCommand("Aceptar");
+		GridBagConstraints gbc_okButton = new GridBagConstraints();
+		gbc_okButton.anchor = GridBagConstraints.EAST;
+		gbc_okButton.insets = new Insets(0, 0, 5, 5);
+		gbc_okButton.gridx = 5;
+		gbc_okButton.gridy = 2;
+		panelCentral.add(okButton, gbc_okButton);
 	}
 
 }

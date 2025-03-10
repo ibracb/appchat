@@ -20,6 +20,7 @@ import javax.swing.Box;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -60,6 +61,7 @@ public class VentanaPrincipal {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 601, 449);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();

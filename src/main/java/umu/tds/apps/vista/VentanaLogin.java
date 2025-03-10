@@ -24,6 +24,7 @@ import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.Toolkit;
 
 public class VentanaLogin {
 
@@ -70,6 +71,7 @@ public class VentanaLogin {
 	 */
 	private void initialize() {
 		frameLogin = new JFrame();
+		frameLogin.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
 		frameLogin.setTitle("AppChat");
 		frameLogin.setBounds(100, 100, 613, 464);
 		frameLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
