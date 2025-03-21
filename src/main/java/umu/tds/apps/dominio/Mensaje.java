@@ -24,16 +24,6 @@ public class Mensaje implements Comparable<Mensaje> {
 	 * Identificador único asociado al mensaje.
 	 */
 	private int id;
-
-	/**
-	 * Indica el número de teléfono de la persona que envió el mensaje.
-	 */
-	private String emisor;
-	
-	/**
-	 * Indica el número de teléfono de la persona que recibió el mensaje.
-	 */
-	private String receptor;
 	
 	/**
 	 * Representación del instante de tiempo en el que el mensaje fue enviado.
@@ -56,42 +46,27 @@ public class Mensaje implements Comparable<Mensaje> {
 	private TipoMensaje tipo;
 	
 	/**
-	 * Constructor de Mensaje, con solo texto.
-	 * @param emisor - El teléfono móvil de quien haya enviado el mensaje.
-	 * @param receptor - El teléfono móvil de quien haya recibido el mensaje.
+	 * Constructor de Mensaje, con texto/emoticono, y tipo de mensaje.
 	 * @param texto - El texto escrito en el mensaje.
-	 * @param tipo - El tipo de mensaje.
-	 */
-	public Mensaje(String emisor, String receptor, String texto, TipoMensaje tipo) {
-		this.id = Utils.ID_DEFAULT;
-		this.emisor = emisor;
-		this.receptor = receptor;
-		this.momentoEnvio = Utils.FECHA_ACTUAL;
-		this.texto = texto;
-		this.emoticono = ICONO_NULL;
-		this.tipo = tipo;
-	}
-	
-	/**
-	 * Constructor de Mensaje, con solo un emoticono.
-	 * @param emisor - El teléfono móvil de quien haya enviado el mensaje.
-	 * @param receptor - El teléfono móvil de quien haya recibido el mensaje.
 	 * @param emoticono - El emoticono empleado en el mensaje.
 	 * @param tipo - El tipo de mensaje.
 	 */
-	public Mensaje(String emisor, String receptor, int emoticono, TipoMensaje tipo) {
+	public Mensaje(String texto, int emoticono, TipoMensaje tipo) {
 		this.id = Utils.ID_DEFAULT;
-		this.emisor = emisor;
-		this.receptor = receptor;
 		this.momentoEnvio = Utils.FECHA_ACTUAL;
-		this.texto = TEXTO_NULL;
-		this.emoticono = emoticono;
+		if (emoticono > 0) {
+			this.emoticono = emoticono;
+			this.texto = TEXTO_NULL;
+		} else {
+			this.emoticono = ICONO_NULL;
+			this.texto = texto;
+		}
 		this.tipo = tipo;
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(emisor, emoticono, id, momentoEnvio, receptor, texto, tipo);
+		return Objects.hash(emoticono, id, momentoEnvio, texto, tipo);
 	}
 
 	@Override
@@ -103,9 +78,9 @@ public class Mensaje implements Comparable<Mensaje> {
 		if (getClass() != obj.getClass())
 			return false;
 		Mensaje other = (Mensaje) obj;
-		return Objects.equals(emisor, other.emisor) && emoticono == other.emoticono && id == other.id
-				&& Objects.equals(momentoEnvio, other.momentoEnvio) && Objects.equals(receptor, other.receptor)
-				&& Objects.equals(texto, other.texto) && tipo == other.tipo;
+		return emoticono == other.emoticono && id == other.id &&
+				Objects.equals(momentoEnvio, other.momentoEnvio) &&
+				Objects.equals(texto, other.texto) && tipo == other.tipo;
 	}
 
 	/**
@@ -122,22 +97,6 @@ public class Mensaje implements Comparable<Mensaje> {
 	 */
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	/**
-	 * Devuelve el teléfono móvil de quien envió el mensaje.
-	 * @return el emisor correspondiente.
-	 */
-	public String getEmisor() {
-		return emisor;
-	}
-	
-	/**
-	 * Devuelve el teléfono móvil de quien recibió el mensaje.
-	 * @return el receptor correspondiente.
-	 */
-	public String getReceptor() {
-		return receptor;
 	}
 	
 	/**
@@ -170,22 +129,6 @@ public class Mensaje implements Comparable<Mensaje> {
 	 */
 	public TipoMensaje getTipo() {
 		return tipo;
-	}
-	
-	/**
-	 * Establece un emisor al mensaje.
-	 * @param emisor - Teléfono del emisor a establecer.
-	 */
-	public void setEmisor(String emisor) {
-		this.emisor = emisor;
-	}
-	
-	/**
-	 * Establece un receptor al mensaje.
-	 * @param receptor - Teléfono del receptor a establecer.
-	 */
-	public void setReceptor(String receptor) {
-		this.receptor = receptor;
 	}
 	
 	/**

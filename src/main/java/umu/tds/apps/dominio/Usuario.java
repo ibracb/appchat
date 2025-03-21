@@ -303,5 +303,14 @@ public class Usuario {
 	public Set<Contacto> getContactos() {
 		return Collections.unmodifiableSet(contactos);
 	}
+
+	public ContactoIndividual getContactoIndividual(String movil) {
+		return contactos.stream()
+				.filter(contacto -> contacto instanceof ContactoIndividual)
+				.map(contacto -> (ContactoIndividual) contacto)
+				.filter(contactoIndividual -> contactoIndividual.getMovil().equals(movil))
+				.findFirst()
+				.orElse(null);
+	}
 	
 }

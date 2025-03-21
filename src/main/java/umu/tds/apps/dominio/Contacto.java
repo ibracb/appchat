@@ -131,7 +131,21 @@ public class Contacto implements Comparable<Contacto> {
 	public void setMensajes(Set<Mensaje> mensajes) {
 		this.mensajes = mensajes;
 	}
-
+	
+	/**
+	 * Crea un nuevo mensaje a partir de un texto, un emoticono y un tipo de mensaje.
+	 * @param texto - Texto a incluir en el mensaje.
+	 * @param emoticono - Emoticono a incluir en el mensaje.
+	 * @param tipo - Tipo de mensaje a crear.
+	 * @return el mensaje creado.
+	 */
+	public Mensaje nuevoMensaje(String texto, int emoticono, TipoMensaje tipo) {
+		Mensaje mensaje = new Mensaje(texto, emoticono, tipo);
+		mensaje.setMomentoEnvio(Utils.FECHA_ACTUAL);
+		addMensaje(mensaje);
+		return mensaje;
+	}
+	
 	@Override
 	public int compareTo(Contacto o) {
 		return this.getNombre().compareTo(o.getNombre());

@@ -160,18 +160,6 @@ public class RepositorioUsuarios {
 	}
 	
 	/**
-	 * 
-	 * @param contacto - el contacto de donde extraer los mensajes.
-	 * @param movil - .
-	 * @return los mensajes coincidentes.
-	 */
-	public Set<Mensaje> getMensajesPorMovil(Contacto contacto, String movil) {
-		return contacto.getMensajes().stream()
-			.filter(mensaje -> mensaje.getEmisor().equals(movil) || mensaje.getReceptor().equals(movil))
-			.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
 	 * Dada una fecha, devuelve los mensajes que un contacto intercambió con el usuario en esa misma fecha.
 	 * @param contacto - el contacto de donde extraer los mensajes.
 	 * @param dia - el día coincidente.
@@ -230,9 +218,12 @@ public class RepositorioUsuarios {
 	 * @return los mensajes que cumplen.
 	 */
 	public Set<Mensaje> searchMensajesPorMovil(Usuario usuario, String movil) {
-		return getAllContactos(usuario).stream()
-				.flatMap(contacto -> getMensajesPorMovil(contacto, movil).stream())
-				.collect(Collectors.toCollection(TreeSet::new));		
+		return usuario.getContactos().stream()
+				.filter(contacto -> contacto instanceof ContactoIndividual)
+				.map(contacto -> (ContactoIndividual) contacto)
+				.filter(contacto -> contacto.getMovil().equals(movil))
+				.flatMap(contacto -> contacto.getMensajes().stream())
+				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
 	/**

@@ -1,5 +1,8 @@
 package umu.tds.apps.dominio;
 
+/**
+ * Enumerado que modela si un determinado mensaje ha sido enviado o recibido por el usuario.
+ */
 public enum TipoMensaje {
 	
 	/**

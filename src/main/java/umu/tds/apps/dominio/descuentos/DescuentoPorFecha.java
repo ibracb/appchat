@@ -6,7 +6,7 @@ import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.utils.Utils;
 
 /**
- * 
+ * Clase que modela un tipo de descuento que se aplica en función de la fecha de registro.
  */
 public class DescuentoPorFecha implements Descuento {
 	

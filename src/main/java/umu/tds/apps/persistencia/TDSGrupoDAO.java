@@ -1,6 +1,5 @@
 package umu.tds.apps.persistencia;
 
-import java.text.SimpleDateFormat;
 import java.util.Set;
 
 import tds.driver.FactoriaServicioPersistencia;

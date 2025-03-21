@@ -13,6 +13,11 @@ public class ContactoIndividual extends Contacto {
 	private String movil;
 	
 	/**
+	 * Cadena de texto que representa la cadena vacía y, por lo tanto, no tiene nombre el contacto individual.
+	 */
+	public static final String NOMBRE_NULL = "";
+	
+	/**
 	 * Contructor de un contacto individual.
 	 * @param nombre - Nombre asignado al contacto.
 	 * @param usuario - Usuario que crea el contacto.

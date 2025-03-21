@@ -4,7 +4,7 @@ import umu.tds.apps.dominio.RepositorioUsuarios;
 import umu.tds.apps.dominio.Usuario;
 
 /**
- * 
+ * Clase que modela un tipo de descuento que se aplica en función de la cantidad de mensajes enviados.
  */
 public class DescuentoPorMensaje implements Descuento {
 	

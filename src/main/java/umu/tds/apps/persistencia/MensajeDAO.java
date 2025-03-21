@@ -3,7 +3,6 @@ package umu.tds.apps.persistencia;
 import java.util.Set;
 
 import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.Usuario;
 
 /**
  * Interfaz para el manejo de la persistencia de los mensajes de AppChat.
@@ -29,8 +28,8 @@ public interface MensajeDAO {
 	void update(Mensaje mensaje);
 	
 	/**
-	 * 
-	 * @param id
+	 *	Método para recuperar un mensaje del sistema. 
+	 * @param id - Identificador del mensaje a recuperar.
 	 * @return
 	 */
 	Mensaje get(int id);

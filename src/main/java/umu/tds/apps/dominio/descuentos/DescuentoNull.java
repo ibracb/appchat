@@ -3,7 +3,7 @@ package umu.tds.apps.dominio.descuentos;
 import umu.tds.apps.dominio.Usuario;
 
 /**
- * 
+ * Clase que modela un tipo de descuento nulo.
  */
 public class DescuentoNull implements Descuento {
 	

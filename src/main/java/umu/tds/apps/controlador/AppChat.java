@@ -16,7 +16,6 @@ import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.GrupoDAO;
 import umu.tds.apps.persistencia.MensajeDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
-import umu.tds.apps.utils.Utils;
 
 /**
  * Coordina la lógica de la aplicación, y maneja los eventos capturados por la interfaz de usuario.
@@ -67,11 +66,6 @@ public class AppChat {
 	 * Grupo actualmente manejado por el controlador.
 	 */
 	private Grupo grupoActual;
-	
-	/**
-	 * Mensaje actualmente manejado por el controlador.
-	 */
-	private Mensaje mensajeActual;
 	
 	/**
 	 * Constructor privado del controlador AppChat.
@@ -152,6 +146,7 @@ public class AppChat {
 	 */
 	public void borrarContactoIndividual(ContactoIndividual contacto) {
 		adaptadorContactoIndividual.delete(contacto);
+		adaptadorUsuario.update(repositorioUsuarios.findUsuario(contacto.getUsuario().getMovil()));
 	}
 	
 	/**
@@ -178,54 +173,43 @@ public class AppChat {
 	 */
 	public void borrarGrupo(Grupo grupo) {
 		adaptadorGrupo.delete(grupo);
+		adaptadorUsuario.update(grupo.getUsuario());
 	}
 	
 	/**
-	 * Método para registrar un mensaje con solo texto en la base de datos.
+	 * Método para registrar en la base de datos un mensaje enviado a un contacto individual.
 	 * @param emisor - Móvil del emisor del mensaje.
 	 * @param receptor - Móvil del receptor de mensaje.
 	 * @param texto - Texto empleado en el mensaje.
+	 * @param emoticono - Emoticono empleado en el mensaje.
 	 */
-	public void registrarMensaje(String emisor, String receptor, String texto) {
-		ContactoIndividual userEmisor = repositorioUsuarios.findContactoIndividual(receptor, emisor);
-		ContactoIndividual userReceptor = repositorioUsuarios.findContactoIndividual(emisor, receptor);
-		mensajeActual.setEmisor(userEmisor.getMovil());
-		mensajeActual.setReceptor(userReceptor.getMovil());
-		mensajeActual.setMomentoEnvio(Utils.FECHA_ACTUAL);
-		mensajeActual.setTexto(texto);
-		mensajeActual.setEmoticono(Mensaje.ICONO_NULL);
-		mensajeActual.setTipo(TipoMensaje.ENVIADO);
-		adaptadorMensaje.create(mensajeActual);
-		userEmisor.addMensaje(mensajeActual);
-		adaptadorContactoIndividual.update(userEmisor);
-		mensajeActual.setTipo(TipoMensaje.RECIBIDO);
-		adaptadorMensaje.create(mensajeActual);
-		userReceptor.addMensaje(mensajeActual);
-		adaptadorContactoIndividual.update(userReceptor);
+	public void registrarMensajeContacto(ContactoIndividual contacto, String texto, int emoticono, TipoMensaje tipo) {
+		Mensaje mensaje = contacto.nuevoMensaje(texto, emoticono, tipo);
+		adaptadorMensaje.create(mensaje);
+		adaptadorContactoIndividual.update(contacto);
+		Usuario usuarioReceptor = contacto.getUsuario();
+		ContactoIndividual contactoInverso = usuarioReceptor.getContactoIndividual(usuarioActual.getMovil());
+		if(contactoInverso == null) {
+			contactoInverso = new ContactoIndividual(usuarioActual.getNombre(), usuarioReceptor, usuarioActual.getMovil());
+			adaptadorContactoIndividual.create(contactoInverso);
+			adaptadorUsuario.update(usuarioReceptor);
+		}
+		Mensaje mensajeRecibido = contactoInverso.nuevoMensaje(texto, emoticono, tipo);
+		adaptadorMensaje.create(mensajeRecibido);
+		adaptadorContactoIndividual.update(contactoInverso);
 	}
 	
 	/**
-	 * Registra un mensaje con solo un emoticono.
-	 * @param emisor - Móvil del emisor del mensaje.
-	 * @param receptor - Móvil del receptor de mensaje.
+	 * Método para registrar en la base de datos un mensaje enviado a un grupo.
+	 * @param grupo - Grupo al que se envía el mensaje.
+	 * @param texto - Texto empleado en el mensaje.
 	 * @param emoticono - Emoticono empleado en el mensaje.
 	 */
-	public void registrarMensaje(String emisor, String receptor, int emoticono) {
-		ContactoIndividual userEmisor = repositorioUsuarios.findContactoIndividual(receptor, emisor);
-		ContactoIndividual userReceptor = repositorioUsuarios.findContactoIndividual(emisor, receptor);
-		mensajeActual.setEmisor(userEmisor.getMovil());
-		mensajeActual.setReceptor(userReceptor.getMovil());
-		mensajeActual.setMomentoEnvio(Utils.FECHA_ACTUAL);
-		mensajeActual.setTexto(Mensaje.TEXTO_NULL);
-		mensajeActual.setEmoticono(emoticono);
-		mensajeActual.setTipo(TipoMensaje.ENVIADO);
-		adaptadorMensaje.create(mensajeActual);
-		userEmisor.addMensaje(mensajeActual);
-		adaptadorContactoIndividual.update(userEmisor);
-		mensajeActual.setTipo(TipoMensaje.RECIBIDO);
-		adaptadorMensaje.create(mensajeActual);
-		userReceptor.addMensaje(mensajeActual);
-		adaptadorContactoIndividual.update(userReceptor);
+	public void registrarMensajeGrupo(Grupo grupo, String texto, int emoticono, TipoMensaje tipo) {
+		Mensaje mensaje = grupo.nuevoMensaje(texto, emoticono, tipo);
+		adaptadorMensaje.create(mensaje);
+		adaptadorGrupo.update(grupo);
+		grupo.getMiembros().forEach(miembro -> registrarMensajeContacto(miembro, texto, emoticono, tipo));
 	}
 	
 	/**
@@ -234,6 +218,7 @@ public class AppChat {
 	 */
 	public void borrarMensaje(Mensaje mensaje) {
 		adaptadorMensaje.delete(mensaje);
+		adaptadorContactoIndividual.update(contactoIndividualActual);
 	}
 	
 	/**
