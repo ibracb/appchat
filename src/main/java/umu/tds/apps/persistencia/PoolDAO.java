@@ -25,14 +25,6 @@ public enum PoolDAO {
 	}
 	
 	/**
-	 * Devuelve el pool de la aplicación.
-	 * @return la única instancia del pool
-	 */
-	public static PoolDAO getInstance() {
-		return INSTANCE;
-	}
-	
-	/**
 	 * Añade al pool la instancia que tiene el id especificado.
 	 * @param id - el identificador de la instancia a querer añadir del pool.
 	 * @param object la instancia a añadir al pool

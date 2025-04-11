@@ -21,14 +21,6 @@ public enum FactoriaDescuentos {
 	private FactoriaDescuentos() {}
 	
 	/**
-	 * Devuelve la única instancia de FactoriaDescuentos.
-	 * @return la única instancia FactoriaDescuentos
-	 */
-	public static FactoriaDescuentos getInstance() {
-		return INSTANCE;
-	}
-	
-	/**
 	 * Lista de los posibles descuentos especiales que se pueden aplicar a un usuario de AppChat. 
 	 */
 	private static final List<Supplier<Descuento>> descuentos = List.of(

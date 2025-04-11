@@ -16,6 +16,13 @@ import umu.tds.apps.utils.Utils;
 public class Usuario {
 	
 	/**
+	 * Mensaje de saludo por defecto.
+	 */
+	public static final String SALUDO_DEFAULT = "¡Hola! Soy un usuario de AppChat.";
+	
+	private static final String IMAGEN_DEFAULT = "src/main/resources/imagenes/usuario_perfil_defecto.png";
+	
+	/**
 	 * Identificador asociado a un usuario.
 	 */
 	private int id;
@@ -28,32 +35,32 @@ public class Usuario {
 	/**
 	 * Fecha en la que el usuario nació.
 	 */
-	private final LocalDate fechaNacimiento;
+	private LocalDate fechaNacimiento;
 	
 	/**
 	 * Fecha en la que el usuario se registró en AppChat.
 	 */
-	private final LocalDate fechaRegistro;
+	private LocalDate fechaRegistro;
 	
 	/**
 	 * Correo eléctronico con el que el usuario se registró.
 	 */
-	private final String email;
+	private String email;
 	
 	/**
 	 * Ruta que representa la imagen de perfil del usuario.
 	 */
-	private String imagen;
+	private Optional<String> imagen;
 	
 	/**
 	 * Número de teléfono móvil del usuario.
 	 */
-	private final String movil;
+	private String movil;
 	
 	/**
 	 * Contraseña del usuario para acceder a su cuenta de AppChat.
 	 */
-	private final String contraseña;
+	private String contraseña;
 	
 	/**
 	 * Mensaje de saludo opcional del usuario.
@@ -91,7 +98,7 @@ public class Usuario {
 		this.fechaNacimiento = fechaNacimiento;
 		this.fechaRegistro = Utils.FECHA_ACTUAL.toLocalDate();
 		this.email = email;
-		this.imagen = imagen;
+		setImagen(imagen);
 		this.movil = movil;
 		this.contraseña = contraseña;
 		setSaludo(saludo);
@@ -190,7 +197,7 @@ public class Usuario {
 	 * @return la ruta correspondiente.
 	 */
 	public String getImagen() {
-		return imagen;
+		return imagen.orElse(IMAGEN_DEFAULT);
 	}
 
 	/**
@@ -198,15 +205,15 @@ public class Usuario {
 	 * @param imagen - La ruta para para establecer la imagen de perfil deseada por el ususario.
 	 */
 	public void setImagen(String imagen) {
-		this.imagen = imagen;
+		this.imagen = Optional.ofNullable(imagen);
 	}
 	
 	/**
 	 * Devuelve el mensaje de saludo del usuario.
-	 * @return el saludo correspondiente.
+	 * @return el saludo correspondiente, o el por defecto si no tiene.
 	 */
-	public Optional<String> getSaludo() {
-		return saludo;
+	public String getSaludo() {
+		return saludo.orElse(SALUDO_DEFAULT);
 	}
 	
 	/**
@@ -242,10 +249,18 @@ public class Usuario {
 	}
 	
 	/**
+	 * Establece el descuento que se le aplica al usuario.
+	 * @param descuento - El descuento a establecer.
+	 */
+	public void setDescuento(Descuento descuento) {
+		this.descuento = descuento;
+	}
+	
+	/**
 	 * Actualización de descuento, dependiendo de ciertas condiciones.
 	 */
 	public void updateDescuento() {
-		this.descuento = FactoriaDescuentos.getInstance().createDescuento(this);
+		this.descuento = FactoriaDescuentos.INSTANCE.createDescuento(this);
 	}
 	
 	/**
@@ -265,11 +280,27 @@ public class Usuario {
 	}
 	
 	/**
+	 * Establece la fecha de nacimiento del usuario.
+	 * @param fechaNacimiento - La fecha de nacimiento a establecer.
+	 */
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+	
+	/**
 	 * Devuelve la fecha en la que el usuario se registró.
 	 * @return la fecha de registro correspondiente.
 	 */
 	public LocalDate getFechaRegistro() {
 		return fechaRegistro;
+	}
+	
+	/**
+	 * Establece la fecha de registro del usuario.
+	 * @param fechaRegistro - La fecha de registro a establecer.
+	 */
+	public void setFechaRegistro(LocalDate fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
 	}
 	
 	/**
@@ -281,11 +312,27 @@ public class Usuario {
 	}
 	
 	/**
+	 * Establece el email del usuario.
+	 * @param email - El email a establecer.
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	/**
 	 * Devuelve el número de teléfono móvil del usuario.
 	 * @return el teléfono móvil correspondiente.
 	 */
 	public String getMovil() {
 		return movil;
+	}
+	
+	/**
+	 * Establece el número de teléfono móvil del usuario.
+	 * @param movil - El número de teléfono móvil a establecer.
+	 */
+	public void setMovil(String movil) {
+		this.movil = movil;
 	}
 	
 	/**
@@ -297,11 +344,27 @@ public class Usuario {
 	}
 	
 	/**
+	 * Establece la contraseña de acceso del usuario.
+	 * @param contraseña - La contraseña a establecer.
+	 */
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
+	}
+	
+	/**
 	 * Devuelve los contactos (ya sean individuales o grupales) del usuario.
 	 * @return los contactos correspondientes.
 	 */
 	public Set<Contacto> getContactos() {
 		return Collections.unmodifiableSet(contactos);
+	}
+	
+	/**
+	 * Establece los contactos del usuario.
+	 * @param contactos - Los contactos a establecer.
+	 */
+	public void setContactos(Set<Contacto> contactos) {
+		this.contactos = contactos;
 	}
 
 	public ContactoIndividual getContactoIndividual(String movil) {

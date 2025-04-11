@@ -11,6 +11,11 @@ import java.util.TreeSet;
 public class Grupo extends Contacto {
 	
 	/**
+	 * Imagen por defecto que tiene un grupo si no tiene asignada una imagen
+	 */
+	private static final String IMAGEN_DEFAULT = "src/main/resources/imagenes/perfil_grupo.png";
+	
+	/**
 	 * Ruta que representa la imagen de perfil del grupo.
 	 */
 	private Optional<String> imagen;
@@ -54,10 +59,10 @@ public class Grupo extends Contacto {
 	
 	/**
 	 * Devuelve la ruta de la imagen de perfil del grupo.
-	 * @return la ruta correspondiente.
+	 * @return la ruta correspondiente, o una por defecto si no tiene.
 	 */
-	public Optional<String> getImagen() {
-		return imagen;
+	public String getImagen() {
+		return imagen.orElse(IMAGEN_DEFAULT);
 	}
 
 	/**

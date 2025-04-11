@@ -15,12 +15,4 @@ public enum ExportPDF {
 	 */
 	private ExportPDF() {}
 	
-	/**
-	 * Devuelve la instancia generadora de ficheros PDF. 
-	 * @return la única instancia.
-	 */
-	public static ExportPDF getInstance() {
-		return INSTANCE;
-	}
-	
 }
