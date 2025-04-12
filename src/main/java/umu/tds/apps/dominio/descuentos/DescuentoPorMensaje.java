@@ -25,12 +25,12 @@ public class DescuentoPorMensaje implements Descuento {
 	
 	@Override
 	public boolean isAplicable(Usuario usuario) {
-		return RepositorioUsuarios.getInstance().getTotalMensajesEnviadosUltimoMes(usuario) >= NUM_MENSAJES_DESCUENTO_FIJO;
+		return RepositorioUsuarios.INSTANCE.getTotalMensajesEnviadosUltimoMes(usuario) >= NUM_MENSAJES_DESCUENTO_FIJO;
 	}
 	
 	@Override
 	public int getNumDescuentosAdicionales(Usuario usuario) {
-		return (RepositorioUsuarios.getInstance().getTotalMensajesEnviadosUltimoMes(usuario) - NUM_MENSAJES_DESCUENTO_FIJO) / 100; 
+		return (RepositorioUsuarios.INSTANCE.getTotalMensajesEnviadosUltimoMes(usuario) - NUM_MENSAJES_DESCUENTO_FIJO) / 100; 
 	}
 	
 	@Override

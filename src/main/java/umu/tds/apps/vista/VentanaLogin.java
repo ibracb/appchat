@@ -1,34 +1,33 @@
 package umu.tds.apps.vista;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
-
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import java.awt.Font;
-import javax.swing.JPasswordField;
-import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 
-public class VentanaLogin {
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
-	private JFrame frameLogin;
+public class VentanaLogin extends JFrame{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private VentanaRegistro vRegistro;
 	private JTextField textFieldTelefono;
 	private JLabel EtiquetaContrasena;
 	private JTextField textField;
@@ -36,50 +35,26 @@ public class VentanaLogin {
 	private JPasswordField passwordField;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaLogin window = new VentanaLogin();
-					window.frameLogin.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the application.
 	 */
-	public VentanaLogin() {
+	public VentanaLogin(VentanaRegistro vRegistro) {
+		this.vRegistro = vRegistro;
 		initialize();
-	}
-	
-	/**
-	 * 
-	 */
-	public void show() {
-		frameLogin.setLocationRelativeTo(null);
-		frameLogin.setVisible(true);
 	}
 	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frameLogin = new JFrame();
-		frameLogin.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
-		frameLogin.setTitle("AppChat");
-		frameLogin.setBounds(100, 100, 613, 464);
-		frameLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frameLogin.getContentPane().setLayout(new BorderLayout(0, 0));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
+		setTitle("AppChat");
+		setBounds(100, 100, 613, 464);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelCentral = new JPanel();
 		panelCentral.setBackground(new Color(242, 216, 245));
-		frameLogin.getContentPane().add(panelCentral, BorderLayout.CENTER);
+		getContentPane().add(panelCentral, BorderLayout.CENTER);
 		GridBagLayout gbl_panelCentral = new GridBagLayout();
 		gbl_panelCentral.columnWidths = new int[]{Integer.MIN_VALUE, 0, 90, 0, 0, 0, 128, 62, 0, 0, 0};
 		gbl_panelCentral.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -143,6 +118,7 @@ public class VentanaLogin {
 		gbc_botonRegistrar.gridx = 3;
 		gbc_botonRegistrar.gridy = 5;
 		botonRegistrar.setPreferredSize(new Dimension(100, 30));
+		botonRegistrar.addActionListener(e -> accederRegistro());
 		panelCentral.add(botonRegistrar, gbc_botonRegistrar);
 		
 		JButton botonAceptar = new JButton("Aceptar");
@@ -162,10 +138,14 @@ public class VentanaLogin {
 		gbc_horizontalGlue.gridy = 7;
 		panelCentral.add(horizontalGlue, gbc_horizontalGlue);
 		
-		
-		
-		
-		
+	}
+	
+	private void accederRegistro() {
+		this.setVisible(false);
+		if(vRegistro == null) {
+			vRegistro = new VentanaRegistro(this);
+		}
+		VistaUtils.transicionar(this, vRegistro);
 	}
 
 }

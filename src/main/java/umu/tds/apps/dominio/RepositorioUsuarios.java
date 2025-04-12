@@ -17,7 +17,12 @@ import umu.tds.apps.utils.Utils;
 /**
  * Punto global que colecciona a todos los usuarios del sistema AppChat.
  */
-public class RepositorioUsuarios {
+public enum RepositorioUsuarios {
+	
+	/**
+	 * Instancia global que representa el repositorio de usuarios.
+	 */
+	INSTANCE;
 	
 	/**
 	 * Tabla de dispersión que asocia un usuario a un ID.
@@ -28,11 +33,6 @@ public class RepositorioUsuarios {
 	 * Tabla de dispersión que asocia un usuario a un número móvil.
 	 */
 	private Map<String, Usuario> usuariosPorMovil;
-	
-	/**
-	 * Instancia global que representa el repositorio de usuarios.
-	 */
-	private static RepositorioUsuarios INSTANCE = new RepositorioUsuarios();
 	
 	/**
 	 * Campo donde acceder a la FactoriaDAO global del sistema.
@@ -49,7 +49,7 @@ public class RepositorioUsuarios {
 	 */
 	private RepositorioUsuarios() {
 		try {
-			factoriaDAO = FactoriaDAO.getInstance(FactoriaDAO.DAO_TDS);
+			factoriaDAO = FactoriaDAO.getInstance();
 			adaptadorUsuarioDAO = factoriaDAO.getUsuarioDAO();
 			usuariosPorID = new HashMap<Integer, Usuario>();
 			usuariosPorMovil = new HashMap<String, Usuario>();
@@ -66,14 +66,6 @@ public class RepositorioUsuarios {
 	 */
 	public Set<Usuario> getUsuarios() {
 		return Collections.unmodifiableSet(new HashSet<>(usuariosPorID.values()));
-	}
-	
-	/**
-	 * Devuelve la única instancia del repositorio de usuarios.
-	 * @return la instancia.
-	 */
-	public static RepositorioUsuarios getInstance(){
-		return INSTANCE;
 	}
 	
 	/**

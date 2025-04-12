@@ -20,12 +20,12 @@ import umu.tds.apps.persistencia.UsuarioDAO;
 /**
  * Coordina la lógica de la aplicación, y maneja los eventos capturados por la interfaz de usuario.
  */
-public class AppChat {
+public enum AppChat {
 	
 	/**
 	 * Punto de acceso global al Controlador AppChat.
 	 */
-	private static AppChat INSTANCE;
+	INSTANCE;
 	
 	/**
 	 * Campo para acceder al adaptador de usuarios para TDS.
@@ -73,17 +73,6 @@ public class AppChat {
 	private AppChat() {
 		initializeAdaptadores();
 		initializeRepositorioUsuarios();
-	}
-	
-	/**
-	 * Devuelve la única instancia que representa el controlador.
-	 * @return la única instancia.
-	 */
-	public static AppChat getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new AppChat();
-		}
-		return INSTANCE;
 	}
 	
 	/**
@@ -242,7 +231,7 @@ public class AppChat {
 	 * Inicializa el repositorio de usuarios.
 	 */
 	private void initializeRepositorioUsuarios() {
-		repositorioUsuarios = RepositorioUsuarios.getInstance();
+		repositorioUsuarios = RepositorioUsuarios.INSTANCE;
 	}
 	
 	/**

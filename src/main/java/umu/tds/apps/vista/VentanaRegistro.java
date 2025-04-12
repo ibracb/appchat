@@ -1,71 +1,59 @@
 package umu.tds.apps.vista;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import java.awt.GridBagLayout;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Toolkit;
-
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-
-import com.toedter.calendar.JDateChooser;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.JTextArea;
-import javax.swing.JDesktopPane;
-import javax.swing.ImageIcon;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.io.File;
 
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
-import javax.swing.JRadioButton;
-import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
-public class VentanaRegistro {
+import com.toedter.calendar.JDateChooser;
 
-	private JFrame frameRegistro;
+public class VentanaRegistro extends JFrame{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	private VentanaLogin frameLogin;
 	private JLabel etiquetaImagen;
 	private JTextField textFieldNombre;
 	private JTextField textFieldApellidos;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
-	private JTextField textFieldImagenPerfil;
 	private JTextField textFieldTelefono;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaRegistro window = new VentanaRegistro();
-					window.frameRegistro.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
+	private JLabel lblPerfil;
 
 	/**
 	 * Create the application.
+	 * @param ventanaLogin 
 	 */
-	public VentanaRegistro() {
+	public VentanaRegistro(VentanaLogin login) {
+		this.frameLogin = login;
 		initialize();
 	}
 
@@ -73,15 +61,14 @@ public class VentanaRegistro {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frameRegistro = new JFrame();
-		frameRegistro.getContentPane().setBackground(new Color(242, 216, 245));
-		frameRegistro.setBounds(100, 100, 613, 464);
-		frameRegistro.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
-		frameRegistro.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setBackground(new Color(242, 216, 245));
+		setBounds(100, 100, 613, 464);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(242, 216, 245));
-		frameRegistro.getContentPane().add(panel, BorderLayout.CENTER);
+		getContentPane().add(panel, BorderLayout.CENTER);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 110, 0, 0, 110, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 34, 40, 0};
@@ -205,14 +192,14 @@ public class VentanaRegistro {
 		gbc_etiquetaImagen.gridy = 5;
 		panel.add(etiquetaImagen, gbc_etiquetaImagen);
 		
-		textFieldImagenPerfil = new JTextField();
-		GridBagConstraints gbc_textFieldImagenPerfil = new GridBagConstraints();
-		gbc_textFieldImagenPerfil.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldImagenPerfil.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldImagenPerfil.gridx = 5;
-		gbc_textFieldImagenPerfil.gridy = 5;
-		panel.add(textFieldImagenPerfil, gbc_textFieldImagenPerfil);
-		textFieldImagenPerfil.setColumns(10);
+		JButton btnPerfil = new JButton("Selecciona una imagen de perfil");
+		GridBagConstraints gbc_btnPerfil = new GridBagConstraints();
+		gbc_btnPerfil.anchor = GridBagConstraints.WEST;
+		gbc_btnPerfil.insets = new Insets(0, 0, 5, 5);
+		gbc_btnPerfil.gridx = 5;
+		gbc_btnPerfil.gridy = 5;
+		btnPerfil.addActionListener(e -> seleccionarImagen());
+		panel.add(btnPerfil, gbc_btnPerfil);
 		
 		JLabel etiquetaSaludo = new JLabel("Saludo");
 		etiquetaSaludo.setFont(new Font("Georgia", Font.BOLD, 12));
@@ -231,20 +218,24 @@ public class VentanaRegistro {
 		gbc_scrollPane.gridx = 2;
 		gbc_scrollPane.gridy = 6;
 		panel.add(scrollPane, gbc_scrollPane);
-		
+
 		JTextArea textArea = new JTextArea();
+		textArea.setLineWrap(true); // Habilitar ajuste de línea
+		textArea.setWrapStyleWord(true); // Habilitar ajuste por palabra
 		scrollPane.setViewportView(textArea);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setMinimumSize(new Dimension(170, 170));
-		lblNewLabel.setMaximumSize(new Dimension(200, 200));
-		ImageIcon imagen = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\appchatLogoGrande3.PNG").getImage());
-		lblNewLabel.setIcon(imagen);
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 5;
-		gbc_lblNewLabel.gridy = 6;
-		panel.add(lblNewLabel, gbc_lblNewLabel);
+		lblPerfil = new JLabel("");
+		lblPerfil.setMinimumSize(new Dimension(120, 120));
+		lblPerfil.setPreferredSize(new Dimension(120, 120));
+		lblPerfil.setMaximumSize(new Dimension(120, 120));
+		ImageIcon imagen = new ImageIcon(getClass().getResource("/imagenes/usuario_perfil_defecto.png"));
+		Image imagenEscalada = imagen.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+		lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+		GridBagConstraints gbc_lblPerfil = new GridBagConstraints();
+		gbc_lblPerfil.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPerfil.gridx = 5;
+		gbc_lblPerfil.gridy = 6;
+		panel.add(lblPerfil, gbc_lblPerfil);
 		
 		JPanel panelBotones = new JPanel();
 		panelBotones.setBackground(new Color(242, 216, 245));
@@ -267,6 +258,48 @@ public class VentanaRegistro {
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Georgia", Font.BOLD, 12));
 		btnCancelar.setPreferredSize(new Dimension(100, 30)); // Establece el tamaño preferido
+		btnCancelar.addActionListener(e -> volverLogin());
 		panelBotones.add(btnCancelar);
 	}
+	
+	private void volverLogin() {
+		this.setVisible(false);
+		if(frameLogin == null) {
+			frameLogin = new VentanaLogin(this);
+		}
+		VistaUtils.transicionar(this, frameLogin);
+	}
+	
+	private void seleccionarImagen() {
+	    while (true) {
+	        JFileChooser selector = new JFileChooser();
+	        selector.setDialogTitle("Selecciona un archivo PNG");
+	        selector.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes PNG", "png"));
+	        int resultado = selector.showOpenDialog(null);
+	        if (resultado == JFileChooser.APPROVE_OPTION) {
+	            File archivo = selector.getSelectedFile();
+	            if (archivo.getName().toLowerCase().endsWith(".png")) {
+	                ImageIcon icono = new ImageIcon(archivo.getAbsolutePath());
+	                // Verifica que las dimensiones del JLabel sean válidas
+	                int width = lblPerfil.getWidth();
+	                int height = lblPerfil.getHeight();
+	                if (width > 0 && height > 0) {
+	                    Image imagenEscalada = icono.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+	                    lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+	                } else {
+	                    // Si las dimensiones son inválidas, puedes establecer un tamaño por defecto
+	                    Image imagenEscalada = icono.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+	                    lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+	                }
+	                break;
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Por favor selecciona un archivo .png válido.", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
+	            }
+	        } else {
+	            break;
+	        }
+	    }
+	}
+
+	
 }
