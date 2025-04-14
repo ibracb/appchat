@@ -116,9 +116,16 @@ public enum RepositorioUsuarios {
 	 * Añadir un usuario al repositorio.
 	 * @param usuario - usuario a añadir.
 	 */
-	public void addUsuario(Usuario usuario) {
-		usuariosPorID.put(usuario.getId(), usuario);
-		usuariosPorMovil.put(usuario.getMovil(), usuario);
+	public boolean addUsuario(Usuario usuario) {
+		if (usuario == null) {
+	        return false;
+	    }
+	    if (usuariosPorID.containsKey(usuario.getId()) || usuariosPorMovil.containsKey(usuario.getMovil())) {
+	        return false;
+	    }
+	    usuariosPorID.put(usuario.getId(), usuario);
+	    usuariosPorMovil.put(usuario.getMovil(), usuario);
+	    return true;
 	}
 	
 	/**
