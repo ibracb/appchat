@@ -8,7 +8,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
+
 import java.awt.Color;
 
 import tds.BubbleText;
@@ -17,19 +17,34 @@ import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import java.awt.Component;
 import javax.swing.Box;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JScrollPane;
 
-public class VentanaPrincipal {
+public class VentanaPrincipal implements ActionListener {
 
 	private JFrame frame;
 	private JPanel chat = new JPanel();
 	private JPanel contactos = new JPanel();
+	private Component horizontalGlue;
+	private Component horizontalGlue_1;
+	private JMenuBar menuBar;
+	private JMenu MTuContacto;
+	private JMenuItem MCerrarSesion;
+	private JMenuItem MCambiarImagenPerfil;
+	private JMenuItem MContactos;
+	private JMenuItem MBuscar;
+	private JMenuItem MPremium;
+	private ImageIcon imagenPerfil;
+	private ImageIcon imagenBuscar;
+	private ImageIcon imagenPremium;
+	private JPanel panel;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -64,53 +79,70 @@ public class VentanaPrincipal {
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		panel.add(menuBar);
 		
 		
 		
-		JMenu MTuContacto = new JMenu("Nombre");
+		MTuContacto = new JMenu("Nombre");
 		// Hacer que el nombre sea el nombre del usuario logeado + apellidos
 		MTuContacto.setFont(new Font("Georgia", Font.BOLD, 12));
-		MTuContacto.setMaximumSize(new Dimension(200, 200));
+		MTuContacto.setPreferredSize(new Dimension(200, 25));
 		MTuContacto.setAlignmentX(Component.LEFT_ALIGNMENT);
 		//MTuContacto.setIcon(new ImageIcon("FOTO QUE NOS HAN PASADO COMO FOTO DE PERFIL"));
 		menuBar.add(MTuContacto);
 		
-		JMenuItem MCambiarImagenPerfil = new JMenuItem("Cambiar imagen de perfil");
+		MCambiarImagenPerfil = new JMenuItem("Cambiar imagen de perfil");
 		MCambiarImagenPerfil.setFont(new Font("Georgia", Font.PLAIN, 12));
 		MTuContacto.add(MCambiarImagenPerfil);
 		
-		JMenuItem MCerrarSesion = new JMenuItem("Cerrar sesión");
+		MCambiarImagenPerfil.addActionListener(this);
+		
+		MCerrarSesion = new JMenuItem("Cerrar sesión");
 		MCerrarSesion.setFont(new Font("Georgia", Font.PLAIN, 12));
 		MTuContacto.add(MCerrarSesion);
 		
-		JMenuItem MContactos = new JMenuItem("Contactos");
+		MCerrarSesion.addActionListener(this);
+		
+		horizontalGlue = Box.createHorizontalGlue();
+		menuBar.add(horizontalGlue);
+		
+		horizontalGlue_1 = Box.createHorizontalGlue();
+		menuBar.add(horizontalGlue_1);
+		
+		MContactos = new JMenuItem("Contactos");
 		MContactos.setFont(new Font("Georgia", Font.BOLD, 12));
 		MContactos.setMaximumSize(new Dimension(128, 128));
-		ImageIcon imagenPerfil = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\login.png").getImage());
+		imagenPerfil = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\login.png").getImage());
 		MContactos.setIcon(imagenPerfil);
 		menuBar.add(MContactos);
 		
-		JMenuItem MBuscar = new JMenuItem("Buscar");
+		MContactos.addActionListener(this);
+		
+		MBuscar = new JMenuItem("Buscar");
 		MBuscar.setFont(new Font("Georgia", Font.BOLD, 12));
-		ImageIcon imagenBuscar = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\buscar.png").getImage());
+		imagenBuscar = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\buscar.png").getImage());
 		MBuscar.setIcon(imagenBuscar);
 		MBuscar.setMaximumSize(new Dimension(128, 128));
 		menuBar.add(MBuscar);
 		
-		JMenuItem MPremium = new JMenuItem("Premium");
+		MBuscar.addActionListener(this);
+		
+		MPremium = new JMenuItem("Premium");
 		MPremium.setFont(new Font("Georgia", Font.BOLD, 12));
 		MPremium.setMaximumSize(new Dimension(128, 128));
 		MPremium.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		ImageIcon imagenPremium = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\premiumTick.png").getImage());
+		imagenPremium = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\premiumTick.png").getImage());
 		MPremium.setIcon(imagenPremium);
 		MPremium.setActionCommand("MPremium");
 		menuBar.add(MPremium);
+		
+		MPremium.addActionListener(this);
+		
 		
 		
 		contactos.setPreferredSize(new Dimension(200, 700));
@@ -130,6 +162,32 @@ public class VentanaPrincipal {
 		crearMensaje("Hola", "IBRA", BubbleText.SENT);
 		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
 		
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == MCerrarSesion) {
+			//Llamar al controlador para cerrar sesion
+			VentanaLogin ventanaLogin = new VentanaLogin();
+			frame.dispose();
+			ventanaLogin.mostrarLogin();
+		}
+		else if (e.getSource() == MCambiarImagenPerfil) {
+			// Llamar al controlador para cambiar la imagen de perfil
+			// TODO Habria que hacer una ventana para cambiar la imagen de perfil
+		} else if (e.getSource() == MContactos) {
+			// Llamar al controlador para mostrar contactos
+			// TODO: no se que ventana mostrar para esto
+		} else if (e.getSource() == MBuscar) {
+			// Llamar al controlador para buscar contactos
+			VentanaBuscar ventanaBuscar = new VentanaBuscar();
+			frame.dispose();
+			ventanaBuscar.mostrarVentanaBuscar();
+		}
+
+		else if (e.getSource() == MPremium) {
+			// Llamar al controlador para mostrar premium
+		    // TODO: a lo mejor hay que quitar este y poner opciones como lo de nombre que ponga pagar, descargar conversacion o algo asi
+		}
 	}
 		
 		public void crearMensaje(String mensaje, String usuario, int tipo) {

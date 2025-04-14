@@ -2,8 +2,6 @@ package umu.tds.apps.vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 
@@ -21,7 +19,7 @@ public class VentanaBuscar {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -32,6 +30,10 @@ public class VentanaBuscar {
 				}
 			}
 		});
+	}*/
+	
+	public void mostrarVentanaBuscar() {
+		frame.setVisible(true);
 	}
 
 	/**
