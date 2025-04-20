@@ -134,17 +134,14 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	}
 	
 	@Override
-	public void create(Usuario usuario) {
+	public boolean create(Usuario usuario) {
 		Entidad eUsuario = null;
-		boolean noRegistrar = true;
 		try {
 			eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+			return false;
 		}
 		catch (NullPointerException e) {
-			noRegistrar = false;
-		}
-		if(noRegistrar) {
-			return;
+			
 		}
 		TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
 		TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
@@ -174,6 +171,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		));
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
 		usuario.setId(eUsuario.getId());
+		return true;
 	}
 	
 	@Override

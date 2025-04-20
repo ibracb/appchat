@@ -25,9 +25,12 @@ import java.awt.event.ActionListener;
 import java.awt.Dimension;
 import java.awt.Font;
 
-public class VentanaPrincipal implements ActionListener {
+public class VentanaPrincipal extends JFrame implements ActionListener {
 
-	private JFrame frame;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel chat = new JPanel();
 	private JPanel contactos = new JPanel();
 	private Component horizontalGlue;
@@ -54,7 +57,7 @@ public class VentanaPrincipal implements ActionListener {
 			public void run() {
 				try {
 					VentanaPrincipal window = new VentanaPrincipal();
-					window.frame.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -73,14 +76,13 @@ public class VentanaPrincipal implements ActionListener {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 601, 449);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		setBounds(100, 100, 601, 449);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.NORTH);
+		getContentPane().add(panel, BorderLayout.NORTH);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		menuBar = new JMenuBar();
@@ -147,7 +149,7 @@ public class VentanaPrincipal implements ActionListener {
 		
 		contactos.setPreferredSize(new Dimension(200, 700));
 		contactos.setLayout(new BoxLayout(contactos,BoxLayout.Y_AXIS));
-		frame.getContentPane().add(contactos, BorderLayout.WEST);
+		getContentPane().add(contactos, BorderLayout.WEST);
 		// Añadir contactos en el lado de los chats 
 		
 		
@@ -157,7 +159,7 @@ public class VentanaPrincipal implements ActionListener {
 		chat.setMinimumSize(new Dimension(400,700));
 		chat.setMaximumSize(new Dimension(400,700));
 		chat.setPreferredSize(new Dimension(400,700));
-		frame.getContentPane().add(chat, BorderLayout.CENTER);
+		getContentPane().add(chat, BorderLayout.CENTER);
 		
 		crearMensaje("Hola", "IBRA", BubbleText.SENT);
 		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
@@ -168,7 +170,7 @@ public class VentanaPrincipal implements ActionListener {
 		if (e.getSource() == MCerrarSesion) {
 			//Llamar al controlador para cerrar sesion
 			VentanaLogin ventanaLogin = new VentanaLogin();
-			frame.dispose();
+			dispose();
 			ventanaLogin.mostrarLogin();
 		}
 		else if (e.getSource() == MCambiarImagenPerfil) {
@@ -180,7 +182,7 @@ public class VentanaPrincipal implements ActionListener {
 		} else if (e.getSource() == MBuscar) {
 			// Llamar al controlador para buscar contactos
 			VentanaBuscar ventanaBuscar = new VentanaBuscar();
-			frame.dispose();
+			dispose();
 			ventanaBuscar.mostrarVentanaBuscar();
 		}
 

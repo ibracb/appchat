@@ -10,10 +10,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -31,7 +30,9 @@ import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JDateChooser;
 
-public class VentanaRegistro extends JFrame implements ActionListener {
+import umu.tds.apps.controlador.AppChat;
+
+public class VentanaRegistro extends JFrame {
 
 	/**
 	 * 
@@ -46,7 +47,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 	
 	private JPasswordField passwordField;
 	private JLabel etiquetaContrasena2;
-	private JPasswordField passwordField_1;
+	private JPasswordField passwordFieldOk;
 	private JLabel etiquetaContrasena1;
 	private JTextField textFieldTelefono;
 	private JLabel etiquetaTelefono;
@@ -73,7 +74,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 	private GridBagConstraints gbc_etiquetaContrasena1;
 	private GridBagConstraints gbc_passwordField;
 	private GridBagConstraints gbc_etiquetaContrasena2;
-	private GridBagConstraints gbc_passwordField_1;
+	private GridBagConstraints gbc_passwordFieldOk;
 	private GridBagConstraints gbc_etiquetaFechaNacimiento;
 	private GridBagConstraints gbc_dateChooser;
 	private GridBagConstraints gbc_etiquetaImagen;
@@ -87,6 +88,8 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 
 
 	private JLabel lblPerfil;
+	private JTextField textFieldEmail;
+	private JLabel lblEmail;
 
 	/**
 	 * Create the application.
@@ -104,7 +107,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 	private void initialize() {
 		getContentPane().setBackground(new Color(242, 216, 245));
 		setBounds(100, 100, 613, 464);
-		setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		panel = new JPanel();
@@ -124,7 +127,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		gbc_etiquetaNombre.anchor = GridBagConstraints.EAST;
 		gbc_etiquetaNombre.insets = new Insets(0, 0, 5, 5);
 		gbc_etiquetaNombre.gridx = 1;
-		gbc_etiquetaNombre.gridy = 1;
+		gbc_etiquetaNombre.gridy = 0;
 		panel.add(etiquetaNombre, gbc_etiquetaNombre);
 		
 		textFieldNombre = new JTextField();
@@ -133,7 +136,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		gbc_textFieldNombre.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldNombre.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldNombre.gridx = 2;
-		gbc_textFieldNombre.gridy = 1;
+		gbc_textFieldNombre.gridy = 0;
 		panel.add(textFieldNombre, gbc_textFieldNombre);
 		textFieldNombre.setColumns(10);
 		
@@ -143,7 +146,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		gbc_etiquetaApellidos.anchor = GridBagConstraints.EAST;
 		gbc_etiquetaApellidos.insets = new Insets(0, 0, 5, 5);
 		gbc_etiquetaApellidos.gridx = 1;
-		gbc_etiquetaApellidos.gridy = 2;
+		gbc_etiquetaApellidos.gridy = 1;
 		panel.add(etiquetaApellidos, gbc_etiquetaApellidos);
 		
 		textFieldApellidos = new JTextField();
@@ -152,7 +155,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		gbc_textFieldApellidos.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldApellidos.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldApellidos.gridx = 2;
-		gbc_textFieldApellidos.gridy = 2;
+		gbc_textFieldApellidos.gridy = 1;
 		panel.add(textFieldApellidos, gbc_textFieldApellidos);
 		textFieldApellidos.setColumns(10);
 		
@@ -162,7 +165,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		gbc_etiquetaTelefono.anchor = GridBagConstraints.EAST;
 		gbc_etiquetaTelefono.insets = new Insets(0, 0, 5, 5);
 		gbc_etiquetaTelefono.gridx = 1;
-		gbc_etiquetaTelefono.gridy = 3;
+		gbc_etiquetaTelefono.gridy = 2;
 		panel.add(etiquetaTelefono, gbc_etiquetaTelefono);
 		
 		textFieldTelefono = new JTextField();
@@ -170,9 +173,27 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		gbc_textFieldTelefono.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldTelefono.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldTelefono.gridx = 2;
-		gbc_textFieldTelefono.gridy = 3;
+		gbc_textFieldTelefono.gridy = 2;
 		panel.add(textFieldTelefono, gbc_textFieldTelefono);
 		textFieldTelefono.setColumns(10);
+		
+		lblEmail = new JLabel("Email");
+		lblEmail.setFont(new Font("Georgia", Font.BOLD, 12));
+		GridBagConstraints gbc_lblEmail = new GridBagConstraints();
+		gbc_lblEmail.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEmail.anchor = GridBagConstraints.EAST;
+		gbc_lblEmail.gridx = 1;
+		gbc_lblEmail.gridy = 3;
+		panel.add(lblEmail, gbc_lblEmail);
+		
+		textFieldEmail = new JTextField();
+		GridBagConstraints gbc_textFieldEmail = new GridBagConstraints();
+		gbc_textFieldEmail.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldEmail.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldEmail.gridx = 2;
+		gbc_textFieldEmail.gridy = 3;
+		panel.add(textFieldEmail, gbc_textFieldEmail);
+		textFieldEmail.setColumns(10);
 		
 		etiquetaContrasena1 = new JLabel("Contraseña");
 		etiquetaContrasena1.setFont(new Font("Georgia", Font.BOLD, 12));
@@ -200,13 +221,13 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		gbc_etiquetaContrasena2.gridy = 4;
 		panel.add(etiquetaContrasena2, gbc_etiquetaContrasena2);
 		
-		passwordField_1 = new JPasswordField();
-		gbc_passwordField_1 = new GridBagConstraints();
-		gbc_passwordField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_passwordField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_passwordField_1.gridx = 5;
-		gbc_passwordField_1.gridy = 4;
-		panel.add(passwordField_1, gbc_passwordField_1);
+		passwordFieldOk = new JPasswordField();
+		gbc_passwordFieldOk = new GridBagConstraints();
+		gbc_passwordFieldOk.insets = new Insets(0, 0, 5, 5);
+		gbc_passwordFieldOk.fill = GridBagConstraints.HORIZONTAL;
+		gbc_passwordFieldOk.gridx = 5;
+		gbc_passwordFieldOk.gridy = 4;
+		panel.add(passwordFieldOk, gbc_passwordFieldOk);
 		
 		etiquetaFechaNacimiento = new JLabel("Fecha de nacimiento");
 		etiquetaFechaNacimiento.setFont(new Font("Georgia", Font.BOLD, 12));
@@ -239,6 +260,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		gbc_btnPerfil.insets = new Insets(0, 0, 5, 5);
 		gbc_btnPerfil.gridx = 5;
 		gbc_btnPerfil.gridy = 5;
+		btnPerfil.addActionListener(e -> seleccionarImagen());
 		panel.add(btnPerfil, gbc_btnPerfil);
 		
 		etiquetaSaludo = new JLabel("Saludo");
@@ -250,7 +272,6 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		panel.add(etiquetaSaludo, gbc_etiquetaSaludo);
 		
 		
-		//TODO Mirar el saludo a ver como hacer un scroll panel
 		scrollPane = new JScrollPane();
 		gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
@@ -290,6 +311,7 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		btnAceptar = new JButton("Aceptar");
 		btnAceptar.setFont(new Font("Georgia", Font.BOLD, 12));
 		btnAceptar.setPreferredSize(new Dimension(100, 30)); // Establece el tamaño preferido
+		btnAceptar.addActionListener(e -> registrarUsuario());
 		panelBotones.add(btnAceptar);
 		
 		horizontalStrut = Box.createHorizontalStrut(20);
@@ -298,59 +320,64 @@ public class VentanaRegistro extends JFrame implements ActionListener {
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Georgia", Font.BOLD, 12));
 		btnCancelar.setPreferredSize(new Dimension(100, 30)); // Establece el tamaño preferido
+		btnCancelar.addActionListener(e -> volverLogin());
 		panelBotones.add(btnCancelar);
-		
-		btnAceptar.addActionListener(this);
-		btnCancelar.addActionListener(this);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnAceptar) {
-			//Aqui se llamar al controlador y que guarde y compruebe todos los valores
-			
-			//Si esta correcto vuelve a la ventana de login y si no muestra un mensaje de error
-			dispose(); // Cierra la ventana actual
-			
-		} else if (e.getSource() == btnCancelar){
-			VentanaLogin ventanaLogin = new VentanaLogin();
-			dispose(); // Cierra la ventana actual
-			ventanaLogin.mostrarLogin();
-		} else { // btnPerfil
-			seleccionarImagen();
+	private void registrarUsuario() {
+		String nombre = textFieldNombre.getText() + " " + textFieldApellidos.getText();
+		LocalDate fechaNacimiento = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		String email = textFieldEmail.getText();
+		String imagen = seleccionarImagen();
+		String movil = textFieldTelefono.getText();
+		String contraseña = new String(passwordField.getPassword());
+		String contraseñaOk = new String(passwordFieldOk.getPassword()); 
+		String saludo = textArea.getText();
+		if(contraseña.equals(contraseñaOk) && AppChat.INSTANCE.registrarUsuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo)) {
+			dispose();
+			JOptionPane.showMessageDialog(null, "¡Bienvenido a AppChat, " + nombre + "!");			
+			VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
+			ventanaPrincipal.setVisible(true);
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Error en el registro, inténtalo de nuevo...");
 		}
 	}
 	
-	private void seleccionarImagen() {
-	    while (true) {
-	        JFileChooser selector = new JFileChooser();
-	        selector.setDialogTitle("Selecciona un archivo PNG");
-	        selector.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes PNG", "png"));
-	        int resultado = selector.showOpenDialog(null);
-	        if (resultado == JFileChooser.APPROVE_OPTION) {
-	            File archivo = selector.getSelectedFile();
-	            if (archivo.getName().toLowerCase().endsWith(".png")) {
-	                ImageIcon icono = new ImageIcon(archivo.getAbsolutePath());
-	                // Verifica que las dimensiones del JLabel sean válidas
-	                int width = lblPerfil.getWidth();
-	                int height = lblPerfil.getHeight();
-	                if (width > 0 && height > 0) {
-	                    Image imagenEscalada = icono.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-	                    lblPerfil.setIcon(new ImageIcon(imagenEscalada));
-	                } else {
-	                    // Si las dimensiones son inválidas, puedes establecer un tamaño por defecto
-	                    Image imagenEscalada = icono.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-	                    lblPerfil.setIcon(new ImageIcon(imagenEscalada));
-	                }
-	                break;
-	            } else {
-	                JOptionPane.showMessageDialog(null, "Por favor selecciona un archivo .png válido.", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
-	            }
-	        } else {
-	            break;
-	        }
-	    }
+	private void volverLogin() {
+		VentanaLogin ventanaLogin = new VentanaLogin();
+		dispose();
+		ventanaLogin.mostrarLogin();
 	}
-
+	
+	private String seleccionarImagen() {
+		while (true) {
+			JFileChooser selector = new JFileChooser();
+			selector.setDialogTitle("Selecciona un archivo PNG");
+			selector.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes PNG", "png"));
+			int resultado = selector.showOpenDialog(null);
+			if (resultado == JFileChooser.APPROVE_OPTION) {
+				File archivo = selector.getSelectedFile();
+				if (archivo.getName().toLowerCase().endsWith(".png")) {
+					String ruta = archivo.getAbsolutePath(); // Ruta a devolver
+					ImageIcon icono = new ImageIcon(ruta);
+					int width = lblPerfil.getWidth();
+					int height = lblPerfil.getHeight();
+					if (width > 0 && height > 0) {
+						Image imagenEscalada = icono.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+					} else {
+						Image imagenEscalada = icono.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+						lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+					}
+					return ruta;
+				} else {
+					JOptionPane.showMessageDialog(null, "Por favor selecciona un archivo .png válido.", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				return null;
+			}
+		}
+	}
 	
 }

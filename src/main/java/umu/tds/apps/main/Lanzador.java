@@ -17,7 +17,7 @@ public class Lanzador {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaLogin ventana = new VentanaLogin(null);
+					VentanaLogin ventana = new VentanaLogin();
 					ventana.setVisible(true);
 					ventana.setLocationRelativeTo(null);
 				} catch (Exception e) {

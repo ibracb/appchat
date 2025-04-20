@@ -1,4 +1,4 @@
-package umu.tds.apps.pdf;
+package umu.tds.apps.servicios;
 
 /**
  * Clase que tiene la responsabilidad de generar los PDF correspondientes en la aplicación.

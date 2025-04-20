@@ -23,7 +23,7 @@ public enum FactoriaDescuentos {
 	/**
 	 * Lista de los posibles descuentos especiales que se pueden aplicar a un usuario de AppChat. 
 	 */
-	private static final List<Supplier<Descuento>> descuentos = List.of(
+	private static final List<Supplier<Descuento>> DESCUENTOS = List.of(
 			DescuentoPorMensaje::new,
 			DescuentoPorFecha::new
 			);
@@ -34,7 +34,7 @@ public enum FactoriaDescuentos {
 	 * @return el descuento correspondiente.
 	 */
 	public Descuento createDescuento(Usuario usuario) {
-		return descuentos.stream()
+		return DESCUENTOS.stream()
 				.map(Supplier::get)
 				.filter(descuento -> descuento.isAplicable(usuario))
 				.findFirst()

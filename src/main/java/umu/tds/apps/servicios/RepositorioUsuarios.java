@@ -1,4 +1,4 @@
-package umu.tds.apps.dominio;
+package umu.tds.apps.servicios;
 
 import java.time.Month;
 import java.util.Collections;
@@ -9,6 +9,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import umu.tds.apps.dominio.Contacto;
+import umu.tds.apps.dominio.ContactoIndividual;
+import umu.tds.apps.dominio.Mensaje;
+import umu.tds.apps.dominio.TipoMensaje;
+import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
@@ -105,8 +110,7 @@ public enum RepositorioUsuarios {
 	 * @throws DAOException - El método lanza una DAOException.
 	 */
 	private void loadRepositorioUsuarios() throws DAOException {
-		adaptadorUsuarioDAO.getAll().stream()
-		.forEach(usuario -> {
+		adaptadorUsuarioDAO.getAll().forEach(usuario -> {
 			usuariosPorID.put(usuario.getId(), usuario);
 			usuariosPorMovil.put(usuario.getMovil(), usuario);
 		});
@@ -132,9 +136,13 @@ public enum RepositorioUsuarios {
 	 * Eliminar un usuario del repositorio.
 	 * @param usuario - usuario a eliminar.
 	 */
-	public void removeUsuario(Usuario usuario) {
+	public boolean removeUsuario(Usuario usuario) {
+		if(!usuariosPorID.containsKey(usuario.getId()) || !usuariosPorMovil.containsKey(usuario.getMovil())) {
+			return false;
+		}
 		usuariosPorID.remove(usuario.getId());
 		usuariosPorMovil.remove(usuario.getMovil());
+		return true;
 	}
 	
 	/**

@@ -7,7 +7,7 @@ import java.util.TreeSet;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.RepositorioUsuarios;
+import umu.tds.apps.servicios.RepositorioUsuarios;
 import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.persistencia.ContactoIndividualDAO;
@@ -85,10 +85,12 @@ public enum AppChat {
 	 * @param contraseña - La contraseña del usuario a registrar.
 	 * @param saludo - El saludo del usuario a registrar.
 	 */
-	public void registrarUsuario(String nombre, LocalDate fechaNacimiento, String email, String imagen, String movil, String contraseña, String saludo) {
+	public boolean registrarUsuario(String nombre, LocalDate fechaNacimiento, String email, String imagen, String movil, String contraseña, String saludo) {
+		if(repositorioUsuarios.findUsuario(movil) != null) {
+			return false;
+		}
 		Usuario usuario = new Usuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo);
-		adaptadorUsuario.create(usuario);
-		repositorioUsuarios.addUsuario(usuario);
+		return adaptadorUsuario.create(usuario) && repositorioUsuarios.addUsuario(usuario);
 	}
 	
 	/**

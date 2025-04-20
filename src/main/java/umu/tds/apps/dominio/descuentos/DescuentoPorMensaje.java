@@ -1,6 +1,6 @@
 package umu.tds.apps.dominio.descuentos;
 
-import umu.tds.apps.dominio.RepositorioUsuarios;
+import umu.tds.apps.servicios.RepositorioUsuarios;
 import umu.tds.apps.dominio.Usuario;
 
 /**
