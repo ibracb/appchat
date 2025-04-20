@@ -98,11 +98,13 @@ public enum AppChat {
 	 * @param movil - El teléfono móvil del usuario a iniciar sesión.
 	 * @param contraseña - La contraseña del usuario a iniciar sesión.
 	 */
-	public void loginUsuario(String movil, String contraseña) {
+	public boolean loginUsuario(String movil, String contraseña) {
 		Usuario usuario = repositorioUsuarios.findUsuario(movil);
 		if(usuario != null && usuario.getContraseña().equals(contraseña)) {
 			usuarioActual = usuario;
+			return true;
 		}
+		return false;
 	}
 	
 	/**

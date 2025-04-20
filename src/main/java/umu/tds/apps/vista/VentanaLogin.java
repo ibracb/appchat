@@ -10,29 +10,29 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import umu.tds.apps.controlador.AppChat;
 
-public class VentanaLogin extends JFrame implements ActionListener {
+
+public class VentanaLogin extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// private VentanaRegistro vRegistro;
-	private JTextField textField_Telefono;
+	private JTextField textFieldTelefono;
 	private JPasswordField passwordField;
 	private JLabel etiquetaTelefono;
 	private JLabel etiquetaContrasena;
@@ -41,7 +41,7 @@ public class VentanaLogin extends JFrame implements ActionListener {
 	private GridBagLayout gbl_panelCentral;
 	private GridBagConstraints gbc_imagenAppChat;
 	private GridBagConstraints gbc_etiquetaTelefono;
-	private GridBagConstraints gbc_textField_Telefono;
+	private GridBagConstraints gbc_textFieldTelefono;
 	private GridBagConstraints gbc_etiquetaContrasena;
 	private GridBagConstraints gbc_passwordField;
 	private GridBagConstraints gbc_botonRegistrar;
@@ -118,15 +118,15 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		gbc_etiquetaTelefono.gridy = 3;
 		panelCentral.add(etiquetaTelefono, gbc_etiquetaTelefono);
 
-		textField_Telefono = new JTextField();
-		gbc_textField_Telefono = new GridBagConstraints();
-		gbc_textField_Telefono.gridwidth = 4;
-		gbc_textField_Telefono.insets = new Insets(10, 10, 10, 10);
-		gbc_textField_Telefono.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_Telefono.gridx = 3;
-		gbc_textField_Telefono.gridy = 3;
-		panelCentral.add(textField_Telefono, gbc_textField_Telefono);
-		textField_Telefono.setColumns(10);
+		textFieldTelefono = new JTextField();
+		gbc_textFieldTelefono = new GridBagConstraints();
+		gbc_textFieldTelefono.gridwidth = 4;
+		gbc_textFieldTelefono.insets = new Insets(10, 10, 10, 10);
+		gbc_textFieldTelefono.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldTelefono.gridx = 3;
+		gbc_textFieldTelefono.gridy = 3;
+		panelCentral.add(textFieldTelefono, gbc_textFieldTelefono);
+		textFieldTelefono.setColumns(10);
 
 		etiquetaContrasena = new JLabel("Contraseña");
 		etiquetaContrasena.setFont(new Font("Georgia", Font.BOLD, 12));
@@ -153,7 +153,7 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		gbc_botonRegistrar.gridx = 3;
 		gbc_botonRegistrar.gridy = 5;
 		botonRegistrar.setPreferredSize(new Dimension(100, 30));
-		// botonRegistrar.addActionListener(e -> accederRegistro());
+		botonRegistrar.addActionListener(e -> accederRegistro());
 		panelCentral.add(botonRegistrar, gbc_botonRegistrar);
 
 		botonAceptar = new JButton("Aceptar");
@@ -164,6 +164,7 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		gbc_botonAceptar.gridx = 6;
 		gbc_botonAceptar.gridy = 5;
 		botonAceptar.setPreferredSize(new Dimension(100, 30));
+		botonAceptar.addActionListener(e -> accederLogin());
 		panelCentral.add(botonAceptar, gbc_botonAceptar);
 
 		horizontalGlue = Box.createHorizontalGlue();
@@ -173,29 +174,26 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		gbc_horizontalGlue.gridy = 7;
 		panelCentral.add(horizontalGlue, gbc_horizontalGlue);
 
-		botonRegistrar.addActionListener(this);
-		botonAceptar.addActionListener(this);
-
 	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == botonRegistrar) {
-			VentanaRegistro registro = new VentanaRegistro();
+	
+	private void accederLogin() {
+		String movil = textFieldTelefono.getText();
+		String contraseña = new String(passwordField.getPassword());
+		if(AppChat.INSTANCE.loginUsuario(movil, contraseña)) {
 			dispose();
-			registro.mostrarRegistro();
-		} else { // botonAceptar
-			// Aqui hay que llamar al controlador para que compruebe en el repositorio de
-			// usuarios si existe alguien con el nombre y contraseña que hay en los
-			// textfield
-			dispose();
+			JOptionPane.showMessageDialog(null, "¡Hola de nuevo!");
+			VentanaPrincipal vPrincipal = new VentanaPrincipal();
+			vPrincipal.setVisible(true);
 		}
-
+		else {
+			JOptionPane.showMessageDialog(null, "Login fallido. Inténtelo de nuevo");
+		}
 	}
-
-	/*
-	 * private void accederRegistro() { this.setVisible(false); if(vRegistro ==
-	 * null) { vRegistro = new VentanaRegistro(this); }
-	 * VistaUtils.transicionar(this, vRegistro); }
-	 */
+	
+	private void accederRegistro() {
+		VentanaRegistro registro = new VentanaRegistro();
+		dispose();
+		registro.setVisible(true);
+	}
 
 }

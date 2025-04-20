@@ -98,9 +98,7 @@ public class VentanaRegistro extends JFrame {
 	public VentanaRegistro() {
 		initialize();
 	}
-	public void mostrarRegistro() {
-		setVisible(true);
-	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
