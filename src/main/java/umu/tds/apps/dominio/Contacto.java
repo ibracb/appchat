@@ -9,7 +9,7 @@ import umu.tds.apps.utils.Utils;
 /**
  * Clase que define un contacto de un usuario.
  */
-public class Contacto implements Comparable<Contacto> {
+public abstract class Contacto implements Comparable<Contacto> {
 
 	/**
 	 * Identificador del contacto.
@@ -22,11 +22,6 @@ public class Contacto implements Comparable<Contacto> {
 	private String nombre;
 	
 	/**
-	 * Usuario que crea el contacto.
-	 */
-	private Usuario usuario;
-	
-	/**
 	 * Mensajes intercambiados entre el usuario y el contacto.
 	 */
 	private Set<Mensaje> mensajes;
@@ -34,12 +29,10 @@ public class Contacto implements Comparable<Contacto> {
 	/**
 	 * Constructor de Contacto, a partir de un nombre y un usuario.
 	 * @param nombre -  Nombre a asignar al contacto.
-	 * @param usuario - Usuario que crea y maneja el contacto.
 	 */
-	public Contacto(String nombre, Usuario usuario) {
+	public Contacto(String nombre) {
 		this.id = Utils.ID_DEFAULT;
 		this.nombre = nombre;
-		this.usuario = usuario;
 		this.mensajes = new TreeSet<Mensaje>();
 	}
 	
@@ -98,22 +91,6 @@ public class Contacto implements Comparable<Contacto> {
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-	
-	/**
-	 * Devuelve el usuario que gestiona el contacto.
-	 * @return el usuario correspondiente.
-	 */
-	public Usuario getUsuario() {
-		return usuario;
-	}
-	
-	/**
-	 * Establece un usuario al contacto.
-	 * @param usuario - usuario a asociar al contacto.
-	 */
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 	
 	/**

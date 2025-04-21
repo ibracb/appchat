@@ -28,12 +28,11 @@ public class Grupo extends Contacto {
 	/**
 	 * Método que otorga un determinado estado inicial a un grupo.
 	 * @param nombre - Nombre del grupo
-	 * @param usuario - Usuario que administra el grupo.
 	 * @param imagen - Ruta de la imagen a asignar al grupo.
 	 * @param miembros - Miembros a añadir al grupo.
 	 */
-	public Grupo(String nombre, Usuario usuario, String imagen, ContactoIndividual...miembros) {
-		super(nombre, usuario);
+	public Grupo(String nombre, String imagen, ContactoIndividual...miembros) {
+		super(nombre);
 		setImagen(imagen);
 		this.miembros = new TreeSet<ContactoIndividual>();
 		Collections.addAll(this.miembros, miembros);

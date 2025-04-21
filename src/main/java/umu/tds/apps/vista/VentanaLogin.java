@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -69,7 +68,6 @@ public class VentanaLogin extends JFrame {
 	 * Create the application.
 	 */
 	public VentanaLogin() {
-		// this.vRegistro = vRegistro;
 		initialize();
 	}
 	public void mostrarLogin() {
@@ -80,7 +78,7 @@ public class VentanaLogin extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
 		setTitle("AppChat");
 		setBounds(100, 100, 613, 464);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,7 +97,7 @@ public class VentanaLogin extends JFrame {
 
 		imagenAppChat = new JLabel("");
 		imagenAppChat.setMaximumSize(new Dimension(200, 200));
-		imagenLogo = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\appchatLogoGrande3.PNG").getImage());
+		imagenLogo = new ImageIcon(getClass().getResource("/imagenes/appchatLogoGrande3.PNG"));
 		imagenAppChat.setIcon(imagenLogo);
 		gbc_imagenAppChat = new GridBagConstraints();
 		gbc_imagenAppChat.gridwidth = 5;

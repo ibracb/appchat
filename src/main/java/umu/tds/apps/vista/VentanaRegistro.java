@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -84,12 +85,11 @@ public class VentanaRegistro extends JFrame {
 	private GridBagConstraints gbc_lblPerfil;
 	private GridBagConstraints gbc_panel_1;
 	
-	
-
-
 	private JLabel lblPerfil;
 	private JTextField textFieldEmail;
 	private JLabel lblEmail;
+	
+	private String rutaImagenSeleccionada;
 
 	/**
 	 * Create the application.
@@ -106,6 +106,7 @@ public class VentanaRegistro extends JFrame {
 		getContentPane().setBackground(new Color(242, 216, 245));
 		setBounds(100, 100, 613, 464);
 		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setTitle("Registrarse en AppChat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		panel = new JPanel();
@@ -326,7 +327,7 @@ public class VentanaRegistro extends JFrame {
 		String nombre = textFieldNombre.getText() + " " + textFieldApellidos.getText();
 		LocalDate fechaNacimiento = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		String email = textFieldEmail.getText();
-		String imagen = seleccionarImagen();
+		String imagen = rutaImagenSeleccionada;
 		String movil = textFieldTelefono.getText();
 		String contraseña = new String(passwordField.getPassword());
 		String contraseñaOk = new String(passwordFieldOk.getPassword()); 
@@ -348,34 +349,31 @@ public class VentanaRegistro extends JFrame {
 		ventanaLogin.mostrarLogin();
 	}
 	
-	private String seleccionarImagen() {
-		while (true) {
-			JFileChooser selector = new JFileChooser();
-			selector.setDialogTitle("Selecciona un archivo PNG");
-			selector.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes PNG", "png"));
-			int resultado = selector.showOpenDialog(null);
-			if (resultado == JFileChooser.APPROVE_OPTION) {
-				File archivo = selector.getSelectedFile();
-				if (archivo.getName().toLowerCase().endsWith(".png")) {
-					String ruta = archivo.getAbsolutePath(); // Ruta a devolver
-					ImageIcon icono = new ImageIcon(ruta);
-					int width = lblPerfil.getWidth();
-					int height = lblPerfil.getHeight();
-					if (width > 0 && height > 0) {
-						Image imagenEscalada = icono.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-						lblPerfil.setIcon(new ImageIcon(imagenEscalada));
-					} else {
-						Image imagenEscalada = icono.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-						lblPerfil.setIcon(new ImageIcon(imagenEscalada));
-					}
-					return ruta;
-				} else {
-					JOptionPane.showMessageDialog(null, "Por favor selecciona un archivo .png válido.", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
-				}
-			} else {
-				return null;
+	private void seleccionarImagen() {
+		JFileChooser selector = new JFileChooser();
+		selector.setDialogTitle("Selecciona un fichero PNG");
+		selector.setFileFilter(new FileNameExtensionFilter("Imágenes PNG", "png"));
+		int resultado = selector.showOpenDialog(null);
+		if (resultado == JFileChooser.APPROVE_OPTION) {
+			File archivo = selector.getSelectedFile();
+			String nombreArchivo = archivo.getName().toLowerCase();
+			if (nombreArchivo.endsWith(".png")) {
+				rutaImagenSeleccionada = archivo.getAbsolutePath();
+				ImageIcon icono = new ImageIcon(rutaImagenSeleccionada);
+				int width = lblPerfil.getWidth();
+				int height = lblPerfil.getHeight();
+				int escalaAncho = (width > 0) ? width : 120;
+				int escalaAlto = (height > 0) ? height : 120;
+				Image imagenEscalada = icono.getImage().getScaledInstance( escalaAncho, escalaAlto, Image.SCALE_SMOOTH);
+				lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Por favor selecciona un fichero .png válido.", "Fichero no válido", JOptionPane.ERROR_MESSAGE);
+				seleccionarImagen();
 			}
 		}
 	}
+
+
 	
 }

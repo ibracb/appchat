@@ -1,4 +1,4 @@
-package umu.tds.apps.persistencia;
+package umu.tds.apps.persistencia.tdsimpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,8 @@ import tds.driver.ServicioPersistencia;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.persistencia.GrupoDAO;
+import umu.tds.apps.persistencia.PoolDAO;
 
 /**
  * Clase para manejo de persistencia de grupos en TDS.
@@ -82,10 +83,9 @@ public class TDSGrupoDAO implements GrupoDAO {
 		eGrupo.setNombre(ENTIDAD_GRUPO);
 		eGrupo.setPropiedades(
 			new ArrayList<Propiedad>(Arrays.asList(
-				new Propiedad(PersistenciaContactosUtils.PROPIEDAD_ID, String.valueOf(grupo.getId())),
-				new Propiedad(PersistenciaContactosUtils.PROPIEDAD_NOMBRE, grupo.getNombre()),
-				new Propiedad(PersistenciaContactosUtils.PROPIEDAD_USUARIO, String.valueOf(grupo.getUsuario().getId())),
-				new Propiedad(PersistenciaContactosUtils.PROPIEDAD_MENSAJES, getIdsMensajes(grupo.getMensajes())),
+				new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_ID, String.valueOf(grupo.getId())),
+				new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_NOMBRE, grupo.getNombre()),
+				new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES, getIdsMensajes(grupo.getMensajes())),
 				new Propiedad(PROPIEDAD_IMAGEN, grupo.getImagen()),
 				new Propiedad(PROPIEDAD_MIEMBROS, getIdsContactos(grupo.getMiembros())))));
 		servPersistencia.registrarEntidad(eGrupo);
@@ -104,13 +104,10 @@ public class TDSGrupoDAO implements GrupoDAO {
 	public void update(Grupo grupo) {
 		Entidad eGrupo = servPersistencia.recuperarEntidad(grupo.getId());
 		eGrupo.getPropiedades().forEach(propiedad -> {
-			if(propiedad.getNombre().equals(PersistenciaContactosUtils.PROPIEDAD_NOMBRE)) {
+			if(propiedad.getNombre().equals(TDSContactosUtilsDAO.PROPIEDAD_NOMBRE)) {
 				propiedad.setValor(grupo.getNombre());
 			}
-			else if(propiedad.getNombre().equals(PersistenciaContactosUtils.PROPIEDAD_USUARIO)) {
-				propiedad.setValor(String.valueOf(grupo.getUsuario().getId()));
-			}
-			else if(propiedad.getNombre().equals(PersistenciaContactosUtils.PROPIEDAD_MENSAJES)) {
+			else if(propiedad.getNombre().equals(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES)) {
 				propiedad.setValor(getIdsMensajes(grupo.getMensajes()));
 			}
 			else if(propiedad.getNombre().equals(PROPIEDAD_IMAGEN)) {
@@ -130,21 +127,18 @@ public class TDSGrupoDAO implements GrupoDAO {
 		}
 		String nombre;
 		String imagen;
-		Usuario usuario;
 		Set<Mensaje> mensajes;
 		Set<ContactoIndividual> miembros;
 		Entidad eGrupo = servPersistencia.recuperarEntidad(id);
-		nombre = servPersistencia.recuperarPropiedadEntidad(eGrupo, PersistenciaContactosUtils.PROPIEDAD_NOMBRE);
+		nombre = servPersistencia.recuperarPropiedadEntidad(eGrupo, TDSContactosUtilsDAO.PROPIEDAD_NOMBRE);
 		imagen = servPersistencia.recuperarPropiedadEntidad(eGrupo, PROPIEDAD_IMAGEN);
-		int usuarioId = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eGrupo, PersistenciaContactosUtils.PROPIEDAD_USUARIO));;
-		usuario = TDSUsuarioDAO.getInstance().get(usuarioId);
-		Grupo grupo = new Grupo(nombre, usuario, imagen, new ContactoIndividual[0]);
+		Grupo grupo = new Grupo(nombre, imagen, new ContactoIndividual[0]);
 		grupo.setId(id);
 		PoolDAO.INSTANCE.addObject(grupo.getId(), grupo);
 		miembros = getContactosFromIds(servPersistencia.recuperarPropiedadEntidad(eGrupo, PROPIEDAD_MIEMBROS));
 		miembros.stream()
 			.forEach(miembro -> grupo.addMiembro(miembro));
-		mensajes = getMensajesFromIds(servPersistencia.recuperarPropiedadEntidad(eGrupo, PersistenciaContactosUtils.PROPIEDAD_MENSAJES));
+		mensajes = getMensajesFromIds(servPersistencia.recuperarPropiedadEntidad(eGrupo, TDSContactosUtilsDAO.PROPIEDAD_MENSAJES));
 		grupo.setMensajes(mensajes);
 		return grupo;
 	}
@@ -164,7 +158,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 	 * @return cadena con los ids de los mensajes.
 	 */
 	private String getIdsMensajes(Set<Mensaje> mensajes) {
-		return PersistenciaContactosUtils.getIdsMensajes(mensajes);
+		return TDSContactosUtilsDAO.getIdsMensajes(mensajes);
 	}
 	
 	/**
@@ -173,7 +167,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 	 * @return conjunto de mensajes.
 	 */
 	private Set<Mensaje> getMensajesFromIds(String lineas) {
-		return PersistenciaContactosUtils.getMensajesFromIds(lineas);
+		return TDSContactosUtilsDAO.getMensajesFromIds(lineas);
 	}
 	
 	/**
@@ -184,7 +178,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 	private String getIdsContactos(Set<ContactoIndividual> contactos) {
 		return contactos.stream()
 				.map(contacto -> String.valueOf(contacto.getId()))
-				.collect(Collectors.joining(PersistenciaContactosUtils.ESPACIO_EN_BLANCO));
+				.collect(Collectors.joining(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO));
 	}
 	
 	/**
@@ -194,7 +188,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 	 */
 	private Set<ContactoIndividual> getContactosFromIds(String lineas) {
 		TDSContactoIndividualDAO adaptadorContacto = TDSContactoIndividualDAO.getInstance();
-		return Arrays.stream(lineas.split(PersistenciaContactosUtils.ESPACIO_EN_BLANCO))
+		return Arrays.stream(lineas.split(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO))
 			.map(Integer::valueOf)
 			.map(adaptadorContacto::get)
 			.collect(Collectors.toSet());

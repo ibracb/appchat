@@ -13,7 +13,7 @@ public abstract class FactoriaDAO {
 	/**
 	 * Cadena para instanciar TDSFactoriaDAO.
 	 */
-	public static final String DAO_TDS = "umu.tds.apps.persistencia.TDSFactoriaDAO";
+	public static final String DAO_TDS = "umu.tds.apps.persistencia.tdsimpl.TDSFactoriaDAO";
 	
 	/**
 	 * Método para instanciar un adaptador FactoriaDAO.

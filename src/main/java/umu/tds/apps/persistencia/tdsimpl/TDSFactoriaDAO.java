@@ -1,4 +1,10 @@
-package umu.tds.apps.persistencia;
+package umu.tds.apps.persistencia.tdsimpl;
+
+import umu.tds.apps.persistencia.ContactoIndividualDAO;
+import umu.tds.apps.persistencia.FactoriaDAO;
+import umu.tds.apps.persistencia.GrupoDAO;
+import umu.tds.apps.persistencia.MensajeDAO;
+import umu.tds.apps.persistencia.UsuarioDAO;
 
 /**
  * Factoria concreta DAO para el Servidor de Persistencia de la asignatura TDS.

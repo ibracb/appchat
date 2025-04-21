@@ -1,29 +1,25 @@
 package umu.tds.apps.vista;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.ImageIcon;
-
 import java.awt.Color;
-
-import tds.BubbleText;
-
-import javax.swing.JPanel;
-import javax.swing.BoxLayout;
 import java.awt.Component;
-import javax.swing.Box;
-
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Dimension;
-import java.awt.Font;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+
+import tds.BubbleText;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
@@ -78,7 +74,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private void initialize() {
 		setBounds(100, 100, 601, 449);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		panel = new JPanel();
@@ -119,7 +115,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		MContactos = new JMenuItem("Contactos");
 		MContactos.setFont(new Font("Georgia", Font.BOLD, 12));
 		MContactos.setMaximumSize(new Dimension(128, 128));
-		imagenPerfil = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\login.png").getImage());
+		imagenPerfil = new ImageIcon(getClass().getResource("/imagenes/login.png"));
 		MContactos.setIcon(imagenPerfil);
 		menuBar.add(MContactos);
 		
@@ -127,7 +123,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		
 		MBuscar = new JMenuItem("Buscar");
 		MBuscar.setFont(new Font("Georgia", Font.BOLD, 12));
-		imagenBuscar = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\buscar.png").getImage());
+		imagenBuscar = new ImageIcon(getClass().getResource("/imagenes/buscar.png"));
 		MBuscar.setIcon(imagenBuscar);
 		MBuscar.setMaximumSize(new Dimension(128, 128));
 		menuBar.add(MBuscar);
@@ -138,7 +134,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		MPremium.setFont(new Font("Georgia", Font.BOLD, 12));
 		MPremium.setMaximumSize(new Dimension(128, 128));
 		MPremium.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		imagenPremium = new ImageIcon(new ImageIcon("src\\main\\resources\\imagenes\\premiumTick.png").getImage());
+		imagenPremium = new ImageIcon(getClass().getResource("/imagenes/premiumTick.png"));
 		MPremium.setIcon(imagenPremium);
 		MPremium.setActionCommand("MPremium");
 		menuBar.add(MPremium);

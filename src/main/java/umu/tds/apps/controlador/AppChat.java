@@ -3,11 +3,12 @@ package umu.tds.apps.controlador;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
+import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.servicios.RepositorioUsuarios;
 import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.persistencia.ContactoIndividualDAO;
@@ -16,6 +17,7 @@ import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.GrupoDAO;
 import umu.tds.apps.persistencia.MensajeDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
+import umu.tds.apps.repositorios.RepositorioUsuarios;
 
 /**
  * Coordina la lógica de la aplicación, y maneja los eventos capturados por la interfaz de usuario.
@@ -118,19 +120,20 @@ public enum AppChat {
 	
 	/**
 	 * Llamada al adaptador de contactos individuales para registrar un contacto individual en la base de datos.
-	 * @param movilUsuario - móvil del usuario que añade el contacto.
 	 * @param nombre - Nombre del contacto a registrar.
 	 * @param movilContacto - Móvil de contacto a registrar.
 	 */
-	public void registrarContactoIndividual(String movilUsuario, String nombre, String movilContacto) {
-		Usuario usuario = repositorioUsuarios.findUsuario(movilUsuario);
+	public boolean registrarContactoIndividual(String nombre, String movilContacto) {
+		if(usuarioActual.getContactoIndividual(movilContacto) != null) {
+			return false;
+		}
 		contactoIndividualActual.setNombre(nombre);
-		contactoIndividualActual.setUsuario(usuario);
-		contactoIndividualActual.setMovil(movilContacto);
+		contactoIndividualActual.setUsuario(repositorioUsuarios.findUsuario(movilContacto));
 		contactoIndividualActual.setMensajes(new TreeSet<Mensaje>());
 		adaptadorContactoIndividual.create(contactoIndividualActual);
-		usuario.addContacto(nombre, movilContacto);
-		adaptadorUsuario.update(usuario);
+		usuarioActual.addContacto(nombre, movilContacto);
+		adaptadorUsuario.update(usuarioActual);
+		return true;
 	}
 	
 	/**
@@ -152,7 +155,6 @@ public enum AppChat {
 	public void registrarGrupo(String movilUsuario, String nombre, String imagen, ContactoIndividual... miembros) {
 		Usuario usuario = repositorioUsuarios.findUsuario(movilUsuario);
 		grupoActual.setNombre(nombre);
-		grupoActual.setUsuario(usuario);
 		grupoActual.setImagen(imagen);
 		grupoActual.setMensajes(new TreeSet<Mensaje>());
 		adaptadorGrupo.create(grupoActual);
@@ -166,7 +168,9 @@ public enum AppChat {
 	 */
 	public void borrarGrupo(Grupo grupo) {
 		adaptadorGrupo.delete(grupo);
-		adaptadorUsuario.update(grupo.getUsuario());
+		grupo.getMiembros().forEach(miembro -> {
+			adaptadorUsuario.update(miembro.getUsuario());
+		});
 	}
 	
 	/**
@@ -252,6 +256,12 @@ public enum AppChat {
 	 */
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
+	}
+	
+	public Set<Contacto> getContactosIndividualesUsuarioActual(){
+		return getUsuarioActual().getContactos().stream()
+				.filter(contacto -> contacto instanceof ContactoIndividual)
+				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
 }

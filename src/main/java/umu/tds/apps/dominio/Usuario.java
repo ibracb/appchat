@@ -20,8 +20,6 @@ public class Usuario {
 	 */
 	public static final String SALUDO_DEFAULT = "¡Hola! Soy un usuario de AppChat.";
 	
-	private static final String IMAGEN_DEFAULT = "src/main/resources/imagenes/usuario_perfil_defecto.png";
-	
 	/**
 	 * Identificador asociado a un usuario.
 	 */
@@ -50,7 +48,7 @@ public class Usuario {
 	/**
 	 * Ruta que representa la imagen de perfil del usuario.
 	 */
-	private Optional<String> imagen;
+	private String imagen;
 	
 	/**
 	 * Número de teléfono móvil del usuario.
@@ -132,7 +130,7 @@ public class Usuario {
 	 * @return true si se ha creado bien el grupo, false si no es así.
 	 */
 	public boolean createGrupo(String nombre, String imagen, ContactoIndividual...miembros) {
-		Grupo grupo = new Grupo(nombre, this, imagen, miembros);
+		Grupo grupo = new Grupo(nombre, imagen, miembros);
 		return contactos.add(grupo);
 	}
 	
@@ -197,7 +195,7 @@ public class Usuario {
 	 * @return la ruta correspondiente.
 	 */
 	public String getImagen() {
-		return imagen.orElse(IMAGEN_DEFAULT);
+		return imagen;
 	}
 
 	/**
@@ -205,7 +203,7 @@ public class Usuario {
 	 * @param imagen - La ruta para para establecer la imagen de perfil deseada por el ususario.
 	 */
 	public void setImagen(String imagen) {
-		this.imagen = Optional.ofNullable(imagen);
+		this.imagen = imagen;
 	}
 	
 	/**

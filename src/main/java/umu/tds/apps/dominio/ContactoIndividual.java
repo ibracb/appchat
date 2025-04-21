@@ -8,9 +8,9 @@ import java.util.Objects;
 public class ContactoIndividual extends Contacto {
 	
 	/**
-	 * Número de teléfono móvil del contacto.
+	 * 
 	 */
-	private String movil;
+	private Usuario usuario;
 	
 	/**
 	 * Cadena de texto que representa la cadena vacía y, por lo tanto, no tiene nombre el contacto individual.
@@ -21,16 +21,15 @@ public class ContactoIndividual extends Contacto {
 	 * Contructor de un contacto individual.
 	 * @param nombre - Nombre asignado al contacto.
 	 * @param usuario - Usuario que crea el contacto.
-	 * @param movil - Teléfono móvil del contacto creado.
 	 */
 	public ContactoIndividual(String nombre, Usuario usuario, String movil) {
-		super(nombre, usuario);
-		this.movil = movil;
+		super(nombre);
+		this.usuario = usuario;
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(movil);
+		return Objects.hash(usuario);
 	}
 
 	@Override
@@ -42,7 +41,15 @@ public class ContactoIndividual extends Contacto {
 		if (getClass() != obj.getClass())
 			return false;
 		ContactoIndividual other = (ContactoIndividual) obj;
-		return Objects.equals(movil, other.movil);
+		return Objects.equals(usuario, other.usuario);
+	}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	
 	/**
@@ -50,15 +57,7 @@ public class ContactoIndividual extends Contacto {
 	 * @return el movil del contacto individual.
 	 */
 	public String getMovil() {
-		return movil;
-	}
-	
-	/**
-	 * Establece un número de teléfono móvil al contacto individual.
-	 * @param movil - Móvil a asociar al contacto individual.
-	 */
-	public void setMovil(String movil) {
-		this.movil = movil;
+		return getUsuario().getMovil();
 	}
 	
 }

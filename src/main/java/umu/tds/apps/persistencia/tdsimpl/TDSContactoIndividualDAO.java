@@ -1,4 +1,4 @@
-package umu.tds.apps.persistencia;
+package umu.tds.apps.persistencia.tdsimpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +13,8 @@ import tds.driver.ServicioPersistencia;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.persistencia.ContactoIndividualDAO;
+import umu.tds.apps.persistencia.PoolDAO;
 
 /**
  * Clase para manejo de persistencia de contactos individuales en TDS.
@@ -79,10 +81,10 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 		eContacto.setNombre(ENTIDAD_CONTACTO);
 		eContacto.setPropiedades(
 			new ArrayList<Propiedad>(Arrays.asList(
-					new Propiedad(PersistenciaContactosUtils.PROPIEDAD_ID, String.valueOf(contacto.getId())),
-					new Propiedad(PersistenciaContactosUtils.PROPIEDAD_NOMBRE, contacto.getNombre()),
-					new Propiedad(PersistenciaContactosUtils.PROPIEDAD_USUARIO, String.valueOf(contacto.getUsuario().getId())),
-					new Propiedad(PersistenciaContactosUtils.PROPIEDAD_MENSAJES, getIdsMensajes(contacto.getMensajes())),
+					new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_ID, String.valueOf(contacto.getId())),
+					new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_NOMBRE, contacto.getNombre()),
+					new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_USUARIO, String.valueOf(contacto.getUsuario().getId())),
+					new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES, getIdsMensajes(contacto.getMensajes())),
 					new Propiedad(PROPIEDAD_MOVIL, contacto.getMovil()))));
 		eContacto = servPersistencia.registrarEntidad(eContacto);
 		contacto.setId(eContacto.getId());
@@ -100,13 +102,13 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	public void update(ContactoIndividual contacto) {
 		Entidad eContacto = servPersistencia.recuperarEntidad(contacto.getId());
 		eContacto.getPropiedades().forEach(propiedad -> {
-			if(propiedad.getNombre().equals(PersistenciaContactosUtils.PROPIEDAD_NOMBRE)) {
+			if(propiedad.getNombre().equals(TDSContactosUtilsDAO.PROPIEDAD_NOMBRE)) {
 				propiedad.setValor(contacto.getNombre());
 			}
-			else if(propiedad.getNombre().equals(PersistenciaContactosUtils.PROPIEDAD_USUARIO)) {
+			else if(propiedad.getNombre().equals(TDSContactosUtilsDAO.PROPIEDAD_USUARIO)) {
 				propiedad.setValor(String.valueOf(contacto.getUsuario().getId()));
 			}
-			else if(propiedad.getNombre().equals(PersistenciaContactosUtils.PROPIEDAD_MENSAJES)) {
+			else if(propiedad.getNombre().equals(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES)) {
 				propiedad.setValor(getIdsMensajes(contacto.getMensajes()));
 			}
 			else if(propiedad.getNombre().equals(PROPIEDAD_MOVIL)) {
@@ -126,14 +128,14 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 		Usuario usuario;
 		Set<Mensaje> mensajes;
 		Entidad eContacto = servPersistencia.recuperarEntidad(id);
-		nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, PersistenciaContactosUtils.PROPIEDAD_NOMBRE);
+		nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_NOMBRE);
 		movil = servPersistencia.recuperarPropiedadEntidad(eContacto, PROPIEDAD_MOVIL);
-		int usuarioId = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, PersistenciaContactosUtils.PROPIEDAD_USUARIO));
+		int usuarioId = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_USUARIO));
 		usuario = TDSUsuarioDAO.getInstance().get(usuarioId);
 		ContactoIndividual contacto = new ContactoIndividual(nombre, usuario, movil);
 		contacto.setId(id);
 		PoolDAO.INSTANCE.addObject(contacto.getId(), contacto);
-		mensajes = getMensajesFromIds(servPersistencia.recuperarPropiedadEntidad(eContacto, PersistenciaContactosUtils.PROPIEDAD_MENSAJES));
+		mensajes = getMensajesFromIds(servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_MENSAJES));
 		contacto.setMensajes(mensajes);
 		return contacto;
 	}
@@ -153,7 +155,7 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	 * @return cadena con los ids de los mensajes.
 	 */
 	private String getIdsMensajes(Set<Mensaje> mensajes) {
-		return PersistenciaContactosUtils.getIdsMensajes(mensajes);
+		return TDSContactosUtilsDAO.getIdsMensajes(mensajes);
 	}
 	
 	/**
@@ -162,7 +164,7 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	 * @return conjunto de mensajes.
 	 */
 	private Set<Mensaje> getMensajesFromIds(String lineas) {
-		return PersistenciaContactosUtils.getMensajesFromIds(lineas);
+		return TDSContactosUtilsDAO.getMensajesFromIds(lineas);
 	}
 	
 

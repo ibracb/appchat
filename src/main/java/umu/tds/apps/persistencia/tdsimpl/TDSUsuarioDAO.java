@@ -1,4 +1,4 @@
-package umu.tds.apps.persistencia;
+package umu.tds.apps.persistencia.tdsimpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,6 +19,8 @@ import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.persistencia.PoolDAO;
+import umu.tds.apps.persistencia.UsuarioDAO;
 
 /**
  * Clase para manejo de persistencia de usuarios en TDS.
@@ -294,7 +296,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		return contactos.stream()
 				.filter(contacto -> contacto instanceof ContactoIndividual)
 				.map(contacto -> String.valueOf(contacto.getId()))
-				.collect(Collectors.joining(PersistenciaContactosUtils.ESPACIO_EN_BLANCO));
+				.collect(Collectors.joining(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO));
 	}
 	
 	/**
@@ -304,7 +306,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	 */
 	private Set<ContactoIndividual> getContactosIndividualesFromIds(String lineas) {
 		TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
-		return Arrays.stream(lineas.split(PersistenciaContactosUtils.ESPACIO_EN_BLANCO))
+		return Arrays.stream(lineas.split(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO))
 			.map(Integer::valueOf)
 			.map(adaptadorContactoIndividual::get)
 			.filter(contacto -> contacto instanceof ContactoIndividual)
@@ -320,7 +322,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		return contactos.stream()
 				.filter(contacto -> contacto instanceof Grupo)
 				.map(contacto -> String.valueOf(contacto.getId()))
-				.collect(Collectors.joining(PersistenciaContactosUtils.ESPACIO_EN_BLANCO));
+				.collect(Collectors.joining(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO));
 	}
 	
 	/**
@@ -330,7 +332,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	 */
 	private Set<Grupo> getGruposFromIds(String lineas) {
 		TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
-		return Arrays.stream(lineas.split(PersistenciaContactosUtils.ESPACIO_EN_BLANCO))
+		return Arrays.stream(lineas.split(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO))
 			.map(Integer::valueOf)
 			.map(adaptadorGrupo::get)
 			.filter(contacto -> contacto instanceof Grupo)

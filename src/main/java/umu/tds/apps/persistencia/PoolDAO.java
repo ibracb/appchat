@@ -34,14 +34,6 @@ public enum PoolDAO {
 	}
 	
 	/**
-	 * Borra del pool la instancia que tiene el id especificado.
-	 * @param id - el identificador de la instancia a querer borrar del pool.
-	 */
-	public void removeObject(int id) {
-		pool.remove(id);
-	}
-	
-	/**
 	 * Devuelve la instancia que tiene el id especificado.
 	 * @param id - el identificador de la instancia a querer obtener.
 	 * @return la instancia correspondiente contenida en el pool.
