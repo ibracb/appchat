@@ -247,6 +247,13 @@ public enum RepositorioUsuarios {
 				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
+	public ContactoIndividual findContacto(Usuario usuario, Mensaje mensaje) {
+		return (ContactoIndividual) usuario.getContactos().stream()
+				.filter(contacto -> contacto instanceof ContactoIndividual && contacto.getMensajes().contains(mensaje))
+				.findFirst()
+				.get();
+	}
+	
 	/**
 	 * Devuelve cuántos mensajes un usuario envió en el mes actual.
 	 * @param usuario - el usuario que nos interesa conocer la información.

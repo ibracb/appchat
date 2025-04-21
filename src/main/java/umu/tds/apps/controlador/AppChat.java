@@ -60,16 +60,6 @@ public enum AppChat {
 	private Usuario usuarioActual;
 	
 	/**
-	 * Contacto individual actualmente manejado por el controlador.
-	 */
-	private ContactoIndividual contactoIndividualActual;
-	
-	/**
-	 * Grupo actualmente manejado por el controlador.
-	 */
-	private Grupo grupoActual;
-	
-	/**
 	 * Constructor privado del controlador AppChat.
 	 */
 	private AppChat() {
@@ -127,10 +117,8 @@ public enum AppChat {
 		if(usuarioActual.getContactoIndividual(movilContacto) != null) {
 			return false;
 		}
-		contactoIndividualActual.setNombre(nombre);
-		contactoIndividualActual.setUsuario(repositorioUsuarios.findUsuario(movilContacto));
-		contactoIndividualActual.setMensajes(new TreeSet<Mensaje>());
-		adaptadorContactoIndividual.create(contactoIndividualActual);
+		ContactoIndividual contacto = new ContactoIndividual(nombre, usuarioActual, movilContacto);
+		adaptadorContactoIndividual.create(contacto);
 		usuarioActual.addContacto(nombre, movilContacto);
 		adaptadorUsuario.update(usuarioActual);
 		return true;
@@ -154,10 +142,8 @@ public enum AppChat {
 	 */
 	public void registrarGrupo(String movilUsuario, String nombre, String imagen, ContactoIndividual... miembros) {
 		Usuario usuario = repositorioUsuarios.findUsuario(movilUsuario);
-		grupoActual.setNombre(nombre);
-		grupoActual.setImagen(imagen);
-		grupoActual.setMensajes(new TreeSet<Mensaje>());
-		adaptadorGrupo.create(grupoActual);
+		Grupo grupo = new Grupo(nombre, imagen, miembros);
+		adaptadorGrupo.create(grupo);
 		usuario.createGrupo(nombre, imagen, miembros);
 		adaptadorUsuario.update(usuario);
 	}
@@ -214,8 +200,9 @@ public enum AppChat {
 	 * @param mensaje - Mensaje a borrar.
 	 */
 	public void borrarMensaje(Mensaje mensaje) {
+		ContactoIndividual contacto = repositorioUsuarios.findContacto(usuarioActual, mensaje);
 		adaptadorMensaje.delete(mensaje);
-		adaptadorContactoIndividual.update(contactoIndividualActual);
+		adaptadorContactoIndividual.update(contacto);
 	}
 	
 	/**
@@ -224,7 +211,7 @@ public enum AppChat {
 	private void initializeAdaptadores() {
 		FactoriaDAO factoria = null;
 		try {
-			factoria = FactoriaDAO.getInstance(FactoriaDAO.DAO_TDS);
+			factoria = FactoriaDAO.getInstance();
 		}
 		catch(DAOException e) {
 			e.printStackTrace();
