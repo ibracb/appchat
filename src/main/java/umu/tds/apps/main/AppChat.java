@@ -7,7 +7,7 @@ import umu.tds.apps.vista.VentanaLogin;
 /**
  * Clase a la que se le delega la responsabilidad de iniciar la aplicación.
  */
-public class Lanzador {
+public class AppChat {
 	
 	/**
 	 * Método que arranca AppChat.

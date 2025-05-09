@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -84,11 +85,6 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	private static final String PROPIEDAD_PREMIUM = "premium";
 	
 	/**
-	 * Identificador de la propiedad de descuento.
-	 */
-	//private static final String PROPIEDAD_DESCUENTO = "descuento";	A falta de ver qué hacer con los descuentos
-	
-	/**
 	 * Identificador de la propiedad de contactos individuales.
 	 */
 	private static final String PROPIEDAD_CONTACTOS_INDIVIDUALES = "contactosIndividuales";
@@ -136,11 +132,10 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	}
 	
 	@Override
-	public boolean create(Usuario usuario) {
+	public void create(Usuario usuario) {
 		Entidad eUsuario = null;
 		try {
 			eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
-			return false;
 		}
 		catch (NullPointerException e) {
 			
@@ -159,21 +154,21 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		eUsuario.setPropiedades(Arrays.asList(
 				new Propiedad(PROPIEDAD_ID, String.valueOf(usuario.getId())),
 				new Propiedad(PROPIEDAD_NOMBRE, usuario.getNombre()),
-				new Propiedad(PROPIEDAD_FECHA_NACIMIENTO, dateFormat.format(usuario.getFechaNacimiento())),
-				new Propiedad(PROPIEDAD_FECHA_REGISTRO, dateFormat.format(usuario.getFechaRegistro())),
+				new Propiedad(PROPIEDAD_FECHA_NACIMIENTO,
+						dateFormat.format(Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
+				new Propiedad(PROPIEDAD_FECHA_REGISTRO,
+						dateFormat.format(Date.from(usuario.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
 				new Propiedad(PROPIEDAD_EMAIL, usuario.getEmail()),
 				new Propiedad(PROPIEDAD_IMAGEN, usuario.getImagen()),
 				new Propiedad(PROPIEDAD_MOVIL, usuario.getMovil()),
 				new Propiedad(PROPIEDAD_CONTRASEÑA, usuario.getContraseña()),
 				new Propiedad(PROPIEDAD_SALUDO, usuario.getSaludo()),
 				new Propiedad(PROPIEDAD_PREMIUM, String.valueOf(usuario.isPremium())),
-				//new Propiedad(PROPIEDAD_DESCUENTO, String.valueOf(usuario.getDescuento().getId())),
 				new Propiedad(PROPIEDAD_CONTACTOS_INDIVIDUALES, getIdsContactosIndividuales(usuario.getContactos())),
 				new Propiedad(PROPIEDAD_GRUPOS, getIdsGrupos(usuario.getContactos()))
 		));
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
 		usuario.setId(eUsuario.getId());
-		return true;
 	}
 	
 	@Override
@@ -197,10 +192,12 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 				propiedad.setValor(usuario.getNombre());
 			}
 			else if(propiedad.getNombre().equals(PROPIEDAD_FECHA_NACIMIENTO)) {
-				propiedad.setValor(dateFormat.format(usuario.getFechaNacimiento()));
+				Date dateNacimiento = Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
+				propiedad.setValor(dateFormat.format(dateNacimiento));
 			}
 			else if(propiedad.getNombre().equals(PROPIEDAD_FECHA_REGISTRO)) {
-				propiedad.setValor(dateFormat.format(usuario.getFechaRegistro()));
+				Date dateRegistro = Date.from(usuario.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant());
+			    propiedad.setValor(dateFormat.format(dateRegistro));
 			}
 			else if(propiedad.getNombre().equals(PROPIEDAD_EMAIL)) {
 				propiedad.setValor(usuario.getEmail());
@@ -243,7 +240,6 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		String contraseña;
 		Optional<String> saludo;
 		boolean premium;
-		//Descuento descuento;
 		Set<ContactoIndividual> contactos;
 		Set<Grupo> grupos;
 		Entidad eUsuario = servPersistencia.recuperarEntidad(id);
@@ -268,7 +264,6 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		usuario.setFechaRegistro(fechaRegistro);
 		usuario.setPremium(premium);
 		PoolDAO.INSTANCE.addObject(usuario.getId(), usuario);
-		//descuento = FactoriaDescuentos.INSTANCE.createDescuento(usuario);		A falta de ver qué hacer con los descuentos
 		contactos = getContactosIndividualesFromIds(servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_CONTACTOS_INDIVIDUALES));
 		contactos.stream()
 			.forEach(contacto -> usuario.addContacto(contacto.getNombre(), contacto.getMovil()));
@@ -307,10 +302,11 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	private Set<ContactoIndividual> getContactosIndividualesFromIds(String lineas) {
 		TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
 		return Arrays.stream(lineas.split(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO))
-			.map(Integer::valueOf)
-			.map(adaptadorContactoIndividual::get)
-			.filter(contacto -> contacto instanceof ContactoIndividual)
-			.collect(Collectors.toSet());
+				.filter(s -> !s.isBlank())
+				.map(Integer::valueOf)
+				.map(adaptadorContactoIndividual::get)
+				.filter(contacto -> contacto instanceof ContactoIndividual)
+				.collect(Collectors.toSet());
 	}
 	
 	/**
@@ -333,6 +329,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	private Set<Grupo> getGruposFromIds(String lineas) {
 		TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
 		return Arrays.stream(lineas.split(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO))
+			.filter(s -> !s.isBlank())	
 			.map(Integer::valueOf)
 			.map(adaptadorGrupo::get)
 			.filter(contacto -> contacto instanceof Grupo)

@@ -21,7 +21,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import umu.tds.apps.controlador.AppChat;
+import umu.tds.apps.controlador.Controlador;
 
 
 public class VentanaLogin extends JFrame {
@@ -177,7 +177,7 @@ public class VentanaLogin extends JFrame {
 	private void accederLogin() {
 		String movil = textFieldTelefono.getText();
 		String contraseña = new String(passwordField.getPassword());
-		if(AppChat.INSTANCE.loginUsuario(movil, contraseña)) {
+		if(Controlador.INSTANCE.loginUsuario(movil, contraseña)) {
 			dispose();
 			JOptionPane.showMessageDialog(null, "¡Hola de nuevo!");
 			VentanaPrincipal vPrincipal = new VentanaPrincipal();

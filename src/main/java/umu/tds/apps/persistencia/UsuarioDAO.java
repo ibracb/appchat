@@ -13,7 +13,7 @@ public interface UsuarioDAO {
 	 * Método para registrar un usuario en el sistema.
 	 * @param usuario - Usuario a registrar.
 	 */
-	boolean create(Usuario usuario);
+	void create(Usuario usuario);
 	
 	/**
 	 * Método para eliminar un usuario del sistema.

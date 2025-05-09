@@ -101,8 +101,8 @@ public class Usuario {
 		this.contraseña = contraseña;
 		setSaludo(saludo);
 		this.premium = false;
-		updateDescuento();
 		this.contactos = new TreeSet<Contacto>();
+		updateDescuento();
 	}
 
 	@Override
@@ -364,7 +364,13 @@ public class Usuario {
 	public void setContactos(Set<Contacto> contactos) {
 		this.contactos = contactos;
 	}
-
+	
+	public int getTotalMensajesEnviadosUltimoMes() {
+		return getContactos().stream()
+				.map(contacto -> contacto.getSubTotalMensajesEnviadosUltimoMes())
+				.reduce(0, Integer::sum);
+	}
+	
 	public ContactoIndividual getContactoIndividual(String movil) {
 		return contactos.stream()
 				.filter(contacto -> contacto instanceof ContactoIndividual)
@@ -373,6 +379,5 @@ public class Usuario {
 				.findFirst()
 				.orElse(null);
 	}
-	
 	
 }

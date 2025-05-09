@@ -22,7 +22,7 @@ import umu.tds.apps.repositorios.RepositorioUsuarios;
 /**
  * Coordina la lógica de la aplicación, y maneja los eventos capturados por la interfaz de usuario.
  */
-public enum AppChat {
+public enum Controlador {
 	
 	/**
 	 * Punto de acceso global al Controlador AppChat.
@@ -62,9 +62,13 @@ public enum AppChat {
 	/**
 	 * Constructor privado del controlador AppChat.
 	 */
-	private AppChat() {
+	private Controlador() {
 		initializeAdaptadores();
 		initializeRepositorioUsuarios();
+	}
+	
+	public boolean isUsuarioRegistrado(String movil) {
+		return RepositorioUsuarios.INSTANCE.findUsuario(movil) != null;
 	}
 	
 	/**
@@ -78,11 +82,13 @@ public enum AppChat {
 	 * @param saludo - El saludo del usuario a registrar.
 	 */
 	public boolean registrarUsuario(String nombre, LocalDate fechaNacimiento, String email, String imagen, String movil, String contraseña, String saludo) {
-		if(repositorioUsuarios.findUsuario(movil) != null) {
+		if (isUsuarioRegistrado(movil)) {
 			return false;
 		}
 		Usuario usuario = new Usuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo);
-		return adaptadorUsuario.create(usuario) && repositorioUsuarios.addUsuario(usuario);
+		adaptadorUsuario.create(usuario);
+		repositorioUsuarios.addUsuario(usuario);
+		return true;
 	}
 	
 	/**

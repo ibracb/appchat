@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import umu.tds.apps.controlador.AppChat;
+import umu.tds.apps.controlador.Controlador;
 import umu.tds.apps.dominio.ContactoIndividual;
 
 public class VentanaContactos extends JFrame {
@@ -88,7 +88,7 @@ public class VentanaContactos extends JFrame {
 		if (opcion == JOptionPane.OK_OPTION) {
 			String nombre = textFieldNombre.getText();
 			String movil = textFieldMovil.getText();
-			boolean registro = AppChat.INSTANCE.registrarContactoIndividual(nombre, movil);
+			boolean registro = Controlador.INSTANCE.registrarContactoIndividual(nombre, movil);
 			if(registro) {
 				updateListaContactos();
 				JOptionPane.showMessageDialog(null, "Nombre: " + nombre + "\nMóvil: " + movil);
@@ -104,7 +104,7 @@ public class VentanaContactos extends JFrame {
 	
 	private void updateListaContactos() {
 		modelContactos.clear();
-		AppChat.INSTANCE.getContactosIndividualesUsuarioActual().forEach(contacto -> {
+		Controlador.INSTANCE.getContactosIndividualesUsuarioActual().forEach(contacto -> {
 			modelContactos.addElement((ContactoIndividual) contacto);
 		});
 	}

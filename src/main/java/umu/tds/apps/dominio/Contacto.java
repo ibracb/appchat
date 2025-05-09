@@ -123,6 +123,13 @@ public abstract class Contacto implements Comparable<Contacto> {
 		return mensaje;
 	}
 	
+	public int getSubTotalMensajesEnviadosUltimoMes() {
+		return (int) getMensajes().stream()
+				.filter(mensaje -> mensaje.getMomentoEnvio().getMonth().equals(Utils.FECHA_ACTUAL.getMonth())
+						&& mensaje.getMomentoEnvio().getYear()==Utils.FECHA_ACTUAL.getYear() && mensaje.getTipo().equals(TipoMensaje.ENVIADO))
+				.count();
+	}
+	
 	@Override
 	public int compareTo(Contacto o) {
 		return this.getNombre().compareTo(o.getNombre());

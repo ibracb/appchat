@@ -12,12 +12,10 @@ import java.util.stream.Collectors;
 import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.persistencia.DAOException;
 import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
-import umu.tds.apps.utils.Utils;
 
 /**
  * Punto global que colecciona a todos los usuarios del sistema AppChat.
@@ -120,29 +118,18 @@ public enum RepositorioUsuarios {
 	 * Añadir un usuario al repositorio.
 	 * @param usuario - usuario a añadir.
 	 */
-	public boolean addUsuario(Usuario usuario) {
-		if (usuario == null) {
-	        return false;
-	    }
-	    if (usuariosPorID.containsKey(usuario.getId()) || usuariosPorMovil.containsKey(usuario.getMovil())) {
-	        return false;
-	    }
+	public void addUsuario(Usuario usuario) {
 	    usuariosPorID.put(usuario.getId(), usuario);
 	    usuariosPorMovil.put(usuario.getMovil(), usuario);
-	    return true;
 	}
 	
 	/**
 	 * Eliminar un usuario del repositorio.
 	 * @param usuario - usuario a eliminar.
 	 */
-	public boolean removeUsuario(Usuario usuario) {
-		if(!usuariosPorID.containsKey(usuario.getId()) || !usuariosPorMovil.containsKey(usuario.getMovil())) {
-			return false;
-		}
+	public void removeUsuario(Usuario usuario) {
 		usuariosPorID.remove(usuario.getId());
 		usuariosPorMovil.remove(usuario.getMovil());
-		return true;
 	}
 	
 	/**
@@ -179,18 +166,6 @@ public enum RepositorioUsuarios {
 				.filter(mensaje -> mensaje.getMomentoEnvio().getDayOfYear()==dia && mensaje.getMomentoEnvio().getMonth().equals(mes)
 					&& mensaje.getMomentoEnvio().getYear()==año)
 				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Devuelve los mensajes que el usuario envió un contacto en el mes actual.
-	 * @param contacto - el contacto que recibe los mensajes.
-	 * @return la cantidad de mensajes enviados.
-	 */
-	public int getSubTotalMensajesEnviadosUltimoMes(Contacto contacto) {
-		return (int) contacto.getMensajes().stream()
-				.filter(mensaje -> mensaje.getMomentoEnvio().getMonth().equals(Utils.FECHA_ACTUAL.getMonth())
-						&& mensaje.getMomentoEnvio().getYear()==Utils.FECHA_ACTUAL.getYear() && mensaje.getTipo().equals(TipoMensaje.ENVIADO))
-				.count();
 	}
 	
 	/**
@@ -252,17 +227,6 @@ public enum RepositorioUsuarios {
 				.filter(contacto -> contacto instanceof ContactoIndividual && contacto.getMensajes().contains(mensaje))
 				.findFirst()
 				.get();
-	}
-	
-	/**
-	 * Devuelve cuántos mensajes un usuario envió en el mes actual.
-	 * @param usuario - el usuario que nos interesa conocer la información.
-	 * @return la cantidad todtal de mensajes.
-	 */
-	public int getTotalMensajesEnviadosUltimoMes(Usuario usuario) {
-		return getAllContactos(usuario).stream()
-				.map(contacto -> getSubTotalMensajesEnviadosUltimoMes(contacto))
-				.reduce(0, Integer::sum);
 	}
 	
 }
