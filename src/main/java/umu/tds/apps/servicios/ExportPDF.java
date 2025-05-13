@@ -60,6 +60,7 @@ public enum ExportPDF {
 				contador++;
 			});
 			Paragraph parrafoGrupos = new Paragraph(MENSAJE_SEGUNDO);
+			document.add(parrafoGrupos);
 			usuario.getGrupos().forEach(grupo -> {
 				int contador = 0;
 				Paragraph parrafo = new Paragraph(contador + grupo.getNombre() + ":\n");
@@ -69,7 +70,6 @@ public enum ExportPDF {
 				document.add(parrafo);
 				contador++;
 			});
-			document.add(parrafoGrupos);
 			document.close();
 			pdfDocument.close();		
 			return true;
