@@ -151,7 +151,7 @@ public class VentanaLogin extends JFrame {
 		gbc_botonRegistrar.gridx = 3;
 		gbc_botonRegistrar.gridy = 5;
 		botonRegistrar.setPreferredSize(new Dimension(100, 30));
-		botonRegistrar.addActionListener(_ -> accederRegistro());
+		botonRegistrar.addActionListener(e -> accederRegistro());
 		panelCentral.add(botonRegistrar, gbc_botonRegistrar);
 
 		botonAceptar = new JButton("Aceptar");
@@ -162,7 +162,7 @@ public class VentanaLogin extends JFrame {
 		gbc_botonAceptar.gridx = 6;
 		gbc_botonAceptar.gridy = 5;
 		botonAceptar.setPreferredSize(new Dimension(100, 30));
-		botonAceptar.addActionListener(_ -> accederLogin());
+		botonAceptar.addActionListener(e -> accederLogin());
 		panelCentral.add(botonAceptar, gbc_botonAceptar);
 
 		horizontalGlue = Box.createHorizontalGlue();

@@ -259,7 +259,7 @@ public class VentanaRegistro extends JFrame {
 		gbc_btnPerfil.insets = new Insets(0, 0, 5, 5);
 		gbc_btnPerfil.gridx = 5;
 		gbc_btnPerfil.gridy = 5;
-		btnPerfil.addActionListener(_ -> seleccionarImagen());
+		btnPerfil.addActionListener(e -> seleccionarImagen());
 		panel.add(btnPerfil, gbc_btnPerfil);
 		
 		etiquetaSaludo = new JLabel("Saludo");
@@ -310,7 +310,7 @@ public class VentanaRegistro extends JFrame {
 		btnAceptar = new JButton("Aceptar");
 		btnAceptar.setFont(new Font("Georgia", Font.BOLD, 12));
 		btnAceptar.setPreferredSize(new Dimension(100, 30)); // Establece el tamaño preferido
-		btnAceptar.addActionListener(_ -> registrarUsuario());
+		btnAceptar.addActionListener(e -> registrarUsuario());
 		panelBotones.add(btnAceptar);
 		
 		horizontalStrut = Box.createHorizontalStrut(20);
@@ -319,7 +319,7 @@ public class VentanaRegistro extends JFrame {
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Georgia", Font.BOLD, 12));
 		btnCancelar.setPreferredSize(new Dimension(100, 30)); // Establece el tamaño preferido
-		btnCancelar.addActionListener(_ -> volverLogin());
+		btnCancelar.addActionListener(e -> volverLogin());
 		panelBotones.add(btnCancelar);
 	}
 	
