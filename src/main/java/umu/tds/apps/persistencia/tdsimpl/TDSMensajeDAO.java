@@ -16,7 +16,6 @@ import tds.driver.ServicioPersistencia;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.persistencia.MensajeDAO;
-import umu.tds.apps.persistencia.PoolDAO;
 
 /**
  * Clase para manejo de persistencia de manejos en TDS.

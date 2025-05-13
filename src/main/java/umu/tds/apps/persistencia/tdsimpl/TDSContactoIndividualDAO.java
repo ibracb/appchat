@@ -14,7 +14,6 @@ import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.persistencia.ContactoIndividualDAO;
-import umu.tds.apps.persistencia.PoolDAO;
 
 /**
  * Clase para manejo de persistencia de contactos individuales en TDS.
@@ -65,18 +64,19 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	@Override
 	public void create(ContactoIndividual contacto) {
 		Entidad eContacto = null;
-		boolean noRegistrar = false;
+		boolean noRegistrar = true;
 		try {
 			eContacto = servPersistencia.recuperarEntidad(contacto.getId());
 		} catch (NullPointerException e) {
-			noRegistrar = true;
+			noRegistrar = false;
 		}
 		if(noRegistrar) {
 			return;
 		}
-		TDSContactoIndividualDAO adaptadorContacto = TDSContactoIndividualDAO.getInstance();
-		contacto.getMensajes().stream()
-			.forEach(mensaje -> adaptadorContacto.create(contacto));
+		TDSMensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
+		contacto.getMensajes().forEach(mensaje -> {
+			adaptadorMensaje.create(mensaje);
+		});
 		eContacto = new Entidad();
 		eContacto.setNombre(ENTIDAD_CONTACTO);
 		eContacto.setPropiedades(

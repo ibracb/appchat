@@ -59,12 +59,12 @@ public class VentanaContactos extends JFrame {
 		
 		JButton btnAñadir = new JButton("Añadir contacto");
 		btnAñadir.setFont(new Font("Georgia", Font.BOLD, 12));
-		btnAñadir.addActionListener(e -> añadirContacto());
+		btnAñadir.addActionListener(_ -> añadirContacto());
 		panelBotones.add(btnAñadir);
 		
 		JButton btnEliminar = new JButton("Eliminar contacto");
 		btnEliminar.setFont(new Font("Georgia", Font.BOLD, 12));
-		btnEliminar.addActionListener(e -> eliminarContacto());
+		btnEliminar.addActionListener(_ -> eliminarContacto());
 		panelBotones.add(btnEliminar);
 		
 		JScrollPane scrollPane = new JScrollPane();

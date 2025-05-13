@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+
 import umu.tds.apps.dominio.descuentos.Descuento;
 import umu.tds.apps.dominio.descuentos.FactoriaDescuentos;
 import umu.tds.apps.utils.Utils;
@@ -378,6 +380,20 @@ public class Usuario {
 				.filter(contactoIndividual -> contactoIndividual.getMovil().equals(movil))
 				.findFirst()
 				.orElse(null);
+	}
+	
+	public Set<ContactoIndividual> getContactosIndividuales(){
+		return getContactos().stream()
+				.filter(contacto -> contacto instanceof ContactoIndividual)
+				.map(contacto -> (ContactoIndividual) contacto)
+				.collect(Collectors.toCollection(TreeSet::new));
+	}
+	
+	public Set<Grupo> getGrupos(){
+		return getContactos().stream()
+				.filter(contacto -> contacto instanceof Grupo)
+				.map(contacto -> (Grupo) contacto)
+				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
 }

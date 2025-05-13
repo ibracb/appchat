@@ -1,4 +1,4 @@
-package umu.tds.apps.main;
+package umu.tds.apps.aplicacion;
 
 import java.awt.EventQueue;
 

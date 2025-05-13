@@ -15,7 +15,6 @@ import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.persistencia.GrupoDAO;
-import umu.tds.apps.persistencia.PoolDAO;
 
 /**
  * Clase para manejo de persistencia de grupos en TDS.
@@ -79,6 +78,10 @@ public class TDSGrupoDAO implements GrupoDAO {
 		if(noRegistrar) {
 			return;
 		}
+		TDSMensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
+		grupo.getMensajes().forEach(mensaje -> {
+			adaptadorMensaje.create(mensaje);
+		});
 		eGrupo = new Entidad();
 		eGrupo.setNombre(ENTIDAD_GRUPO);
 		eGrupo.setPropiedades(

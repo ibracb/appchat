@@ -151,7 +151,7 @@ public class VentanaLogin extends JFrame {
 		gbc_botonRegistrar.gridx = 3;
 		gbc_botonRegistrar.gridy = 5;
 		botonRegistrar.setPreferredSize(new Dimension(100, 30));
-		botonRegistrar.addActionListener(e -> accederRegistro());
+		botonRegistrar.addActionListener(_ -> accederRegistro());
 		panelCentral.add(botonRegistrar, gbc_botonRegistrar);
 
 		botonAceptar = new JButton("Aceptar");
@@ -162,7 +162,7 @@ public class VentanaLogin extends JFrame {
 		gbc_botonAceptar.gridx = 6;
 		gbc_botonAceptar.gridy = 5;
 		botonAceptar.setPreferredSize(new Dimension(100, 30));
-		botonAceptar.addActionListener(e -> accederLogin());
+		botonAceptar.addActionListener(_ -> accederLogin());
 		panelCentral.add(botonAceptar, gbc_botonAceptar);
 
 		horizontalGlue = Box.createHorizontalGlue();
@@ -179,7 +179,7 @@ public class VentanaLogin extends JFrame {
 		String contraseña = new String(passwordField.getPassword());
 		if(Controlador.INSTANCE.loginUsuario(movil, contraseña)) {
 			dispose();
-			JOptionPane.showMessageDialog(null, "¡Hola de nuevo!");
+			JOptionPane.showMessageDialog(null, "¡Hola de nuevo, " + Controlador.INSTANCE.getUsuarioActual().getNombre() + "!");
 			VentanaPrincipal vPrincipal = new VentanaPrincipal();
 			vPrincipal.setVisible(true);
 		}

@@ -20,7 +20,6 @@ import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Usuario;
-import umu.tds.apps.persistencia.PoolDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
 
 /**
@@ -134,11 +133,15 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	@Override
 	public void create(Usuario usuario) {
 		Entidad eUsuario = null;
+		boolean noRegistrar = true;
 		try {
 			eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
 		}
 		catch (NullPointerException e) {
-			
+			noRegistrar = false;
+		}
+		if(noRegistrar) {
+			return;
 		}
 		TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
 		TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
