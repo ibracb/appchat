@@ -17,9 +17,14 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import tds.BubbleText;
+import umu.tds.apps.controlador.Controlador;
+import umu.tds.apps.dominio.Usuario;
+
+import javax.swing.JButton;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
@@ -37,11 +42,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JMenuItem MCambiarImagenPerfil;
 	private JMenuItem MContactos;
 	private JMenuItem MBuscar;
-	private JMenuItem MPremium;
 	private ImageIcon imagenPerfil;
 	private ImageIcon imagenBuscar;
 	private ImageIcon imagenPremium;
 	private JPanel panel;
+	private JButton btnPremium;
 	
 	
 
@@ -128,18 +133,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		MBuscar.setMaximumSize(new Dimension(128, 128));
 		menuBar.add(MBuscar);
 		
-		MBuscar.addActionListener(this);
-		
-		MPremium = new JMenuItem("Premium");
-		MPremium.setFont(new Font("Georgia", Font.BOLD, 12));
-		MPremium.setMaximumSize(new Dimension(128, 128));
-		MPremium.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		imagenPremium = new ImageIcon(getClass().getResource("/imagenes/premiumTick.png"));
-		MPremium.setIcon(imagenPremium);
-		MPremium.setActionCommand("MPremium");
-		menuBar.add(MPremium);
+		btnPremium = new JButton("Premium", imagenPremium);
+		btnPremium.setFont(new Font("Georgia", Font.BOLD, 12));
+		btnPremium.addActionListener(e -> abrirPremium());
+		menuBar.add(btnPremium);
 		
-		MPremium.addActionListener(this);
+		MBuscar.addActionListener(this);
 		
 		
 		
@@ -181,19 +181,33 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			dispose();
 			ventanaBuscar.mostrarVentanaBuscar();
 		}
-
-		else if (e.getSource() == MPremium) {
-			// Llamar al controlador para mostrar premium
-		    // TODO: a lo mejor hay que quitar este y poner opciones como lo de nombre que ponga pagar, descargar conversacion o algo asi
+	}
+	
+	private void abrirPremium() {
+		if(!Controlador.INSTANCE.getUsuarioActual().isPremium()) {
+			int respuestaActivar = JOptionPane.showConfirmDialog(null, "¿Desea activar premium?", "Gestión premium", JOptionPane.YES_NO_OPTION);
+			if(respuestaActivar == JOptionPane.YES_OPTION) {
+				Controlador.INSTANCE.getUsuarioActual().setPremium(true);
+				JOptionPane.showMessageDialog(null, "Premium activado. Gracias por esos " +
+				(Usuario.PRECIO_INICIAL - Controlador.INSTANCE.getUsuarioActual().getDescuento().getDescuento(Usuario.PRECIO_INICIAL, Controlador.INSTANCE.getUsuarioActual())) + 
+				" euros", "Gestión premium", JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		else {
+			int respuestaDesactivar = JOptionPane.showConfirmDialog(null, "¿Desea desactivar premium?", "Gestión premium", JOptionPane.YES_NO_OPTION);
+			if(respuestaDesactivar == JOptionPane.YES_OPTION) {
+				Controlador.INSTANCE.getUsuarioActual().setPremium(false);
+				JOptionPane.showMessageDialog(null, "Premium desactivado", "Gestión premium", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 	}
-		
-		public void crearMensaje(String mensaje, String usuario, int tipo) {
-			Color color;
-			if (tipo == BubbleText.RECEIVED) {color = Color.PINK;} 
-			else { color = Color.CYAN;}	
-			BubbleText burbuja = new BubbleText(chat, mensaje, color, usuario, tipo);
-			chat.add(burbuja);
-		}
+	
+	public void crearMensaje(String mensaje, String usuario, int tipo) {
+		Color color;
+		if (tipo == BubbleText.RECEIVED) {color = Color.PINK;} 
+		else { color = Color.CYAN;}	
+		BubbleText burbuja = new BubbleText(chat, mensaje, color, usuario, tipo);
+		chat.add(burbuja);
+	}
 
 }

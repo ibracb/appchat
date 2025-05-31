@@ -22,6 +22,8 @@ public class Usuario {
 	 */
 	public static final String SALUDO_DEFAULT = "¡Hola! Soy un usuario de AppChat.";
 	
+	public static final double PRECIO_INICIAL = 40.0;
+	
 	/**
 	 * Identificador asociado a un usuario.
 	 */
