@@ -275,8 +275,8 @@ public enum Controlador {
 		return filtroCompuesto.filtrar(usuario);
 	}
 	
-	public void generarPdf() {
-		ExportPDF.INSTANCE.createPDF(usuarioActual);
+	public boolean generarPdf() {
+		return ExportPDF.INSTANCE.createPDF(usuarioActual);
 	}
 	
 }

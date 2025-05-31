@@ -189,7 +189,18 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	}
 	
 	private void gestionarPdf() {
-		Controlador.INSTANCE.generarPdf();
+		if(Controlador.INSTANCE.getUsuarioActual().isPremium()) {
+			if(Controlador.INSTANCE.generarPdf()) {
+				JOptionPane.showMessageDialog(null, "Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo",
+						"Pdf ok", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Error al generar el pdf. Prueba de nuevo", "Pdf mal", JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "No eres premium. ESPABILA", "No premium", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	private void abrirPremium() {
