@@ -20,6 +20,7 @@ import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.persistencia.PoolDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
 
 /**

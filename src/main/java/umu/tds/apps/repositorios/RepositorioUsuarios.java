@@ -1,13 +1,10 @@
 package umu.tds.apps.repositorios;
 
-import java.time.Month;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
@@ -139,87 +136,6 @@ public enum RepositorioUsuarios {
 	 */
 	public Set<Contacto> getAllContactos(Usuario usuario){
 		return usuario.getContactos();
-	}
-	
-	/**
-	 * Dado un número de teléfono móvil, devuelve los mensajes en los que el emisor o el receptor coincide con ese mismo teléfono móvil.
-	 * @param contacto - el contacto de donde extraer los mensajes.
-	 * @param texto - El texto que deben contener los mensajes.
-	 * @return los mensajes coincidentes.
-	 */
-	public Set<Mensaje> getMensajesPorTexto(Contacto contacto, String texto){
-		return contacto.getMensajes().stream()
-			.filter(mensaje -> mensaje.getTexto().contains(texto))
-			.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Dada una fecha, devuelve los mensajes que un contacto intercambió con el usuario en esa misma fecha.
-	 * @param contacto - el contacto de donde extraer los mensajes.
-	 * @param dia - el día coincidente.
-	 * @param mes - el mes coincidente.
-	 * @param año - el año coincidente.
-	 * @return los mensajes coincidentes.
-	 */
-	public Set<Mensaje> getMensajesPorFecha(Contacto contacto, int dia, Month mes, int año) {
-		return contacto.getMensajes().stream()
-				.filter(mensaje -> mensaje.getMomentoEnvio().getDayOfYear()==dia && mensaje.getMomentoEnvio().getMonth().equals(mes)
-					&& mensaje.getMomentoEnvio().getYear()==año)
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Dado un usuario, busca aquellos mensajes que contienen un texto.
-	 * @param usuario - el usuario donde filtrar los mensajes.
-	 * @param texto - el texto que deben contener los mensajes.
-	 * @return los mensajes coincidentes.
-	 */
-	public Set<Mensaje> searchMensajesPorTexto(Usuario usuario, String texto) {
-		return getAllContactos(usuario).stream()
-				.flatMap(contacto -> getMensajesPorTexto(contacto, texto).stream())
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Dado un usuario, busca aquellos mensajes cuyo emisor o receptor es un contacto con el nombre pasado como asrgumento.
-	 * @param usuario - usuario del que obtener los mensajes.
-	 * @param nombre - nombre del contacto que nos intersa.
-	 * @return los mensajes coincidentes con el patrón indicado.
-	 */
-	public Set<Mensaje> searchMensajesPorNombreContacto(Usuario usuario, String nombre) {
-		return getAllContactos(usuario).stream()
-				.filter(contacto -> contacto.getNombre().equals(nombre))
-				.flatMap(contacto -> contacto.getMensajes().stream())
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Dado un usuario, busca aquellos mensaje donde el emisor o el receptor tiene un determinado número de teléfono móvil.
-	 * @param usuario - el usuario del que extraer los mensajes.
-	 * @param movil - teléfono móvil del emisor o receptor.
-	 * @return los mensajes que cumplen.
-	 */
-	public Set<Mensaje> searchMensajesPorMovil(Usuario usuario, String movil) {
-		return usuario.getContactos().stream()
-				.filter(contacto -> contacto instanceof ContactoIndividual)
-				.map(contacto -> (ContactoIndividual) contacto)
-				.filter(contacto -> contacto.getMovil().equals(movil))
-				.flatMap(contacto -> contacto.getMensajes().stream())
-				.collect(Collectors.toCollection(TreeSet::new));
-	}
-	
-	/**
-	 * Busca todos aquellos mensajes en los que participa un usuario, y se cumple una determinada fecha.
-	 * @param usuario - el usuario donde filtrar.
-	 * @param dia - dia coincidente.
-	 * @param mes - mes coincidente.
-	 * @param año - año coincidente.
-	 * @return los mensajes que cumplen con el patrón
-	 */
-	public Set<Mensaje> searchMensajesPorFecha(Usuario usuario, int dia, Month mes, int año) {
-		return getAllContactos(usuario).stream()
-				.flatMap(contacto -> getMensajesPorFecha(contacto, dia, mes, año).stream())
-				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
 	public ContactoIndividual findContacto(Usuario usuario, Mensaje mensaje) {

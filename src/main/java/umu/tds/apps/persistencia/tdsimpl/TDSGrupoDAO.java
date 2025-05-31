@@ -15,6 +15,7 @@ import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.persistencia.GrupoDAO;
+import umu.tds.apps.persistencia.PoolDAO;
 
 /**
  * Clase para manejo de persistencia de grupos en TDS.

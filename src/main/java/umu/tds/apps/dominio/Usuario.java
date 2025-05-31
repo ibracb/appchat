@@ -396,4 +396,10 @@ public class Usuario {
 				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
+	public Set<Mensaje> getAllMensajes() {
+		return contactos.stream()
+			.flatMap(c -> c.getMensajes().stream())
+			.collect(Collectors.toCollection(TreeSet::new));
+	}
+	
 }

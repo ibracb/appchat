@@ -18,6 +18,12 @@ import umu.tds.apps.persistencia.GrupoDAO;
 import umu.tds.apps.persistencia.MensajeDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
 import umu.tds.apps.repositorios.RepositorioUsuarios;
+import umu.tds.apps.servicios.filtros.Filtro;
+import umu.tds.apps.servicios.filtros.FiltroCompuesto;
+import umu.tds.apps.servicios.filtros.FiltroPorFecha;
+import umu.tds.apps.servicios.filtros.FiltroPorMovil;
+import umu.tds.apps.servicios.filtros.FiltroPorNombreContacto;
+import umu.tds.apps.servicios.filtros.FiltroPorTexto;
 
 /**
  * Coordina la lógica de la aplicación, y maneja los eventos capturados por la interfaz de usuario.
@@ -256,5 +262,16 @@ public enum Controlador {
 				.filter(contacto -> contacto instanceof ContactoIndividual)
 				.collect(Collectors.toCollection(TreeSet::new));
 	}
+	
+	public Set<Mensaje> filtrarMensajes(Usuario usuario, String texto, String movil, String nombre, LocalDate fecha) {
+		Set<Filtro> filtros = Set.of(
+				new FiltroPorTexto(texto),
+				new FiltroPorMovil(movil),
+				new FiltroPorNombreContacto(nombre),
+				new FiltroPorFecha(fecha)
+		);
+		Filtro filtroCompuesto = new FiltroCompuesto(filtros);
+		return filtroCompuesto.filtrar(usuario);
+}
 	
 }

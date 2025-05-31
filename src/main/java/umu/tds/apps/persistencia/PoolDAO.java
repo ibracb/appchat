@@ -1,4 +1,4 @@
-package umu.tds.apps.persistencia.tdsimpl;
+package umu.tds.apps.persistencia;
 
 import java.util.HashMap;
 
