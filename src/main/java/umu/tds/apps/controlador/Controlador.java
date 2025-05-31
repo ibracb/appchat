@@ -18,6 +18,7 @@ import umu.tds.apps.persistencia.GrupoDAO;
 import umu.tds.apps.persistencia.MensajeDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
 import umu.tds.apps.repositorios.RepositorioUsuarios;
+import umu.tds.apps.servicios.ExportPDF;
 import umu.tds.apps.servicios.filtros.Filtro;
 import umu.tds.apps.servicios.filtros.FiltroCompuesto;
 import umu.tds.apps.servicios.filtros.FiltroPorFecha;
@@ -272,6 +273,10 @@ public enum Controlador {
 		);
 		Filtro filtroCompuesto = new FiltroCompuesto(filtros);
 		return filtroCompuesto.filtrar(usuario);
-}
+	}
+	
+	public void generarPdf() {
+		ExportPDF.INSTANCE.createPDF(usuarioActual);
+	}
 	
 }

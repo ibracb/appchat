@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -23,8 +24,6 @@ import javax.swing.JPanel;
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
 import umu.tds.apps.dominio.Usuario;
-
-import javax.swing.JButton;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
@@ -47,6 +46,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private ImageIcon imagenPremium;
 	private JPanel panel;
 	private JButton btnPremium;
+	private JButton btnPdf;
 	
 	
 
@@ -139,6 +139,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnPremium.addActionListener(e -> abrirPremium());
 		menuBar.add(btnPremium);
 		
+		btnPdf = new JButton("Generar PDF");
+		btnPdf.setFont(new Font("Georgia", Font.BOLD, 12));
+		btnPdf.addActionListener(e -> gestionarPdf());
+		menuBar.add(btnPdf);
+		
 		MBuscar.addActionListener(this);
 		
 		
@@ -181,6 +186,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			dispose();
 			ventanaBuscar.mostrarVentanaBuscar();
 		}
+	}
+	
+	private void gestionarPdf() {
+		Controlador.INSTANCE.generarPdf();
 	}
 	
 	private void abrirPremium() {
