@@ -7,19 +7,24 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
@@ -88,28 +93,29 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		
 		menuBar = new JMenuBar();
 		panel.add(menuBar);
-		
-		
-		
-		MTuContacto = new JMenu("Nombre");
-		// Hacer que el nombre sea el nombre del usuario logeado + apellidos
+				
+		// Crear el JMenu con el nombre del usuario
+		MTuContacto = new JMenu(Controlador.INSTANCE.getUsuarioActual().getNombre());
 		MTuContacto.setFont(new Font("Georgia", Font.BOLD, 12));
-		MTuContacto.setPreferredSize(new Dimension(200, 25));
+		MTuContacto.setPreferredSize(new Dimension(200, 30)); // Aumentar altura para ícono
 		MTuContacto.setAlignmentX(Component.LEFT_ALIGNMENT);
-		//MTuContacto.setIcon(new ImageIcon("FOTO QUE NOS HAN PASADO COMO FOTO DE PERFIL"));
+
+		refrescarImagen();
+		
+		// Agregar el JMenu a la barra de menú
 		menuBar.add(MTuContacto);
 		
 		MCambiarImagenPerfil = new JMenuItem("Cambiar imagen de perfil");
 		MCambiarImagenPerfil.setFont(new Font("Georgia", Font.PLAIN, 12));
 		MTuContacto.add(MCambiarImagenPerfil);
 		
-		MCambiarImagenPerfil.addActionListener(this);
+		MCambiarImagenPerfil.addActionListener(e -> cambiarImagen());
 		
 		MCerrarSesion = new JMenuItem("Cerrar sesión");
 		MCerrarSesion.setFont(new Font("Georgia", Font.PLAIN, 12));
 		MTuContacto.add(MCerrarSesion);
 		
-		MCerrarSesion.addActionListener(this);
+		MCerrarSesion.addActionListener(e -> cerrarSesion());
 		
 		horizontalGlue = Box.createHorizontalGlue();
 		menuBar.add(horizontalGlue);
@@ -166,18 +172,57 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
 		
 	}
+	
+	private void cerrarSesion() {
+		VentanaLogin ventanaLogin = new VentanaLogin();
+		dispose();
+		ventanaLogin.mostrarLogin();
+	}
+	
+	private void cambiarImagen() {
+		JFileChooser selector = new JFileChooser();
+		selector.setDialogTitle("Selecciona un fichero PNG");
+		selector.setFileFilter(new FileNameExtensionFilter("Imágenes PNG", "png"));
+		int resultado = selector.showOpenDialog(null);
+		if (resultado == JFileChooser.APPROVE_OPTION) {
+			File archivo = selector.getSelectedFile();
+			String nombreArchivo = archivo.getName().toLowerCase();
+			if (nombreArchivo.endsWith(".png")) {
+				try {
+					Controlador.INSTANCE.getUsuarioActual().setImagen(archivo.getCanonicalPath());
+					Controlador.INSTANCE.modificarUsuario();
+					refrescarImagen();
+					JOptionPane.showMessageDialog(null, "Imagen de " + Controlador.INSTANCE.getUsuarioActual().getNombre() + " modificada",
+							"Cambio de imagen OK", JOptionPane.INFORMATION_MESSAGE);
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Error inesperado", "Vaya fail XD", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Por favor selecciona un fichero .png válido.", "Fichero no válido", JOptionPane.ERROR_MESSAGE);
+				cambiarImagen();
+			}
+		}
+	}
+	
+	
+	private void refrescarImagen() {
+		// Cargar la imagen desde la ruta (que devuelve getImagen)
+		String rutaImagen = Controlador.INSTANCE.getUsuarioActual().getImagen();
+		ImageIcon iconoOriginal = new ImageIcon(rutaImagen);
+
+		// Escalar la imagen a 16x16
+		Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH);
+		ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+
+		// Asignar el ícono escalado al JMenu
+		MTuContacto.setIcon(iconoEscalado);
+
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == MCerrarSesion) {
-			//Llamar al controlador para cerrar sesion
-			VentanaLogin ventanaLogin = new VentanaLogin();
-			dispose();
-			ventanaLogin.mostrarLogin();
-		}
-		else if (e.getSource() == MCambiarImagenPerfil) {
-			// Llamar al controlador para cambiar la imagen de perfil
-			// TODO Habria que hacer una ventana para cambiar la imagen de perfil
-		} else if (e.getSource() == MContactos) {
+		if (e.getSource() == MContactos) {
 			// Llamar al controlador para mostrar contactos
 			// TODO: no se que ventana mostrar para esto
 		} else if (e.getSource() == MBuscar) {
@@ -208,6 +253,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			int respuestaActivar = JOptionPane.showConfirmDialog(null, "¿Desea activar premium?", "Gestión premium", JOptionPane.YES_NO_OPTION);
 			if(respuestaActivar == JOptionPane.YES_OPTION) {
 				Controlador.INSTANCE.getUsuarioActual().setPremium(true);
+				Controlador.INSTANCE.modificarUsuario();
 				JOptionPane.showMessageDialog(null, "Premium activado. Gracias por esos " +
 				(Usuario.PRECIO_INICIAL - Controlador.INSTANCE.getUsuarioActual().getDescuento().getDescuento(Usuario.PRECIO_INICIAL, Controlador.INSTANCE.getUsuarioActual())) + 
 				" euros", "Gestión premium", JOptionPane.INFORMATION_MESSAGE);
@@ -217,6 +263,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			int respuestaDesactivar = JOptionPane.showConfirmDialog(null, "¿Desea desactivar premium?", "Gestión premium", JOptionPane.YES_NO_OPTION);
 			if(respuestaDesactivar == JOptionPane.YES_OPTION) {
 				Controlador.INSTANCE.getUsuarioActual().setPremium(false);
+				Controlador.INSTANCE.modificarUsuario();
 				JOptionPane.showMessageDialog(null, "Premium desactivado", "Gestión premium", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}

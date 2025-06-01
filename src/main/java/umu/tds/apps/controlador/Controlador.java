@@ -264,6 +264,10 @@ public enum Controlador {
 				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
+	public void modificarUsuario() {
+		adaptadorUsuario.update(usuarioActual);
+	}
+	
 	public Set<Mensaje> filtrarMensajes(Usuario usuario, String texto, String movil, String nombre, LocalDate fecha) {
 		Set<Filtro> filtros = Set.of(
 				new FiltroPorTexto(texto),

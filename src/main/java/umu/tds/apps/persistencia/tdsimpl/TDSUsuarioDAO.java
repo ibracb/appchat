@@ -227,6 +227,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 			else if(propiedad.getNombre().equals(PROPIEDAD_GRUPOS)) {
 				propiedad.setValor(getIdsGrupos(usuario.getContactos()));
 			}
+			servPersistencia.modificarPropiedad(propiedad);
 		});
 	}
 

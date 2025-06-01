@@ -11,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -358,14 +359,18 @@ public class VentanaRegistro extends JFrame {
 			File archivo = selector.getSelectedFile();
 			String nombreArchivo = archivo.getName().toLowerCase();
 			if (nombreArchivo.endsWith(".png")) {
-				rutaImagenSeleccionada = archivo.getAbsolutePath();
-				ImageIcon icono = new ImageIcon(rutaImagenSeleccionada);
-				int width = lblPerfil.getWidth();
-				int height = lblPerfil.getHeight();
-				int escalaAncho = (width > 0) ? width : 120;
-				int escalaAlto = (height > 0) ? height : 120;
-				Image imagenEscalada = icono.getImage().getScaledInstance( escalaAncho, escalaAlto, Image.SCALE_SMOOTH);
-				lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+				try {
+					rutaImagenSeleccionada = archivo.getCanonicalPath();
+					ImageIcon icono = new ImageIcon(rutaImagenSeleccionada);
+					int width = lblPerfil.getWidth();
+					int height = lblPerfil.getHeight();
+					int escalaAncho = (width > 0) ? width : 120;
+					int escalaAlto = (height > 0) ? height : 120;
+					Image imagenEscalada = icono.getImage().getScaledInstance( escalaAncho, escalaAlto, Image.SCALE_SMOOTH);
+					lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Error inesperado", "Vaya fail XD", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Por favor selecciona un fichero .png válido.", "Fichero no válido", JOptionPane.ERROR_MESSAGE);
