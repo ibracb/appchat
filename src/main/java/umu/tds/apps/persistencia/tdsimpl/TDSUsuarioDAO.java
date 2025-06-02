@@ -137,13 +137,16 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		boolean noRegistrar = true;
 		try {
 			eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
-		}
-		catch (NullPointerException e) {
+		} catch (NullPointerException e) {
 			noRegistrar = false;
 		}
-		if(noRegistrar) {
-			return;
+		if (usuario.getId() <= 0) {
+			noRegistrar = false;
 		}
+		if (noRegistrar) {
+			return; // Ya existe el usuario, no registrar
+		}
+
 		TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
 		TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
 		usuario.getContactos().forEach(contacto -> {
@@ -153,27 +156,31 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 				adaptadorGrupo.create((Grupo) contacto);
 			}
 		});
+
 		eUsuario = new Entidad();
 		eUsuario.setNombre(ENTIDAD_USUARIO);
 		eUsuario.setPropiedades(Arrays.asList(
-				new Propiedad(PROPIEDAD_ID, String.valueOf(usuario.getId())),
-				new Propiedad(PROPIEDAD_NOMBRE, usuario.getNombre()),
-				new Propiedad(PROPIEDAD_FECHA_NACIMIENTO,
-						dateFormat.format(Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
-				new Propiedad(PROPIEDAD_FECHA_REGISTRO,
-						dateFormat.format(Date.from(usuario.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
-				new Propiedad(PROPIEDAD_EMAIL, usuario.getEmail()),
-				new Propiedad(PROPIEDAD_IMAGEN, usuario.getImagen()),
-				new Propiedad(PROPIEDAD_MOVIL, usuario.getMovil()),
-				new Propiedad(PROPIEDAD_CONTRASEÑA, usuario.getContraseña()),
-				new Propiedad(PROPIEDAD_SALUDO, usuario.getSaludo()),
-				new Propiedad(PROPIEDAD_PREMIUM, String.valueOf(usuario.isPremium())),
-				new Propiedad(PROPIEDAD_CONTACTOS_INDIVIDUALES, getIdsContactosIndividuales(usuario.getContactos())),
-				new Propiedad(PROPIEDAD_GRUPOS, getIdsGrupos(usuario.getContactos()))
+			new Propiedad(PROPIEDAD_ID, String.valueOf(usuario.getId())),
+			new Propiedad(PROPIEDAD_NOMBRE, usuario.getNombre()),
+			new Propiedad(PROPIEDAD_FECHA_NACIMIENTO,
+				dateFormat.format(Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
+			new Propiedad(PROPIEDAD_FECHA_REGISTRO,
+				dateFormat.format(Date.from(usuario.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
+			new Propiedad(PROPIEDAD_EMAIL, usuario.getEmail()),
+			new Propiedad(PROPIEDAD_IMAGEN, usuario.getImagen()),
+			new Propiedad(PROPIEDAD_MOVIL, usuario.getMovil()),
+			new Propiedad(PROPIEDAD_CONTRASEÑA, usuario.getContraseña()),
+			new Propiedad(PROPIEDAD_SALUDO, usuario.getSaludo()),
+			new Propiedad(PROPIEDAD_PREMIUM, String.valueOf(usuario.isPremium())),
+			new Propiedad(PROPIEDAD_CONTACTOS_INDIVIDUALES, getIdsContactosIndividuales(usuario.getContactos())),
+			new Propiedad(PROPIEDAD_GRUPOS, getIdsGrupos(usuario.getContactos()))
 		));
+
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
 		usuario.setId(eUsuario.getId());
 	}
+
+
 	
 	@Override
 	public void delete(Usuario usuario) {
@@ -191,6 +198,9 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	@Override
 	public void update(Usuario usuario) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+		if (eUsuario == null) {
+			return;
+		}
 		eUsuario.getPropiedades().forEach(propiedad -> {
 			if(propiedad.getNombre().equals(PROPIEDAD_NOMBRE)) {
 				propiedad.setValor(usuario.getNombre());

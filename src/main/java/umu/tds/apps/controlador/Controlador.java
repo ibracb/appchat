@@ -95,6 +95,7 @@ public enum Controlador {
 		Usuario usuario = new Usuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo);
 		adaptadorUsuario.create(usuario);
 		repositorioUsuarios.addUsuario(usuario);
+		usuarioActual = usuario;
 		return true;
 	}
 	
