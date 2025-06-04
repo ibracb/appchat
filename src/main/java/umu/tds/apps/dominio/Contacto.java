@@ -7,7 +7,7 @@ import java.util.TreeSet;
 import umu.tds.apps.utils.Utils;
 
 /**
- * Clase que define un contacto de un usuario.
+ * Clase que define un contacto de un usuario puede ser individual o grupo.
  */
 public abstract class Contacto implements Comparable<Contacto> {
 
@@ -37,8 +37,9 @@ public abstract class Contacto implements Comparable<Contacto> {
 	}
 	
 	@Override
+
 	public int hashCode() {
-		return Objects.hash(nombre);
+		return Objects.hash(nombre+id);
 	}
 
 	@Override

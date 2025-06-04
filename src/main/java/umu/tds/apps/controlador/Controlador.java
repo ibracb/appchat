@@ -131,7 +131,7 @@ public enum Controlador {
 		if(usuarioActual.getContactoIndividual(movilContacto) != null) {
 			return false;
 		}
-		ContactoIndividual contacto = new ContactoIndividual(nombre, usuarioActual, movilContacto);
+		ContactoIndividual contacto = new ContactoIndividual(nombre, usuarioActual);
 		adaptadorContactoIndividual.create(contacto);
 		usuarioActual.addContacto(nombre, movilContacto);
 		adaptadorUsuario.update(usuarioActual);
@@ -187,7 +187,7 @@ public enum Controlador {
 		Usuario usuarioReceptor = contacto.getUsuario();
 		ContactoIndividual contactoInverso = usuarioReceptor.getContactoIndividual(usuarioActual.getMovil());
 		if(contactoInverso == null) {
-			contactoInverso = new ContactoIndividual(usuarioActual.getNombre(), usuarioReceptor, usuarioActual.getMovil());
+			contactoInverso = new ContactoIndividual(usuarioActual.getNombre(), usuarioReceptor);
 			adaptadorContactoIndividual.create(contactoInverso);
 			adaptadorUsuario.update(usuarioReceptor);
 		}

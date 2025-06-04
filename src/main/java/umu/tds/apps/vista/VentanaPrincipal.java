@@ -8,6 +8,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -76,6 +77,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	 */
 	public VentanaPrincipal() {
 		initialize();
+	}
+	
+	/**
+	 * Mostrar la ventana principal
+	 */
+	public void mostrarVentanaPrincipal(Dimension tam, Point ubi) {
+		setVisible(true);
+		setSize(tam);
+		setLocation(ubi);
 	}
 
 	/**
@@ -176,7 +186,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private void cerrarSesion() {
 		VentanaLogin ventanaLogin = new VentanaLogin();
 		dispose();
-		ventanaLogin.mostrarLogin();
+		ventanaLogin.mostrarLogin(this.getSize(), this.getLocation());
 	}
 	
 	private void cambiarImagen() {
@@ -192,14 +202,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 					Controlador.INSTANCE.getUsuarioActual().setImagen(archivo.getCanonicalPath());
 					Controlador.INSTANCE.modificarUsuario();
 					refrescarImagen();
-					JOptionPane.showMessageDialog(null, "Imagen de " + Controlador.INSTANCE.getUsuarioActual().getNombre() + " modificada",
+					JOptionPane.showMessageDialog(this, "Imagen de " + Controlador.INSTANCE.getUsuarioActual().getNombre() + " modificada",
 							"Cambio de imagen OK", JOptionPane.INFORMATION_MESSAGE);
 				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "Error inesperado", "Vaya fail XD", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Error inesperado", "Vaya fail XD", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			else {
-				JOptionPane.showMessageDialog(null, "Por favor selecciona un fichero .png válido.", "Fichero no válido", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Por favor selecciona un fichero .png válido.", "Fichero no válido", JOptionPane.ERROR_MESSAGE);
 				cambiarImagen();
 			}
 		}
@@ -229,42 +239,42 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			// Llamar al controlador para buscar contactos
 			VentanaBuscar ventanaBuscar = new VentanaBuscar();
 			dispose();
-			ventanaBuscar.mostrarVentanaBuscar();
+			ventanaBuscar.mostrarVentanaBuscar(this.getSize(), this.getLocation());
 		}
 	}
 	
 	private void gestionarPdf() {
 		if(Controlador.INSTANCE.getUsuarioActual().isPremium()) {
 			if(Controlador.INSTANCE.generarPdf()) {
-				JOptionPane.showMessageDialog(null, "Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo",
+				JOptionPane.showMessageDialog(this, "Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo",
 						"Pdf ok", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else {
-				JOptionPane.showMessageDialog(null, "Error al generar el pdf. Prueba de nuevo", "Pdf mal", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Error al generar el pdf. Prueba de nuevo", "Pdf mal", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "No eres premium. ESPABILA", "No premium", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "No eres premium. ESPABILA", "No premium", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void abrirPremium() {
 		if(!Controlador.INSTANCE.getUsuarioActual().isPremium()) {
-			int respuestaActivar = JOptionPane.showConfirmDialog(null, "¿Desea activar premium?", "Gestión premium", JOptionPane.YES_NO_OPTION);
+			int respuestaActivar = JOptionPane.showConfirmDialog(this, "¿Desea activar premium?", "Gestión premium", JOptionPane.YES_NO_OPTION);
 			if(respuestaActivar == JOptionPane.YES_OPTION) {
 				Controlador.INSTANCE.getUsuarioActual().setPremium(true);
 				Controlador.INSTANCE.modificarUsuario();
-				JOptionPane.showMessageDialog(null, "Premium activado. Gracias por esos " +
+				JOptionPane.showMessageDialog(this, "Premium activado. Gracias por esos " +
 				(Usuario.PRECIO_INICIAL - Controlador.INSTANCE.getUsuarioActual().getDescuento().getDescuento(Usuario.PRECIO_INICIAL, Controlador.INSTANCE.getUsuarioActual())) + 
 				" euros", "Gestión premium", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		else {
-			int respuestaDesactivar = JOptionPane.showConfirmDialog(null, "¿Desea desactivar premium?", "Gestión premium", JOptionPane.YES_NO_OPTION);
+			int respuestaDesactivar = JOptionPane.showConfirmDialog(this, "¿Desea desactivar premium?", "Gestión premium", JOptionPane.YES_NO_OPTION);
 			if(respuestaDesactivar == JOptionPane.YES_OPTION) {
 				Controlador.INSTANCE.getUsuarioActual().setPremium(false);
 				Controlador.INSTANCE.modificarUsuario();
-				JOptionPane.showMessageDialog(null, "Premium desactivado", "Gestión premium", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Premium desactivado", "Gestión premium", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 	}

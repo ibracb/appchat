@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -70,8 +71,10 @@ public class VentanaLogin extends JFrame {
 	public VentanaLogin() {
 		initialize();
 	}
-	public void mostrarLogin() {
+	public void mostrarLogin(Dimension tam, Point ubi) {
 		setVisible(true);
+		setSize(tam);
+		setLocation(ubi);
 	}
 
 	/**
@@ -176,22 +179,26 @@ public class VentanaLogin extends JFrame {
 	
 	private void accederLogin() {
 		String movil = textFieldTelefono.getText();
-		String contraseña = new String(passwordField.getPassword());
-		if(Controlador.INSTANCE.loginUsuario(movil, contraseña)) {
-			dispose();
-			JOptionPane.showMessageDialog(null, "¡Hola de nuevo, " + Controlador.INSTANCE.getUsuarioActual().getNombre() + "!");
+		String contrasena = new String(passwordField.getPassword());
+		if (movil.isEmpty() || contrasena.isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Falta algún campo por completar: teléfono y contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
+	        return;
+	    }
+		if(Controlador.INSTANCE.loginUsuario(movil, contrasena)) {
+			JOptionPane.showMessageDialog(this, "¡Hola de nuevo, " + Controlador.INSTANCE.getUsuarioActual().getNombre() + "!");
 			VentanaPrincipal vPrincipal = new VentanaPrincipal();
-			vPrincipal.setVisible(true);
+			dispose();
+			vPrincipal.mostrarVentanaPrincipal(this.getSize(), this.getLocation());;
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "Login fallido. Inténtelo de nuevo");
+			JOptionPane.showMessageDialog(this, "Login fallido. Inténtelo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void accederRegistro() {
 		VentanaRegistro registro = new VentanaRegistro();
 		dispose();
-		registro.setVisible(true);
+		registro.mostrarRegistro(this.getSize(), this.getLocation());;
 	}
 
 }

@@ -125,15 +125,15 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 			return (ContactoIndividual) PoolDAO.INSTANCE.getObject(id);
 		}
 		String nombre;
-		String movil;
+		//String movil;
 		Usuario usuario;
 		Set<Mensaje> mensajes;
 		Entidad eContacto = servPersistencia.recuperarEntidad(id);
 		nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_NOMBRE);
-		movil = servPersistencia.recuperarPropiedadEntidad(eContacto, PROPIEDAD_MOVIL);
+		//movil = servPersistencia.recuperarPropiedadEntidad(eContacto, PROPIEDAD_MOVIL);
 		int usuarioId = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_USUARIO));
 		usuario = TDSUsuarioDAO.getInstance().get(usuarioId);
-		ContactoIndividual contacto = new ContactoIndividual(nombre, usuario, movil);
+		ContactoIndividual contacto = new ContactoIndividual(nombre, usuario/*, movil*/);
 		contacto.setId(id);
 		PoolDAO.INSTANCE.addObject(contacto.getId(), contacto);
 		mensajes = getMensajesFromIds(servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_MENSAJES));

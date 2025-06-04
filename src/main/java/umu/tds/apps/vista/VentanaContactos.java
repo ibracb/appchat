@@ -2,8 +2,10 @@ package umu.tds.apps.vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Point;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -38,7 +40,15 @@ public class VentanaContactos extends JFrame {
 			}
 		});
 	}
-
+	
+	/**
+	 * Mostrar la ventana de la lista contactos
+	 */
+	public void mostrarVentanaContactos(Dimension tam, Point ubi) {
+		setVisible(true);
+		setSize(tam);
+		setLocation(ubi);
+	}
 	/**
 	 * Create the frame.
 	 */
@@ -91,14 +101,14 @@ public class VentanaContactos extends JFrame {
 			boolean registro = Controlador.INSTANCE.registrarContactoIndividual(nombre, movil);
 			if(registro) {
 				updateListaContactos();
-				JOptionPane.showMessageDialog(null, "Nombre: " + nombre + "\nMóvil: " + movil);
+				JOptionPane.showMessageDialog(this, "Nombre: " + nombre + "\nMóvil: " + movil);
 			}
 			else {
-				JOptionPane.showMessageDialog(null, "Error en la adición del contacto");
+				JOptionPane.showMessageDialog(this, "Error en la adición del contacto");
 			}
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "Cancelado");
+			JOptionPane.showMessageDialog(this, "Cancelado");
 		}
 	}
 	

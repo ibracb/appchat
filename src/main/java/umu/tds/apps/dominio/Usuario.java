@@ -145,7 +145,7 @@ public class Usuario {
 	 * @return true si se ha añadido correctamente el contacto, false si no ha sido así.
 	 */
 	public boolean addContacto(String nombre, String movil) {
-		Contacto contacto = new ContactoIndividual(nombre, this, movil);
+		Contacto contacto = new ContactoIndividual(nombre, this);
 		return contactos.add(contacto);
 	}
 	

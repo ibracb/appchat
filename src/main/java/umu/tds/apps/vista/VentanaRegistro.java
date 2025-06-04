@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -98,6 +99,15 @@ public class VentanaRegistro extends JFrame {
 	 */
 	public VentanaRegistro() {
 		initialize();
+	}
+	
+	/**
+	 * Mostrar la ventana de registro
+	 */
+	public void mostrarRegistro(Dimension tam, Point ubi) {
+		setVisible(true);
+		setSize(tam);
+		setLocation(ubi);
 	}
 	
 	/**
@@ -335,19 +345,19 @@ public class VentanaRegistro extends JFrame {
 		String saludo = textArea.getText();
 		if(contraseña.equals(contraseñaOk) && Controlador.INSTANCE.registrarUsuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo)) {
 			dispose();
-			JOptionPane.showMessageDialog(null, "¡Bienvenido a AppChat, " + nombre + "!");			
+			JOptionPane.showMessageDialog(this, "¡Bienvenido a AppChat, " + nombre + "!");			
 			VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
 			ventanaPrincipal.setVisible(true);
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "Error en el registro, inténtalo de nuevo...");
+			JOptionPane.showMessageDialog(this, "Error en el registro, inténtalo de nuevo...");
 		}
 	}
 	
 	private void volverLogin() {
 		VentanaLogin ventanaLogin = new VentanaLogin();
 		dispose();
-		ventanaLogin.mostrarLogin();
+		ventanaLogin.mostrarLogin(this.getSize(), this.getLocation());
 	}
 	
 	private void seleccionarImagen() {
@@ -369,11 +379,11 @@ public class VentanaRegistro extends JFrame {
 					Image imagenEscalada = icono.getImage().getScaledInstance( escalaAncho, escalaAlto, Image.SCALE_SMOOTH);
 					lblPerfil.setIcon(new ImageIcon(imagenEscalada));
 				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "Error inesperado", "Vaya fail XD", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Error inesperado", "Vaya fail XD", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			else {
-				JOptionPane.showMessageDialog(null, "Por favor selecciona un fichero .png válido.", "Fichero no válido", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Por favor selecciona un fichero .png válido.", "Fichero no válido", JOptionPane.ERROR_MESSAGE);
 				seleccionarImagen();
 			}
 		}

@@ -8,7 +8,7 @@ import java.util.Objects;
 public class ContactoIndividual extends Contacto {
 	
 	/**
-	 * 
+	 * Usuario al que hace referencia el nuevo contacto individual.
 	 */
 	private Usuario usuario;
 	
@@ -22,7 +22,7 @@ public class ContactoIndividual extends Contacto {
 	 * @param nombre - Nombre asignado al contacto.
 	 * @param usuario - Usuario que crea el contacto.
 	 */
-	public ContactoIndividual(String nombre, Usuario usuario, String movil) {
+	public ContactoIndividual(String nombre, Usuario usuario) {
 		super(nombre);
 		this.usuario = usuario;
 	}
