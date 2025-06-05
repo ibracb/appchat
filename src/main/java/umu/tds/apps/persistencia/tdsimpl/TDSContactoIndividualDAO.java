@@ -62,31 +62,40 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	
 	@Override
 	public void create(ContactoIndividual contacto) {
-		Entidad eContacto = null;
-		boolean noRegistrar = true;
-		try {
-			eContacto = servPersistencia.recuperarEntidad(contacto.getId());
-		} catch (NullPointerException e) {
-			noRegistrar = false;
-		}
-		if(noRegistrar) {
-			return;
-		}
-		TDSMensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
-		contacto.getMensajes().forEach(mensaje -> {
-			adaptadorMensaje.create(mensaje);
-		});
-		eContacto = new Entidad();
-		eContacto.setNombre(ENTIDAD_CONTACTO);
-		eContacto.setPropiedades(
-			new ArrayList<Propiedad>(Arrays.asList(
-					new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_ID, String.valueOf(contacto.getId())),
-					new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_NOMBRE, contacto.getNombre()),
-					new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_USUARIO, String.valueOf(contacto.getUsuario().getId())),
-					new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES, getIdsMensajes(contacto.getMensajes())),
-					new Propiedad(PROPIEDAD_MOVIL, contacto.getMovil()))));
-		eContacto = servPersistencia.registrarEntidad(eContacto);
-		contacto.setId(eContacto.getId());
+	    // Verificar si el contacto ya tiene un ID válido (ya fue persistido)
+	    if (contacto.getId() > 0) {
+	        try {
+	            Entidad eContacto = servPersistencia.recuperarEntidad(contacto.getId());
+	            if (eContacto != null) {
+	                return; // Ya existe, no necesita ser creado de nuevo
+	            }
+	        } catch (Exception e) {
+	            // Si hay excepción, continuamos con la creación
+	        }
+	    }
+	    
+	    // Crear los mensajes primero
+	    TDSMensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
+	    contacto.getMensajes().forEach(mensaje -> {
+	        if (mensaje.getId() <= 0) { // Solo crear mensajes nuevos
+	            adaptadorMensaje.create(mensaje);
+	        }
+	    });
+	    
+	    // Crear la entidad del contacto
+	    Entidad eContacto = new Entidad();
+	    eContacto.setNombre(ENTIDAD_CONTACTO);
+	    eContacto.setPropiedades(
+	        new ArrayList<Propiedad>(Arrays.asList(
+	                new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_ID, String.valueOf(contacto.getId())),
+	                new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_NOMBRE, contacto.getNombre()),
+	                new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_USUARIO, String.valueOf(contacto.getUsuario().getId())),
+	                new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES, getIdsMensajes(contacto.getMensajes())),
+	                new Propiedad(PROPIEDAD_MOVIL, contacto.getMovil()))));
+	    
+	    // Registrar en la base de datos
+	    eContacto = servPersistencia.registrarEntidad(eContacto);
+	    contacto.setId(eContacto.getId());
 	}
 
 	@Override
