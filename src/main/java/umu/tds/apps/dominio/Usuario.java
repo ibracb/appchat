@@ -138,16 +138,9 @@ public class Usuario {
 		return contactos.add(grupo);
 	}
 	
-	/**
-	 * El usuario añade un contacto a su lista de contactos.
-	 * @param nombre - Nombre que se le quiere dar al contacto.
-	 * @param movil - Teléfono del contacto.
-	 * @return true si se ha añadido correctamente el contacto, false si no ha sido así.
-	 */
-	public boolean addContacto(String nombre, String movil) {
-		Contacto contacto = new ContactoIndividual(nombre, this);
-		return contactos.add(contacto);
-	}
+	 public void addContacto(ContactoIndividual contacto) {
+		 contactos.add(contacto);
+	 }
 	
 	/**
 	 * El usuario elimina un contacto de su lista de contactos.

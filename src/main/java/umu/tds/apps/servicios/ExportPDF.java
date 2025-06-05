@@ -3,6 +3,11 @@ package umu.tds.apps.servicios;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
@@ -10,9 +15,15 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 
+import umu.tds.apps.dominio.ContactoIndividual;
+import umu.tds.apps.dominio.Mensaje;
+import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.servicios.descargas.FactoriaProveedorRutaDescargas;
 
@@ -78,6 +89,89 @@ public enum ExportPDF {
 		} catch (IOException e) {
 			return false;
 		}
+	}
+	
+	public boolean createPdfChat(ContactoIndividual contacto) {
+		File fichero = new File(FactoriaProveedorRutaDescargas.INSTANCE.getProveedor().getRutaDescargas(),
+				"Historial_" + contacto.getNombre() + ".pdf");
+
+		try (PdfWriter writer = new PdfWriter(fichero);
+			 PdfDocument pdfDoc = new PdfDocument(writer);
+			 Document document = new Document(pdfDoc)) {
+
+			PdfFont fontBold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+
+			Paragraph titulo = new Paragraph("Historial de conversación con " + contacto.getNombre())
+				.setFont(fontBold)
+				.setTextAlignment(TextAlignment.CENTER)
+				.setFontSize(18)
+				.setMarginBottom(10);
+			document.add(titulo);
+
+			Paragraph intro = new Paragraph("Gracias por confiar en AppChat y apostar por el modo Premium. " +
+				"Nos alegra acompañarte en tu experiencia de comunicación.")
+				.setTextAlignment(TextAlignment.CENTER)
+				.setFontSize(12)
+				.setMarginBottom(30);
+			document.add(intro);
+
+			List<Mensaje> mensajes = new ArrayList<>(contacto.getMensajes());
+			mensajes.sort(Comparator.comparing(Mensaje::getMomentoEnvio));
+
+			LocalDate ultimaFecha = null;
+			DateTimeFormatter horaFormat = DateTimeFormatter.ofPattern("HH:mm");
+
+			for (Mensaje mensaje : mensajes) {
+				LocalDate fechaMensaje = mensaje.getMomentoEnvio().toLocalDate();
+
+				if (ultimaFecha == null || !fechaMensaje.equals(ultimaFecha)) {
+					String etiquetaFecha = getEtiquetaFecha(fechaMensaje);
+					Paragraph separador = new Paragraph(etiquetaFecha)
+						.setFont(fontBold)
+						.setTextAlignment(TextAlignment.CENTER)
+						.setFontSize(10)
+						.setMarginTop(10)
+						.setMarginBottom(10);
+					document.add(separador);
+					ultimaFecha = fechaMensaje;
+				}
+
+				Div burbuja = new Div();
+				Paragraph texto = new Paragraph(mensaje.getTexto())
+					.setFontSize(12)
+					.setMargin(0);
+
+				Paragraph hora = new Paragraph(mensaje.getMomentoEnvio().format(horaFormat))
+					.setFontSize(8)
+					.setMarginTop(5)
+					.setMarginBottom(0)
+					.setTextAlignment(TextAlignment.RIGHT);
+
+				burbuja.add(texto);
+				burbuja.add(hora);
+				burbuja.setWidth(UnitValue.createPercentValue(60));
+				burbuja.setPadding(10);
+				burbuja.setMarginBottom(10);
+
+				if (mensaje.getTipo() == TipoMensaje.ENVIADO) {
+					burbuja.setHorizontalAlignment(HorizontalAlignment.RIGHT);
+				} else {
+					burbuja.setHorizontalAlignment(HorizontalAlignment.LEFT);
+				}
+
+				document.add(burbuja);
+			}
+
+			return true;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	private String getEtiquetaFecha(LocalDate fecha) {
+	    return fecha.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
 	}
 	
 }

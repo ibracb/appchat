@@ -86,16 +86,14 @@ public enum RepositorioUsuarios {
 		return usuariosPorMovil.get(movil);
 	}
 	
-	/**
-	 * Busca un contacto individual dado el móvil del usuario y del contacto individual.
-	 * @param movilUsuario - el móvil del usuario.
-	 * @param movilContacto - el móvil del contacto.
-	 * @return el contacto individual.
-	 */
 	public ContactoIndividual findContactoIndividual(String movilUsuario, String movilContacto) {
-		return findUsuario(movilUsuario).getContactos().stream()
+		Usuario usuario = findUsuario(movilUsuario);
+		if (usuario == null) return null;
+
+		return usuario.getContactos().stream()
 				.filter(contacto -> contacto instanceof ContactoIndividual)
 				.map(contacto -> (ContactoIndividual) contacto)
+				.filter(contacto -> movilContacto.equals(contacto.getMovil()))
 				.findFirst()
 				.orElse(null);
 	}

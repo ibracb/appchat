@@ -59,5 +59,7 @@ public class ContactoIndividual extends Contacto {
 	public String getMovil() {
 		return getUsuario().getMovil();
 	}
+
+	
 	
 }

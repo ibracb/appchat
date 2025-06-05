@@ -116,11 +116,9 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	 */
 	public static TDSUsuarioDAO getInstance() {
 		if (INSTANCE == null) {
-			return new TDSUsuarioDAO();
+			INSTANCE = new TDSUsuarioDAO();
 		}
-		else {
-			return INSTANCE;
-		}
+		return INSTANCE;
 	}
 	
 	/**
@@ -133,52 +131,59 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	
 	@Override
 	public void create(Usuario usuario) {
-		Entidad eUsuario = null;
-		boolean noRegistrar = true;
-		try {
-			eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
-		} catch (NullPointerException e) {
-			noRegistrar = false;
-		}
-		if (usuario.getId() <= 0) {
-			noRegistrar = false;
-		}
-		if (noRegistrar) {
-			return; // Ya existe el usuario, no registrar
-		}
+	    Entidad eUsuario = null;
+	    boolean noRegistrar = true;
+	    try {
+	        eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+	    } catch (NullPointerException e) {
+	        noRegistrar = false;
+	    }
+	    if (usuario.getId() <= 0) {
+	        noRegistrar = false;
+	    }
+	    if (noRegistrar) {
+	        return; // Ya existe el usuario, no registrar
+	    }
 
-		TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
-		TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
-		usuario.getContactos().forEach(contacto -> {
-			if (contacto instanceof ContactoIndividual) {
-				adaptadorContactoIndividual.create((ContactoIndividual) contacto);
-			} else if (contacto instanceof Grupo) {
-				adaptadorGrupo.create((Grupo) contacto);
-			}
-		});
+	    TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
+	    TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
 
-		eUsuario = new Entidad();
-		eUsuario.setNombre(ENTIDAD_USUARIO);
-		eUsuario.setPropiedades(Arrays.asList(
-			new Propiedad(PROPIEDAD_ID, String.valueOf(usuario.getId())),
-			new Propiedad(PROPIEDAD_NOMBRE, usuario.getNombre()),
-			new Propiedad(PROPIEDAD_FECHA_NACIMIENTO,
-				dateFormat.format(Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
-			new Propiedad(PROPIEDAD_FECHA_REGISTRO,
-				dateFormat.format(Date.from(usuario.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
-			new Propiedad(PROPIEDAD_EMAIL, usuario.getEmail()),
-			new Propiedad(PROPIEDAD_IMAGEN, usuario.getImagen()),
-			new Propiedad(PROPIEDAD_MOVIL, usuario.getMovil()),
-			new Propiedad(PROPIEDAD_CONTRASEÑA, usuario.getContraseña()),
-			new Propiedad(PROPIEDAD_SALUDO, usuario.getSaludo()),
-			new Propiedad(PROPIEDAD_PREMIUM, String.valueOf(usuario.isPremium())),
-			new Propiedad(PROPIEDAD_CONTACTOS_INDIVIDUALES, getIdsContactosIndividuales(usuario.getContactos())),
-			new Propiedad(PROPIEDAD_GRUPOS, getIdsGrupos(usuario.getContactos()))
-		));
+	    // SOLO crea contactos que NO tengan ID válido
+	    usuario.getContactos().forEach(contacto -> {
+	        if (contacto instanceof ContactoIndividual) {
+	            if (contacto.getId() <= 0) {
+	                adaptadorContactoIndividual.create((ContactoIndividual) contacto);
+	            }
+	        } else if (contacto instanceof Grupo) {
+	            if (contacto.getId() <= 0) {
+	                adaptadorGrupo.create((Grupo) contacto);
+	            }
+	        }
+	    });
 
-		eUsuario = servPersistencia.registrarEntidad(eUsuario);
-		usuario.setId(eUsuario.getId());
+	    eUsuario = new Entidad();
+	    eUsuario.setNombre(ENTIDAD_USUARIO);
+	    eUsuario.setPropiedades(Arrays.asList(
+	        new Propiedad(PROPIEDAD_ID, String.valueOf(usuario.getId())),
+	        new Propiedad(PROPIEDAD_NOMBRE, usuario.getNombre()),
+	        new Propiedad(PROPIEDAD_FECHA_NACIMIENTO,
+	            dateFormat.format(Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
+	        new Propiedad(PROPIEDAD_FECHA_REGISTRO,
+	            dateFormat.format(Date.from(usuario.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
+	        new Propiedad(PROPIEDAD_EMAIL, usuario.getEmail()),
+	        new Propiedad(PROPIEDAD_IMAGEN, usuario.getImagen()),
+	        new Propiedad(PROPIEDAD_MOVIL, usuario.getMovil()),
+	        new Propiedad(PROPIEDAD_CONTRASEÑA, usuario.getContraseña()),
+	        new Propiedad(PROPIEDAD_SALUDO, usuario.getSaludo()),
+	        new Propiedad(PROPIEDAD_PREMIUM, String.valueOf(usuario.isPremium())),
+	        new Propiedad(PROPIEDAD_CONTACTOS_INDIVIDUALES, getIdsContactosIndividuales(usuario.getContactos())),
+	        new Propiedad(PROPIEDAD_GRUPOS, getIdsGrupos(usuario.getContactos()))
+	    ));
+
+	    eUsuario = servPersistencia.registrarEntidad(eUsuario);
+	    usuario.setId(eUsuario.getId());
 	}
+
 
 
 	
@@ -197,49 +202,67 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 
 	@Override
 	public void update(Usuario usuario) {
-		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
-		if (eUsuario == null) {
-			return;
-		}
-		eUsuario.getPropiedades().forEach(propiedad -> {
-			if(propiedad.getNombre().equals(PROPIEDAD_NOMBRE)) {
-				propiedad.setValor(usuario.getNombre());
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_FECHA_NACIMIENTO)) {
-				Date dateNacimiento = Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
-				propiedad.setValor(dateFormat.format(dateNacimiento));
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_FECHA_REGISTRO)) {
-				Date dateRegistro = Date.from(usuario.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant());
-			    propiedad.setValor(dateFormat.format(dateRegistro));
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_EMAIL)) {
-				propiedad.setValor(usuario.getEmail());
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_IMAGEN)) {
-				propiedad.setValor(usuario.getImagen());
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_MOVIL)) {
-				propiedad.setValor(usuario.getMovil());
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_CONTRASEÑA)) {
-				propiedad.setValor(usuario.getContraseña());
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_SALUDO)) {
-				propiedad.setValor(usuario.getSaludo());
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_PREMIUM)) {
-				propiedad.setValor(String.valueOf(usuario.isPremium()));
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_CONTACTOS_INDIVIDUALES)) {
-				propiedad.setValor(getIdsContactosIndividuales(usuario.getContactos()));
-			}
-			else if(propiedad.getNombre().equals(PROPIEDAD_GRUPOS)) {
-				propiedad.setValor(getIdsGrupos(usuario.getContactos()));
-			}
-			servPersistencia.modificarPropiedad(propiedad);
-		});
+	    Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+	    if (eUsuario == null) {
+	        return;
+	    }
+
+	    TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
+	    TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
+
+	    // Crear contactos sin ID antes de actualizar propiedades
+	    usuario.getContactos().forEach(contacto -> {
+	        if (contacto instanceof ContactoIndividual) {
+	            if (contacto.getId() <= 0) {
+	                adaptadorContactoIndividual.create((ContactoIndividual) contacto);
+	            }
+	        } else if (contacto instanceof Grupo) {
+	            if (contacto.getId() <= 0) {
+	                adaptadorGrupo.create((Grupo) contacto);
+	            }
+	        }
+	    });
+
+	    eUsuario.getPropiedades().forEach(propiedad -> {
+	        if(propiedad.getNombre().equals(PROPIEDAD_NOMBRE)) {
+	            propiedad.setValor(usuario.getNombre());
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_FECHA_NACIMIENTO)) {
+	            Date dateNacimiento = Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
+	            propiedad.setValor(dateFormat.format(dateNacimiento));
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_FECHA_REGISTRO)) {
+	            Date dateRegistro = Date.from(usuario.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant());
+	            propiedad.setValor(dateFormat.format(dateRegistro));
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_EMAIL)) {
+	            propiedad.setValor(usuario.getEmail());
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_IMAGEN)) {
+	            propiedad.setValor(usuario.getImagen());
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_MOVIL)) {
+	            propiedad.setValor(usuario.getMovil());
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_CONTRASEÑA)) {
+	            propiedad.setValor(usuario.getContraseña());
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_SALUDO)) {
+	            propiedad.setValor(usuario.getSaludo());
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_PREMIUM)) {
+	            propiedad.setValor(String.valueOf(usuario.isPremium()));
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_CONTACTOS_INDIVIDUALES)) {
+	            propiedad.setValor(getIdsContactosIndividuales(usuario.getContactos()));
+	        }
+	        else if(propiedad.getNombre().equals(PROPIEDAD_GRUPOS)) {
+	            propiedad.setValor(getIdsGrupos(usuario.getContactos()));
+	        }
+	        servPersistencia.modificarPropiedad(propiedad);
+	    });
 	}
+
 
 	@Override
 	public Usuario get(int id) {
@@ -281,9 +304,11 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		PoolDAO.INSTANCE.addObject(usuario.getId(), usuario);
 		contactos = getContactosIndividualesFromIds(servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_CONTACTOS_INDIVIDUALES));
 		contactos.stream()
-			.forEach(contacto -> usuario.addContacto(contacto.getNombre(), contacto.getMovil()));
+			.filter(contacto -> contacto != null)
+			.forEach(contacto -> usuario.addContacto(contacto));
 		grupos = getGruposFromIds(servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_GRUPOS));
 		grupos.stream()
+			.filter(grupo -> grupo != null)
 			.forEach(grupo -> usuario.createGrupo(grupo.getNombre(), grupo.getImagen(), grupo.getMiembros().toArray(new ContactoIndividual[0])));
 		return usuario;
 	}

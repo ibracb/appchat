@@ -48,11 +48,9 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	 */
 	public static TDSContactoIndividualDAO getInstance() {
 		if (INSTANCE == null) {
-			return new TDSContactoIndividualDAO();
+			INSTANCE = new TDSContactoIndividualDAO();
 		}
-		else {
-			return INSTANCE;
-		}
+		return INSTANCE;
 	}
 	
 	/**
@@ -121,24 +119,41 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 
 	@Override
 	public ContactoIndividual get(int id) {
-		if(PoolDAO.INSTANCE.contains(id)) {
-			return (ContactoIndividual) PoolDAO.INSTANCE.getObject(id);
-		}
-		String nombre;
-		//String movil;
-		Usuario usuario;
-		Set<Mensaje> mensajes;
-		Entidad eContacto = servPersistencia.recuperarEntidad(id);
-		nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_NOMBRE);
-		//movil = servPersistencia.recuperarPropiedadEntidad(eContacto, PROPIEDAD_MOVIL);
-		int usuarioId = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_USUARIO));
-		usuario = TDSUsuarioDAO.getInstance().get(usuarioId);
-		ContactoIndividual contacto = new ContactoIndividual(nombre, usuario/*, movil*/);
-		contacto.setId(id);
-		PoolDAO.INSTANCE.addObject(contacto.getId(), contacto);
-		mensajes = getMensajesFromIds(servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_MENSAJES));
-		contacto.setMensajes(mensajes);
-		return contacto;
+		if (PoolDAO.INSTANCE.contains(id)) {
+	        return (ContactoIndividual) PoolDAO.INSTANCE.getObject(id);
+	    }
+
+	    Entidad eContacto = servPersistencia.recuperarEntidad(id);
+	    if (eContacto == null) return null;
+
+	    String nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_NOMBRE);
+	    String idUsuarioStr = servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_USUARIO);
+
+	    if (idUsuarioStr == null || idUsuarioStr.trim().isEmpty()) {
+	        // No se puede continuar si no hay usuario
+	        return null;
+	    }
+
+	    int usuarioId = 0;
+	    try {
+	        usuarioId = Integer.parseInt(idUsuarioStr);
+	    } catch (NumberFormatException e) {
+	        // Si no es un número válido, simplemente no cargamos este contacto
+	        return null;
+	    }
+
+	    Usuario usuario = TDSUsuarioDAO.getInstance().get(usuarioId);
+	    if (usuario == null) return null;
+
+	    ContactoIndividual contacto = new ContactoIndividual(nombre, usuario);
+	    contacto.setId(id);
+	    PoolDAO.INSTANCE.addObject(contacto.getId(), contacto);
+
+	    String mensajesStr = servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_MENSAJES);
+	    Set<Mensaje> mensajes = getMensajesFromIds(mensajesStr);
+	    contacto.setMensajes(mensajes);
+
+	    return contacto;
 	}
 
 	@Override

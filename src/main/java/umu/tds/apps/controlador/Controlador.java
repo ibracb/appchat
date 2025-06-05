@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
@@ -128,15 +127,28 @@ public enum Controlador {
 	 * @param movilContacto - Móvil de contacto a registrar.
 	 */
 	public boolean registrarContactoIndividual(String nombre, String movilContacto) {
-		if(usuarioActual.getContactoIndividual(movilContacto) != null) {
-			return false;
-		}
-		ContactoIndividual contacto = new ContactoIndividual(nombre, usuarioActual);
-		adaptadorContactoIndividual.create(contacto);
-		usuarioActual.addContacto(nombre, movilContacto);
-		adaptadorUsuario.update(usuarioActual);
-		return true;
+	    // Evitar que un usuario se registre a sí mismo
+	    if (usuarioActual.getMovil().equals(movilContacto)) {
+	        // No puede añadirse a sí mismo
+	        return false;
+	    }
+
+	    if(usuarioActual.getContactoIndividual(movilContacto) != null) {
+	        return false;
+	    }
+
+	    Usuario usuarioContacto = RepositorioUsuarios.INSTANCE.findUsuario(movilContacto);
+	    if (usuarioContacto == null) {
+	        return false;
+	    }
+
+	    ContactoIndividual contacto = new ContactoIndividual(nombre, usuarioContacto);
+	    adaptadorContactoIndividual.create(contacto);
+	    usuarioActual.addContacto(contacto);
+	    adaptadorUsuario.update(usuarioActual);
+	    return true;
 	}
+
 	
 	/**
 	 * Llamada al adaptador de contactos individuales para borrar un contacto individual de la base de datos.
@@ -144,7 +156,10 @@ public enum Controlador {
 	 */
 	public void borrarContactoIndividual(ContactoIndividual contacto) {
 		adaptadorContactoIndividual.delete(contacto);
-		adaptadorUsuario.update(repositorioUsuarios.findUsuario(contacto.getUsuario().getMovil()));
+	    // Eliminar de la lista en memoria del usuario actual
+	    usuarioActual.removeContacto(contacto);
+	    // Actualizar usuario en la base de datos
+	    adaptadorUsuario.update(usuarioActual);
 	}
 	
 	/**
@@ -259,9 +274,10 @@ public enum Controlador {
 		return usuarioActual;
 	}
 	
-	public Set<Contacto> getContactosIndividualesUsuarioActual(){
+	public Set<ContactoIndividual> getContactosIndividualesUsuarioActual(){
 		return getUsuarioActual().getContactos().stream()
 				.filter(contacto -> contacto instanceof ContactoIndividual)
+				.map(contacto -> (ContactoIndividual) contacto)
 				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
@@ -280,7 +296,39 @@ public enum Controlador {
 		return filtroCompuesto.filtrar(usuario);
 	}
 	
-	public boolean generarPdf() {
+	public String getNombreUsuarioActual() {
+		return usuarioActual.getNombre();
+	}
+	
+	public String getImagenUsuarioActual() {
+		return usuarioActual.getImagen();
+	}
+	
+	public void cambiarImagenUsuarioActual(String imagen) {
+		usuarioActual.setImagen(imagen);
+	}
+	
+	public boolean isPremiumUsuarioActual() {
+		return usuarioActual.isPremium();
+	}
+	
+	public void activarPremiumUsuarioActual() {
+		usuarioActual.setPremium(true);
+	}
+	
+	public void desactivarPremiumUsuarioActual() {
+		usuarioActual.setPremium(false);
+	}
+	
+	public double getDescuentoCalculadoUsuarioActual() {
+		return usuarioActual.getDescuento().getDescuento(Usuario.PRECIO_INICIAL, usuarioActual);
+	}
+	
+	public ContactoIndividual recuperarContacto(String movil) {
+		return repositorioUsuarios.findContactoIndividual(usuarioActual.getMovil(), movil);
+	}
+	
+	public boolean generarPdfListado() {
 		return ExportPDF.INSTANCE.createPDF(usuarioActual);
 	}
 	

@@ -4,29 +4,30 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridBagLayout;
-import java.awt.Toolkit;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JLabel;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.JButton;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import com.toedter.calendar.JDateChooser;
 
-public class VentanaBuscar {
+public class VentanaBuscar extends JFrame {
 
-	private JFrame frame;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -39,7 +40,7 @@ public class VentanaBuscar {
 			public void run() {
 				try {
 					VentanaBuscar window = new VentanaBuscar();
-					window.frame.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -48,9 +49,9 @@ public class VentanaBuscar {
 	}
 	
 	public void mostrarVentanaBuscar(Dimension tam, Point ubi) {
-		frame.setVisible(true);
-		frame.setSize(tam);
-		frame.setLocation(ubi);
+		setVisible(true);
+		setSize(tam);
+		setLocation(ubi);
 	}
 
 	/**
@@ -64,24 +65,23 @@ public class VentanaBuscar {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 798, 529);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("src\\main\\resources\\imagenes\\iconoPestanas.PNG"));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		setBounds(100, 100, 798, 529);
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelBuscar = new JPanel();
 		panelBuscar.setBackground(new Color(242, 216, 245));
-		frame.getContentPane().add(panelBuscar, BorderLayout.NORTH);
+		getContentPane().add(panelBuscar, BorderLayout.NORTH);
 		GridBagLayout gbl_panelBuscar = new GridBagLayout();
 		gbl_panelBuscar.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panelBuscar.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panelBuscar.columnWeights = new double[]{1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_panelBuscar.rowWeights = new double[]{2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panelBuscar.rowWeights = new double[]{2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		panelBuscar.setLayout(gbl_panelBuscar);
 		
 		JLabel ImagenBuscar = new JLabel("");
-		ImagenBuscar.setIcon(new ImageIcon("src\\main\\resources\\imagenes\\buscar.png"));
+		ImagenBuscar.setIcon(new ImageIcon("/imagenes/buscar.png"));
 		GridBagConstraints gbc_ImagenBuscar = new GridBagConstraints();
 		gbc_ImagenBuscar.fill = GridBagConstraints.VERTICAL;
 		gbc_ImagenBuscar.insets = new Insets(0, 0, 5, 5);
@@ -158,9 +158,25 @@ public class VentanaBuscar {
 		gbc_botonBuscar.gridy = 6;
 		panelBuscar.add(botonBuscar, gbc_botonBuscar);
 		
+		JLabel lblBuscaFecha = new JLabel("Buscador Fecha");
+		GridBagConstraints gbc_lblBuscaFecha = new GridBagConstraints();
+		gbc_lblBuscaFecha.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBuscaFecha.gridx = 8;
+		gbc_lblBuscaFecha.gridy = 6;
+		panelBuscar.add(lblBuscaFecha, gbc_lblBuscaFecha);
+		
+		JDateChooser dateChooser = new JDateChooser();
+		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
+		gbc_dateChooser.gridwidth = 2;
+		gbc_dateChooser.insets = new Insets(0, 0, 5, 5);
+		gbc_dateChooser.fill = GridBagConstraints.BOTH;
+		gbc_dateChooser.gridx = 9;
+		gbc_dateChooser.gridy = 6;
+		panelBuscar.add(dateChooser, gbc_dateChooser);
+		
 		JPanel panelCentral = new JPanel();
 		panelCentral.setBackground(new Color(242, 216, 245));
-		frame.getContentPane().add(panelCentral, BorderLayout.CENTER);
+		getContentPane().add(panelCentral, BorderLayout.CENTER);
 		JPanel contenedorMensajes = new JPanel();
 		JScrollPane scrollMensajes = new JScrollPane(contenedorMensajes);
 		scrollMensajes.setPreferredSize(new Dimension(700, 300));
