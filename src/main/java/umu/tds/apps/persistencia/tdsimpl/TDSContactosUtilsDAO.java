@@ -51,11 +51,12 @@ public final class TDSContactosUtilsDAO {
 	 * @return Conjunto de mensajes.
 	 */
 	public static Set<Mensaje> getMensajesFromIds(String lineas) {
-		MensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
-		return Arrays.stream(lineas.split(ESPACIO_EN_BLANCO))
-			.map(Integer::valueOf)
-			.map(adaptadorMensaje::get)
-			.collect(Collectors.toSet());
+	    MensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
+	    return Arrays.stream(lineas.split(ESPACIO_EN_BLANCO))
+	        .filter(id -> id != null && !id.isEmpty())  // FILTRO PARA EVITAR CADENAS VACÍAS
+	        .map(Integer::valueOf)
+	        .map(adaptadorMensaje::get)
+	        .collect(Collectors.toSet());
 	}
 	
 }
