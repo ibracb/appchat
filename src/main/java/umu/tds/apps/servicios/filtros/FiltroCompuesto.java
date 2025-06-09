@@ -1,8 +1,10 @@
 package umu.tds.apps.servicios.filtros;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
 
@@ -17,11 +19,20 @@ public class FiltroCompuesto implements Filtro {
 	}
 	
 	@Override
-	public Set<Mensaje> filtrar(Usuario usuario) {
-		Set<Mensaje> resultado = new TreeSet<>(usuario.getAllMensajes());
-		for (Filtro filtro : filtros) {
-			resultado.retainAll(filtro.filtrar(usuario));
-		}
+	public Map<Mensaje, Contacto> filtrar(Usuario usuario) {
+		Map<Mensaje, Contacto>  resultado = new HashMap<>();
+		boolean primerFiltro = true;
+	    for (Filtro filtro : filtros) {
+	        Map<Mensaje, Contacto> actual = filtro.filtrar(usuario);
+
+	        if (primerFiltro) {
+	            resultado.putAll(actual);
+	            primerFiltro = false;
+	        } else {
+	            // Mantener solo las entradas que también están en `actual`
+	            resultado.entrySet().removeIf(entry -> !actual.containsKey(entry.getKey()));
+	        }
+	    }
 		return resultado;
 	}
 	

@@ -245,13 +245,13 @@ public class VentanaPrincipal extends JFrame {
 	private void abrirIndividuales() {
 		VentanaContactos vContactos = new VentanaContactos();
 		dispose();
-		vContactos.setVisible(true);
+		vContactos.mostrarVentanaContactos(this.getSize(), this.getLocation());
 	}
 	
 	private void abrirGrupos() {
 		VentanaGrupos v = new VentanaGrupos();
 		dispose();
-		v.setVisible(true);
+		v.mostrarVentanaGrupos(this.getSize(), this.getLocation());
 	}
 	
 	private void abrirBuscar() {

@@ -1,6 +1,8 @@
 package umu.tds.apps.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -24,6 +26,12 @@ public class VentanaGrupos extends JFrame {
 	private DefaultListModel<Grupo> modeloLista;
 	private JList<Grupo> listaGrupos;
 	private JPanel contentPane;
+	
+	public void mostrarVentanaGrupos(Dimension tam, Point ubi) {
+		setVisible(true);
+		setSize(tam);
+		setLocation(ubi);
+	}
 
 	/**
 	 * Create the frame.
@@ -140,7 +148,7 @@ public class VentanaGrupos extends JFrame {
 	private void volver() {
 		VentanaPrincipal v = new VentanaPrincipal();
 		dispose();
-		v.setVisible(true);
+		v.mostrarVentanaPrincipal(this.getSize(), this.getLocation());
 	}
 
 }

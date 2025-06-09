@@ -9,21 +9,30 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
 import umu.tds.apps.controlador.Controlador;
+import umu.tds.apps.dominio.Contacto;
+import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
@@ -214,10 +223,11 @@ public class VentanaBuscar extends JFrame {
 		panelBuscar.add(botonBuscar, gbc_botonBuscar);
 		botonBuscar.addActionListener(e -> gestionarBtnBuscar());
 		
-		panelCentral = new JPanel();
+		/*panelCentral = new JPanel();
 		panelCentral.setBackground(new Color(242, 216, 245));
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 		contenedorMensajes = new JPanel();
+		contenedorMensajes.setLayout(new BoxLayout(contenedorMensajes, BoxLayout.Y_AXIS));
 		contenedorMensajes.setBackground(new Color(242, 216, 245));
 		scrollMensajes = new JScrollPane(contenedorMensajes);
 		scrollMensajes.setPreferredSize(new Dimension(700, 300));
@@ -228,7 +238,18 @@ public class VentanaBuscar extends JFrame {
 		gbc_scroll.gridwidth = 7;
 		gbc_scroll.fill = GridBagConstraints.BOTH;
 		gbc_scroll.weighty = 1.0;
-		panelCentral.add(scrollMensajes, gbc_scroll);
+		panelCentral.add(scrollMensajes, gbc_scroll);*/
+		contenedorMensajes = new JPanel();
+		contenedorMensajes.setLayout(new BoxLayout(contenedorMensajes, BoxLayout.Y_AXIS));
+		contenedorMensajes.setBackground(new Color(242, 216, 245));
+		contenedorMensajes.setBorder(new EmptyBorder(0, 30, 0, 30));
+
+		scrollMensajes = new JScrollPane(contenedorMensajes);
+		scrollMensajes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollMensajes.getViewport().setBackground(new Color(242, 216, 245));
+
+		// Esto asegura que el scroll panel ocupe todo el espacio disponible bajo el panelBuscar
+		getContentPane().add(scrollMensajes, BorderLayout.CENTER);
 	}
 	
 	public void gestionarBtnVolver() {
@@ -237,12 +258,12 @@ public class VentanaBuscar extends JFrame {
 		dispose();
 	}
 	
-	public void crearMensaje(Mensaje msg) {
+	public void crearMensaje(Mensaje msg, Contacto contacto) {
 	    JPanel mensaje = new JPanel(new GridBagLayout());
 	    Usuario emisor = null;
 	    Usuario receptor = null;
 	    
-	    mensaje.setPreferredSize(new Dimension(contenedorMensajes.getSize().width - 10, 60));
+	    mensaje.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
 	    mensaje.setBorder(BorderFactory.createLineBorder(new Color(135, 0, 146)));
 	    mensaje.setBackground(new Color(242, 216, 245));
 	    
@@ -262,14 +283,22 @@ public class VentanaBuscar extends JFrame {
 	    gbc_mensaje.gridx = 0;
 	    gbc_mensaje.anchor = GridBagConstraints.WEST;
 	    JLabel lblEmisor = new JLabel(""); 
-	    lblEmisor.setText(emisor.getNombre());
+		if (emisor == null) {
+			 lblEmisor.setText(contacto.getNombre());
+		} else {
+			lblEmisor.setText(emisor.getNombre());
+		}
 	    mensaje.add(lblEmisor, gbc_mensaje);
 
 	    // Receptor
 	    gbc_mensaje.gridx = 2;
 	    gbc_mensaje.anchor = GridBagConstraints.EAST;
 	    JLabel lblReceptor = new JLabel("");
-	    lblReceptor.setText(receptor.getNombre());
+	    if (receptor == null) {
+        	lblReceptor.setText(contacto.getNombre());
+        } else {
+        	lblReceptor.setText(receptor.getNombre());
+        }
 	    mensaje.add(lblReceptor, gbc_mensaje);
 
 	    // Texto del mensaje (segunda fila, centrado)
@@ -278,7 +307,8 @@ public class VentanaBuscar extends JFrame {
 	    gbc_mensaje.gridwidth = 3;
 	    gbc_mensaje.fill = GridBagConstraints.HORIZONTAL;
 	    gbc_mensaje.anchor = GridBagConstraints.CENTER;
-	    JTextArea texto = new JTextArea("Texto mensaje");
+	    JTextArea texto = new JTextArea("");
+	    texto.setText(msg.getTexto());
 	    texto.setLineWrap(true);
 	    texto.setWrapStyleWord(true);
 	    texto.setEditable(false);
@@ -296,44 +326,49 @@ public class VentanaBuscar extends JFrame {
 		String texto = textField.getText();
 		String telefono = textField_1.getText();
 		String contacto = textField_2.getText();
-		java.util.Date fecha = dateChooser.getDate();
-		Mensaje msg = new Mensaje(texto, 0, TipoMensaje.ENVIADO); // Crear un mensaje de ejemplo
-		crearMensaje(msg); // Ejemplo de cómo crear un mensaje
+		LocalDate fecha = null;
+		if (dateChooser.getDate() != null) {
+		    fecha = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		}
 		
-		/*if (texto.isEmpty() && telefono.isEmpty() && contacto.isEmpty() && fecha == null) {
+		
+		/*ESTO SE USA PARA PROBAR LA VISTA, NO SE DEBE USAR EN EL PROYECTO FINAL Y HAY QUE BORRARLO
+		Mensaje msg = new Mensaje("Mensaje ejemplo, aquí iría el texto del mensaje", 0, TipoMensaje.ENVIADO); // Crear un mensaje de ejemplo
+		Usuario usuarioEjemplo = new Usuario("Usuario Ejemplo", LocalDate.of(2004, 7, 15), "ue@um.es", null, "123", "ue", "Hola"); // Crear un usuario de ejemplo
+		Contacto contactoEjemplo = new ContactoIndividual("Contacto Ejemplo", usuarioEjemplo); // Crear un contacto de ejemplo
+		crearMensaje(msg, contactoEjemplo); // Ejemplo de cómo crear un mensaje
+		Mensaje msg2 = new Mensaje("Mensaje ejemplo 2, aquí iría el texto del mensaje", 0, TipoMensaje.ENVIADO); // Crear un mensaje de ejemplo
+		crearMensaje(msg2, contactoEjemplo);
+		Mensaje msg3 = new Mensaje("Mensaje ejemplo 3, aquí iría el texto del mensaje", 0, TipoMensaje.ENVIADO); // Crear un mensaje de ejemplo
+		crearMensaje(msg3, contactoEjemplo);
+		crearMensaje(msg2, contactoEjemplo);
+		crearMensaje(msg, contactoEjemplo);
+		crearMensaje(msg3, contactoEjemplo);
+		crearMensaje(msg2, contactoEjemplo);
+		crearMensaje(msg, contactoEjemplo);
+		crearMensaje(msg3, contactoEjemplo);
+		crearMensaje(msg2, contactoEjemplo);
+		crearMensaje(msg, contactoEjemplo);
+		crearMensaje(msg3, contactoEjemplo);
+		crearMensaje(msg2, contactoEjemplo);
+		crearMensaje(msg, contactoEjemplo);
+		crearMensaje(msg3, contactoEjemplo);
+		crearMensaje(msg2, contactoEjemplo);
+		crearMensaje(msg, contactoEjemplo);*/
+		
+		if (texto.isEmpty() && telefono.isEmpty() && contacto.isEmpty() && fecha == null) {
 			JOptionPane.showMessageDialog(this,
 					"No hay datos que buscar. Por favor, complete al menos uno de los campos.",
 					"Mensaje busquedad", JOptionPane.INFORMATION_MESSAGE);
-		} else if (!texto.isEmpty() && telefono.isEmpty() && contacto.isEmpty() && fecha == null) {
-			//Se llama a la función buscar por texto del controlador
-			List<Mensaje> mensajes = Controlador.INSTANCE.buscarMensajesPorTexto(texto);
-			//Bucle for para cada mensaje que se encuentre con ese texto
-				//Psarlo por la función de crear mensaje tipo busquedad
-				//Añadirlo al contenedorMensajes
-			for (Mensaje mensaje : mensajes) {
-				
-			}
-		} else if (texto.isEmpty() && !telefono.isEmpty() && contacto.isEmpty() && fecha == null) {
-			List<Mensaje> mensajes = Controlador.INSTANCE.buscarMensajesPorTelefono(telefono);
-			for (Mensaje mensaje : mensajes) {
-				// Crear mensaje de tipo busquedad
-				// Añadirlo al contenedorMensajes
-			}
-		} else if (texto.isEmpty() && telefono.isEmpty() && !contacto.isEmpty() && fecha == null) {
-			List<Mensaje> mensajes = Controlador.INSTANCE.buscarMensajesPorContacto(contacto);
-			for (Mensaje mensaje : mensajes) {
-				// Crear mensaje de tipo busquedad
-				// Añadirlo al contenedorMensajes
-			}
-		} else if (texto.isEmpty() && telefono.isEmpty() && contacto.isEmpty() && fecha != null) {
-			List<Mensaje> mensajes = Controlador.INSTANCE.buscarMensajesPorFecha(fecha);
-			for (Mensaje mensaje : mensajes) {
-				// Crear mensaje de tipo busquedad
-				// Añadirlo al contenedorMensajes
-			}
 		} else {
-			// Gestionar combinación de campos
-		}*/
+			//Se llama a la función para filtrar los mensajes del controlador
+			Map<Mensaje, Contacto> mensajes = Controlador.INSTANCE.filtrarMensajes(Controlador.INSTANCE.getUsuarioActual(), texto, telefono, contacto, fecha);
+			//Bucle for para cada mensaje que se encuentre con los filtros
+			for (Mensaje mensaje : mensajes.keySet()) {
+				Contacto contactoEncontrado = mensajes.get(mensaje);
+				crearMensaje(mensaje, contactoEncontrado);
+			}
+		}
 
 	}
 

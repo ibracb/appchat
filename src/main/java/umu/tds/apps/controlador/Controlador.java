@@ -1,10 +1,12 @@
 package umu.tds.apps.controlador;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
@@ -288,7 +290,7 @@ public enum Controlador {
 		adaptadorUsuario.update(usuarioActual);
 	}
 	
-	public Set<Mensaje> filtrarMensajes(Usuario usuario, String texto, String movil, String nombre, LocalDate fecha) {
+	public Map<Mensaje, Contacto>filtrarMensajes(Usuario usuario, String texto, String movil, String nombre, LocalDate fecha) {
 		Set<Filtro> filtros = Set.of(
 				new FiltroPorTexto(texto),
 				new FiltroPorMovil(movil),

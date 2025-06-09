@@ -1,6 +1,8 @@
 package umu.tds.apps.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -24,6 +26,12 @@ public class VentanaContactos extends JFrame {
     private static final long serialVersionUID = 1L;
     private DefaultListModel<ContactoIndividual> modeloLista;
     private JList<ContactoIndividual> listaContactos;
+    
+    public void mostrarVentanaContactos(Dimension tam, Point ubi) {
+		setVisible(true);
+		setSize(tam);
+		setLocation(ubi);
+	}
 
     public VentanaContactos() {
         setTitle("Contactos Individuales");
@@ -148,7 +156,7 @@ public class VentanaContactos extends JFrame {
     private void volver() {
     	VentanaPrincipal v = new VentanaPrincipal();
     	dispose();
-    	v.setVisible(true);
+    	v.mostrarVentanaPrincipal(this.getSize(), this.getLocation());
     }
     
 }
