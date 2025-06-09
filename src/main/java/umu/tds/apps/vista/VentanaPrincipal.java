@@ -89,7 +89,7 @@ public class VentanaPrincipal extends JFrame {
 
 		MTuContacto = new JMenu(Controlador.INSTANCE.getNombreUsuarioActual());
 		MTuContacto.setFont(new Font("Georgia", Font.BOLD, 12));
-		MTuContacto.setPreferredSize(new Dimension(200, 30));
+		MTuContacto.setPreferredSize(new Dimension(170, 30));
 		MTuContacto.setAlignmentX(Component.LEFT_ALIGNMENT);
 		refrescarImagen();
 		menuBar.add(MTuContacto);
@@ -257,7 +257,7 @@ public class VentanaPrincipal extends JFrame {
 	private void abrirBuscar() {
 		VentanaBuscar v = new VentanaBuscar();
 		dispose();
-		v.setVisible(true);
+		v.mostrarVentanaBuscar(this.getSize(), this.getLocation());
 	}
 	
 	private void crearMensaje(String mensaje, String usuario, int tipo) {

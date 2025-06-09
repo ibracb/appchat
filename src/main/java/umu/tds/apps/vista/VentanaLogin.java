@@ -81,9 +81,9 @@ public class VentanaLogin extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.png")).getImage());
 		setTitle("AppChat");
-		setBounds(100, 100, 613, 464);
+		setBounds(100, 100, 750, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
