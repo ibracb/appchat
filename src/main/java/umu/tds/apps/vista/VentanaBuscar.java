@@ -223,22 +223,6 @@ public class VentanaBuscar extends JFrame {
 		panelBuscar.add(botonBuscar, gbc_botonBuscar);
 		botonBuscar.addActionListener(e -> gestionarBtnBuscar());
 		
-		/*panelCentral = new JPanel();
-		panelCentral.setBackground(new Color(242, 216, 245));
-		getContentPane().add(panelCentral, BorderLayout.CENTER);
-		contenedorMensajes = new JPanel();
-		contenedorMensajes.setLayout(new BoxLayout(contenedorMensajes, BoxLayout.Y_AXIS));
-		contenedorMensajes.setBackground(new Color(242, 216, 245));
-		scrollMensajes = new JScrollPane(contenedorMensajes);
-		scrollMensajes.setPreferredSize(new Dimension(700, 300));
-		scrollMensajes.getViewport().setBackground(new Color(242, 216, 245));
-		gbc_scroll = new GridBagConstraints();
-		gbc_scroll.gridx = 0;
-		gbc_scroll.gridy = 6;
-		gbc_scroll.gridwidth = 7;
-		gbc_scroll.fill = GridBagConstraints.BOTH;
-		gbc_scroll.weighty = 1.0;
-		panelCentral.add(scrollMensajes, gbc_scroll);*/
 		contenedorMensajes = new JPanel();
 		contenedorMensajes.setLayout(new BoxLayout(contenedorMensajes, BoxLayout.Y_AXIS));
 		contenedorMensajes.setBackground(new Color(242, 216, 245));
