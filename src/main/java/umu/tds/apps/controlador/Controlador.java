@@ -169,12 +169,15 @@ public enum Controlador {
 	 * @param imagen - Foto de perfil del grupo.
 	 * @param miembros - Miembros añadidos al crear el grupo.
 	 */
-	public void registrarGrupo(String movilUsuario, String nombre, String imagen, ContactoIndividual... miembros) {
-		Usuario usuario = repositorioUsuarios.findUsuario(movilUsuario);
+	public boolean registrarGrupo(String nombre, String imagen, ContactoIndividual... miembros) {
+		if(recuperarGrupo(nombre) != null) {
+			return false;
+		}
 		Grupo grupo = new Grupo(nombre, imagen, miembros);
 		adaptadorGrupo.create(grupo);
-		usuario.createGrupo(nombre, imagen, miembros);
-		adaptadorUsuario.update(usuario);
+		usuarioActual.createGrupo(nombre, imagen, miembros);
+		adaptadorUsuario.update(usuarioActual);
+		return true;
 	}
 	
 	/**
@@ -330,6 +333,21 @@ public enum Controlador {
 	
 	public boolean generarPdfListado() {
 		return ExportPDF.INSTANCE.createPDF(usuarioActual);
+	}
+
+	public Set<Grupo> getGruposUsuarioActual() {
+		return usuarioActual.getGrupos();
+	}
+
+	public String getMovilUsuarioActual() {
+		return usuarioActual.getMovil();
+	}
+
+	public Grupo recuperarGrupo(String nombre) {
+		return usuarioActual.getGrupos().stream()
+	            .filter(grupo -> nombre.equals(grupo.getNombre()))
+	            .findFirst()
+	            .orElse(null);
 	}
 	
 }

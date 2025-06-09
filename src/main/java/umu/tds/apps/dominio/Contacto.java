@@ -133,7 +133,15 @@ public abstract class Contacto implements Comparable<Contacto> {
 	
 	@Override
 	public int compareTo(Contacto o) {
+		if (this.getNombre() == null && o.getNombre() == null) return 0;
+		if (this.getNombre() == null) return -1;
+		if (o.getNombre() == null) return 1;
 		return this.getNombre().compareTo(o.getNombre());
+	}
+	
+	@Override
+	public String toString() {
+		return nombre;
 	}
 	
 }

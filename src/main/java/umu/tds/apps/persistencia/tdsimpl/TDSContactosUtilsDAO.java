@@ -1,6 +1,8 @@
 package umu.tds.apps.persistencia.tdsimpl;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,11 +53,17 @@ public final class TDSContactosUtilsDAO {
 	 * @return Conjunto de mensajes.
 	 */
 	public static Set<Mensaje> getMensajesFromIds(String lineas) {
-	    MensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
+		MensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
+	    
+	    if (lineas == null || lineas.isBlank()) {
+	        return new HashSet<>();
+	    }
+
 	    return Arrays.stream(lineas.split(ESPACIO_EN_BLANCO))
-	        .filter(id -> id != null && !id.isEmpty())  // FILTRO PARA EVITAR CADENAS VACÍAS
+	        .filter(id -> id != null && !id.isEmpty())
 	        .map(Integer::valueOf)
 	        .map(adaptadorMensaje::get)
+	        .filter(Objects::nonNull)
 	        .collect(Collectors.toSet());
 	}
 	

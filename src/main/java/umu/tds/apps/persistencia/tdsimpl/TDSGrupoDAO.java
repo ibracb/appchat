@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -191,11 +192,18 @@ public class TDSGrupoDAO implements GrupoDAO {
 	 * @return conjunto de contactos.
 	 */
 	private Set<ContactoIndividual> getContactosFromIds(String lineas) {
-		TDSContactoIndividualDAO adaptadorContacto = TDSContactoIndividualDAO.getInstance();
-		return Arrays.stream(lineas.split(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO))
-			.map(Integer::valueOf)
-			.map(adaptadorContacto::get)
-			.collect(Collectors.toSet());
+	    TDSContactoIndividualDAO adaptadorContacto = TDSContactoIndividualDAO.getInstance();
+	    
+	    if (lineas == null || lineas.isBlank()) {
+	        return new HashSet<>();
+	    }
+
+	    return Arrays.stream(lineas.split(TDSContactosUtilsDAO.ESPACIO_EN_BLANCO))
+	        .map(Integer::valueOf)
+	        .map(adaptadorContacto::get)
+	        .filter(Objects::nonNull) // también puede proteger contra contactos no encontrados
+	        .collect(Collectors.toSet());
 	}
+
 
 }

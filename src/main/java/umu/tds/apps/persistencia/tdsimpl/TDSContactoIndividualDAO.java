@@ -136,6 +136,9 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	    if (eContacto == null) return null;
 
 	    String nombre = servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_NOMBRE);
+	    if (nombre == null) {
+	        nombre = "";
+	    }
 	    String idUsuarioStr = servPersistencia.recuperarPropiedadEntidad(eContacto, TDSContactosUtilsDAO.PROPIEDAD_USUARIO);
 
 	    if (idUsuarioStr == null || idUsuarioStr.trim().isEmpty()) {

@@ -113,6 +113,7 @@ public class VentanaPrincipal extends JFrame {
 		mnContactos.add(mntmIndividuales);
 		
 		mntmGrupos = new JMenuItem("Grupos");
+		mntmGrupos.addActionListener(e -> abrirGrupos());
 		mnContactos.add(mntmGrupos);
 
 		horizontalGlue = Box.createHorizontalGlue();
@@ -245,6 +246,12 @@ public class VentanaPrincipal extends JFrame {
 		VentanaContactos vContactos = new VentanaContactos();
 		dispose();
 		vContactos.setVisible(true);
+	}
+	
+	private void abrirGrupos() {
+		VentanaGrupos v = new VentanaGrupos();
+		dispose();
+		v.setVisible(true);
 	}
 	
 	private void abrirBuscar() {
