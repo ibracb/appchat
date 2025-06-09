@@ -11,7 +11,6 @@ public class AppChat {
 	
 	/**
 	 * Método que arranca AppChat.
-	 * @param args - Almacena los argumentos que se pasan al ejecutar el programa desde la línea de comandos.
 	 */
 	public static void main(final String[] args){
 		EventQueue.invokeLater(new Runnable() {
