@@ -37,6 +37,11 @@ public class Grupo extends Contacto {
 		this.miembros = new TreeSet<ContactoIndividual>();
 	}
 	
+	public Grupo(String nombre, String imagen, Set<ContactoIndividual> miembros) {
+		this(nombre, imagen);
+		this.miembros = miembros;
+	}
+	
 	/**
 	 * Método que añade un contacto individual al grupo.
 	 * @param miembro - El miembro que se desea añadir al grupo.

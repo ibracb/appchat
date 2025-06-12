@@ -16,7 +16,6 @@ import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
-import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Usuario;
@@ -153,8 +152,8 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	        new Propiedad(PROPIEDAD_CONTRASEÑA, usuario.getContraseña()),
 	        new Propiedad(PROPIEDAD_SALUDO, usuario.getSaludo()),
 	        new Propiedad(PROPIEDAD_PREMIUM, String.valueOf(usuario.isPremium())),
-	        new Propiedad(PROPIEDAD_CONTACTOS_INDIVIDUALES, getIdsContactosIndividuales(usuario.getContactos())),
-	        new Propiedad(PROPIEDAD_GRUPOS, getIdsGrupos(usuario.getContactos()))
+	        new Propiedad(PROPIEDAD_CONTACTOS_INDIVIDUALES, getIdsContactosIndividuales(usuario.getContactosIndividuales())),
+	        new Propiedad(PROPIEDAD_GRUPOS, getIdsGrupos(usuario.getGrupos()))
 	    ));
 
 	    eUsuario = servPersistencia.registrarEntidad(eUsuario);
@@ -214,10 +213,10 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	            propiedad.setValor(String.valueOf(usuario.isPremium()));
 	        }
 	        else if(propiedad.getNombre().equals(PROPIEDAD_CONTACTOS_INDIVIDUALES)) {
-	            propiedad.setValor(getIdsContactosIndividuales(usuario.getContactos()));
+	            propiedad.setValor(getIdsContactosIndividuales(usuario.getContactosIndividuales()));
 	        }
 	        else if(propiedad.getNombre().equals(PROPIEDAD_GRUPOS)) {
-	            propiedad.setValor(getIdsGrupos(usuario.getContactos()));
+	            propiedad.setValor(getIdsGrupos(usuario.getGrupos()));
 	        }
 	        servPersistencia.modificarPropiedad(propiedad);
 	    });
@@ -287,7 +286,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	 * @param contactos - Conjunto de contactos.
 	 * @return ids de los contactos individuales.
 	 */
-	private String getIdsContactosIndividuales(Set<Contacto> contactos) {
+	private String getIdsContactosIndividuales(Set<ContactoIndividual> contactos) {
 		return contactos.stream()
 				.filter(contacto -> contacto instanceof ContactoIndividual)
 				.map(contacto -> String.valueOf(contacto.getId()))
@@ -314,7 +313,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	 * @param contactos - Conjunto de contactos.
 	 * @return ids de los grupos.
 	 */
-	private String getIdsGrupos(Set<Contacto> contactos) {
+	private String getIdsGrupos(Set<Grupo> contactos) {
 		return contactos.stream()
 				.filter(contacto -> contacto instanceof Grupo)
 				.map(contacto -> String.valueOf(contacto.getId()))

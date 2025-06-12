@@ -1,7 +1,7 @@
 package umu.tds.apps.servicios.filtros;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import umu.tds.apps.dominio.Contacto;
@@ -20,7 +20,7 @@ public class FiltroCompuesto implements Filtro {
 	
 	@Override
 	public Map<Mensaje, Contacto> filtrar(Usuario usuario) {
-		Map<Mensaje, Contacto>  resultado = new HashMap<>();
+		Map<Mensaje, Contacto>  resultado = new TreeMap<>();
 		boolean primerFiltro = true;
 	    for (Filtro filtro : filtros) {
 	        Map<Mensaje, Contacto> actual = filtro.filtrar(usuario);

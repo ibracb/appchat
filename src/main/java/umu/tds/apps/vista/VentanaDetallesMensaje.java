@@ -18,7 +18,7 @@ public class VentanaDetallesMensaje {
 	private JDialog dialog;
 	private Mensaje mensaje;
 
-	public VentanaDetallesMensaje(Mensaje mensaje) {
+	protected VentanaDetallesMensaje(Mensaje mensaje) {
 		this.mensaje = mensaje;
 		initialize();
 	}
@@ -54,7 +54,7 @@ public class VentanaDetallesMensaje {
 		dialog.getContentPane().add(btnCerrar, BorderLayout.SOUTH);
 	}
 
-	public void mostrar() {
+	protected void mostrar() {
 		dialog.setVisible(true);
 	}
 }

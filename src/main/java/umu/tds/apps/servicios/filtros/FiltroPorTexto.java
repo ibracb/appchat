@@ -1,8 +1,7 @@
 package umu.tds.apps.servicios.filtros;
 
-import java.util.HashMap;
 import java.util.Map;
-
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import umu.tds.apps.dominio.Contacto;
@@ -23,7 +22,7 @@ public class FiltroPorTexto implements Filtro {
 	    		.flatMap(contacto -> contacto.getMensajes().stream()
 	            .filter(mensaje -> mensaje.getTexto().toLowerCase().contains(texto.toLowerCase()))
 	            .map(mensaje -> Map.entry(mensaje, contacto)))
-	    		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (m1, m2) -> m1, HashMap::new));
+	    		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (m1, m2) -> m1, TreeMap::new));
 	}
 
 	@Override

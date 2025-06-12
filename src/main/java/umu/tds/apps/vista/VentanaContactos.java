@@ -27,13 +27,13 @@ public class VentanaContactos extends JFrame {
     private DefaultListModel<ContactoIndividual> modeloLista;
     private JList<ContactoIndividual> listaContactos;
     
-    public void mostrarVentanaContactos(Dimension tam, Point ubi) {
+    protected void mostrarVentanaContactos(Dimension tam, Point ubi) {
 		setVisible(true);
 		setSize(tam);
 		setLocation(ubi);
 	}
 
-    public VentanaContactos() {
+    protected VentanaContactos() {
         setTitle("Contactos Individuales");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);

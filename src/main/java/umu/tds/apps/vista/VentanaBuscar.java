@@ -65,9 +65,7 @@ public class VentanaBuscar extends JFrame {
 	private GridBagConstraints gbc_lblBuscaFecha;
 	private JDateChooser dateChooser;
 	private GridBagConstraints gbc_dateChooser;
-	private JPanel panelCentral;
 	private JScrollPane scrollMensajes;
-	private GridBagConstraints gbc_scroll;
 	private JPanel contenedorMensajes;
 
 	/**
@@ -86,7 +84,7 @@ public class VentanaBuscar extends JFrame {
 		});
 	}
 	
-	public void mostrarVentanaBuscar(Dimension tam, Point ubi) {
+	protected void mostrarVentanaBuscar(Dimension tam, Point ubi) {
 		contenedorMensajes.removeAll();
 		setVisible(true);
 		setSize(tam);
@@ -96,7 +94,7 @@ public class VentanaBuscar extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public VentanaBuscar() {
+	protected VentanaBuscar() {
 		initialize();
 	}
 
@@ -234,13 +232,13 @@ public class VentanaBuscar extends JFrame {
 		getContentPane().add(scrollMensajes, BorderLayout.CENTER);
 	}
 	
-	public void gestionarBtnVolver() {
+	private void gestionarBtnVolver() {
 		VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
 		ventanaPrincipal.mostrarVentanaPrincipal(this.getSize(), this.getLocation());
 		dispose();
 	}
 	
-	public void crearMensaje(Mensaje msg, Contacto contacto) {
+	private void crearMensaje(Mensaje msg, Contacto contacto) {
 	    JPanel mensaje = new JPanel(new GridBagLayout());
 	    Usuario emisor = null;
 	    Usuario receptor = null;
@@ -302,7 +300,7 @@ public class VentanaBuscar extends JFrame {
 	    contenedorMensajes.repaint();
 	}
 	
-	public void gestionarBtnBuscar() {
+	private void gestionarBtnBuscar() {
 		contenedorMensajes.removeAll(); // Limpiar el contenedor de mensajes antes de buscar
 		// Aquí se implementaría la lógica de búsqueda
 		String texto = textField.getText();

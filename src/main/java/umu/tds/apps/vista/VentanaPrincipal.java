@@ -64,11 +64,11 @@ public class VentanaPrincipal extends JFrame {
 		});
 	}
 
-	public VentanaPrincipal() {
+	protected VentanaPrincipal() {
 		initialize();
 	}
 
-	public void mostrarVentanaPrincipal(Dimension tam, Point ubi) {
+	protected void mostrarVentanaPrincipal(Dimension tam, Point ubi) {
 		setVisible(true);
 		setSize(tam);
 		setLocation(ubi);
@@ -143,6 +143,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		btnPdfChat = new JButton("PDF Chat");
 		btnPdfChat.setFont(new Font("Georgia", Font.BOLD, 12));
+		btnPdfChat.addActionListener(e -> gestionarPdfChat());
 		menuBar.add(btnPdfChat);
 
 		contactos.setPreferredSize(new Dimension(200, 700));
@@ -162,6 +163,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private void cerrarSesion() {
+		Controlador.INSTANCE.cerrarSesion();
 		VentanaLogin ventanaLogin = new VentanaLogin();
 		dispose();
 		ventanaLogin.mostrarLogin(this.getSize(), this.getLocation());
@@ -217,7 +219,11 @@ public class VentanaPrincipal extends JFrame {
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
-
+	
+	private void gestionarPdfChat() {
+		//TODO se debe implementar
+	}
+	
 	private void abrirPremium() {
 		if (!Controlador.INSTANCE.isPremiumUsuarioActual()) {
 			int respuestaActivar = JOptionPane.showConfirmDialog(this, "¿Desea activar premium?", "Gestión premium",

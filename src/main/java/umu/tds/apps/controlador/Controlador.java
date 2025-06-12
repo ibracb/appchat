@@ -335,6 +335,10 @@ public enum Controlador {
 	public boolean generarPdfListado() {
 		return ExportPDF.INSTANCE.createPDF(usuarioActual);
 	}
+	
+	public boolean generarPdfChat(ContactoIndividual contacto) {
+		return ExportPDF.INSTANCE.createPdfChat(contacto);
+	}
 
 	public Set<Grupo> getGruposUsuarioActual() {
 		return usuarioActual.getGrupos();
@@ -349,6 +353,10 @@ public enum Controlador {
 	            .filter(grupo -> nombre.equals(grupo.getNombre()))
 	            .findFirst()
 	            .orElse(null);
+	}
+	
+	public void cerrarSesion() {
+		usuarioActual = null;
 	}
 	
 }

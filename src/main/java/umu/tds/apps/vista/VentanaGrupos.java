@@ -27,7 +27,7 @@ public class VentanaGrupos extends JFrame {
 	private JList<Grupo> listaGrupos;
 	private JPanel contentPane;
 	
-	public void mostrarVentanaGrupos(Dimension tam, Point ubi) {
+	protected void mostrarVentanaGrupos(Dimension tam, Point ubi) {
 		setVisible(true);
 		setSize(tam);
 		setLocation(ubi);
@@ -36,7 +36,7 @@ public class VentanaGrupos extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaGrupos() {
+	protected VentanaGrupos() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

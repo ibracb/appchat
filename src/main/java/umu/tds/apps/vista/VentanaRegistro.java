@@ -97,14 +97,14 @@ public class VentanaRegistro extends JFrame {
 	 * Create the application.
 	 * @param ventanaLogin 
 	 */
-	public VentanaRegistro() {
+	protected VentanaRegistro() {
 		initialize();
 	}
 	
 	/**
 	 * Mostrar la ventana de registro
 	 */
-	public void mostrarRegistro(Dimension tam, Point ubi) {
+	protected void mostrarRegistro(Dimension tam, Point ubi) {
 		setVisible(true);
 		setSize(tam);
 		setLocation(ubi);
@@ -347,7 +347,7 @@ public class VentanaRegistro extends JFrame {
 			dispose();
 			JOptionPane.showMessageDialog(this, "¡Bienvenido a AppChat, " + nombre + "!");			
 			VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
-			ventanaPrincipal.setVisible(true);
+			ventanaPrincipal.mostrarVentanaPrincipal(getSize(), getLocation());
 		}
 		else {
 			JOptionPane.showMessageDialog(this, "Error en el registro, inténtalo de nuevo...");

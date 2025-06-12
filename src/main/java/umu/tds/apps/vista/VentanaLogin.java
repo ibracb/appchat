@@ -71,7 +71,7 @@ public class VentanaLogin extends JFrame {
 	public VentanaLogin() {
 		initialize();
 	}
-	public void mostrarLogin(Dimension tam, Point ubi) {
+	protected void mostrarLogin(Dimension tam, Point ubi) {
 		setVisible(true);
 		setSize(tam);
 		setLocation(ubi);
