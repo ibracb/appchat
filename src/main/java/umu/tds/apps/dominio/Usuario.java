@@ -401,4 +401,8 @@ public class Usuario {
 			.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
+	public void addContacto(Contacto contacto) {
+		contactos.add(contacto);
+	}
+	
 }
