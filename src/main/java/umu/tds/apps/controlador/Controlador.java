@@ -175,9 +175,8 @@ public enum Controlador {
 		if(recuperarGrupo(nombre) != null) {
 			return false;
 		}
-		Grupo grupo = new Grupo(nombre, imagen);
+		Grupo grupo = usuarioActual.crearGrupo(nombre, imagen);
 		adaptadorGrupo.create(grupo);
-		usuarioActual.addContacto(grupo);
 		adaptadorUsuario.update(usuarioActual);
 		return true;
 	}

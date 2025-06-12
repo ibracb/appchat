@@ -138,7 +138,7 @@ public class Usuario {
 		return contactos.add(grupo);
 	}
 	
-	 public void addContacto(ContactoIndividual contacto) {
+	public void addContacto(ContactoIndividual contacto) {
 		 contactos.add(contacto);
 	 }
 	
@@ -299,7 +299,9 @@ public class Usuario {
 	}
 	
 	public Grupo crearGrupo(String nombre, String imagen) {
-		return new Grupo(nombre, imagen);
+		Grupo grupo = new Grupo(nombre, imagen);
+		addContacto(grupo);
+		return grupo;
 	}
 	
 	/**
