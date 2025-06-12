@@ -268,7 +268,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		grupos = getGruposFromIds(servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_GRUPOS));
 		grupos.stream()
 			.filter(grupo -> grupo != null)
-			.forEach(grupo -> usuario.createGrupo(grupo.getNombre(), grupo.getImagen()));
+			.forEach(grupo -> usuario.addContacto(grupo));
 		return usuario;
 	}
 

@@ -405,4 +405,8 @@ public class Usuario {
 		contactos.add(contacto);
 	}
 	
+	public void removeContacto(Contacto contacto) {
+		contactos.remove(contacto);
+	}
+	
 }

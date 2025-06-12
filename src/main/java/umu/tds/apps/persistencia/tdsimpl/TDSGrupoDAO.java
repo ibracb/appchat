@@ -84,8 +84,6 @@ public class TDSGrupoDAO implements GrupoDAO {
 				new Propiedad(PROPIEDAD_MIEMBROS, ""))));
 		eGrupo = servPersistencia.registrarEntidad(eGrupo);
 		grupo.setId(eGrupo.getId());
-		System.out.println("Id del egrupo: " + eGrupo.getId());
-		System.out.println("Id del grupo: " + grupo.getId());
 	}
 
 	@Override

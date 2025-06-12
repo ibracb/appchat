@@ -191,6 +191,8 @@ public enum Controlador {
 		grupo.getMiembros().forEach(miembro -> {
 			adaptadorUsuario.update(miembro.getUsuario());
 		});
+		usuarioActual.removeContacto(grupo);
+		adaptadorUsuario.update(usuarioActual);
 	}
 	
 	/**
