@@ -171,13 +171,12 @@ public enum Controlador {
 	 * @param imagen - Foto de perfil del grupo.
 	 * @param miembros - Miembros añadidos al crear el grupo.
 	 */
-	public boolean registrarGrupo(String nombre, String imagen, ContactoIndividual... miembros) {
+	public boolean registrarGrupo(String nombre, String imagen) {
 		if(recuperarGrupo(nombre) != null) {
 			return false;
 		}
-		Grupo grupo = new Grupo(nombre, imagen, miembros);
-		adaptadorGrupo.create(grupo);
-		usuarioActual.createGrupo(nombre, imagen, miembros);
+		adaptadorGrupo.create(usuarioActual.crearGrupo(nombre, imagen));
+		usuarioActual.createGrupo(nombre, imagen);
 		adaptadorUsuario.update(usuarioActual);
 		return true;
 	}

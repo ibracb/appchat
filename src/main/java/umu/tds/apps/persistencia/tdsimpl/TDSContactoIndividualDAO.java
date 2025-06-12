@@ -87,7 +87,6 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	    eContacto.setNombre(ENTIDAD_CONTACTO);
 	    eContacto.setPropiedades(
 	        new ArrayList<Propiedad>(Arrays.asList(
-	                new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_ID, String.valueOf(contacto.getId())),
 	                new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_NOMBRE, contacto.getNombre()),
 	                new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_USUARIO, String.valueOf(contacto.getUsuario().getId())),
 	                new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES, getIdsMensajes(contacto.getMensajes())),

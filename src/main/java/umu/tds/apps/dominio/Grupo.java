@@ -31,11 +31,10 @@ public class Grupo extends Contacto {
 	 * @param imagen - Ruta de la imagen a asignar al grupo.
 	 * @param miembros - Miembros a añadir al grupo.
 	 */
-	public Grupo(String nombre, String imagen, ContactoIndividual...miembros) {
+	public Grupo(String nombre, String imagen) {
 		super(nombre);
 		setImagen(imagen);
 		this.miembros = new TreeSet<ContactoIndividual>();
-		Collections.addAll(this.miembros, miembros);
 	}
 	
 	/**

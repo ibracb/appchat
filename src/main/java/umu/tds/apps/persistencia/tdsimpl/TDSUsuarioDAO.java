@@ -35,11 +35,6 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	private static final String ENTIDAD_USUARIO = "Usuario";
 	
 	/**
-	 * Identificador de la propiedad de id.
-	 */
-	private static final String PROPIEDAD_ID = "id";
-	
-	/**
 	 * Identificador de la propiedad de nombre.
 	 */
 	private static final String PROPIEDAD_NOMBRE = "nombre";
@@ -144,27 +139,9 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	    if (noRegistrar) {
 	        return; // Ya existe el usuario, no registrar
 	    }
-
-	    TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
-	    TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
-
-	    // SOLO crea contactos que NO tengan ID válido
-	    usuario.getContactos().forEach(contacto -> {
-	        if (contacto instanceof ContactoIndividual) {
-	            if (contacto.getId() <= 0) {
-	                adaptadorContactoIndividual.create((ContactoIndividual) contacto);
-	            }
-	        } else if (contacto instanceof Grupo) {
-	            if (contacto.getId() <= 0) {
-	                adaptadorGrupo.create((Grupo) contacto);
-	            }
-	        }
-	    });
-
 	    eUsuario = new Entidad();
 	    eUsuario.setNombre(ENTIDAD_USUARIO);
 	    eUsuario.setPropiedades(Arrays.asList(
-	        new Propiedad(PROPIEDAD_ID, String.valueOf(usuario.getId())),
 	        new Propiedad(PROPIEDAD_NOMBRE, usuario.getNombre()),
 	        new Propiedad(PROPIEDAD_FECHA_NACIMIENTO,
 	            dateFormat.format(Date.from(usuario.getFechaNacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant()))),
@@ -206,23 +183,6 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 	    if (eUsuario == null) {
 	        return;
 	    }
-
-	    TDSContactoIndividualDAO adaptadorContactoIndividual = TDSContactoIndividualDAO.getInstance();
-	    TDSGrupoDAO adaptadorGrupo = TDSGrupoDAO.getInstance();
-
-	    // Crear contactos sin ID antes de actualizar propiedades
-	    usuario.getContactos().forEach(contacto -> {
-	        if (contacto instanceof ContactoIndividual) {
-	            if (contacto.getId() <= 0) {
-	                adaptadorContactoIndividual.create((ContactoIndividual) contacto);
-	            }
-	        } else if (contacto instanceof Grupo) {
-	            if (contacto.getId() <= 0) {
-	                adaptadorGrupo.create((Grupo) contacto);
-	            }
-	        }
-	    });
-
 	    eUsuario.getPropiedades().forEach(propiedad -> {
 	        if(propiedad.getNombre().equals(PROPIEDAD_NOMBRE)) {
 	            propiedad.setValor(usuario.getNombre());
@@ -309,7 +269,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		grupos = getGruposFromIds(servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_GRUPOS));
 		grupos.stream()
 			.filter(grupo -> grupo != null)
-			.forEach(grupo -> usuario.createGrupo(grupo.getNombre(), grupo.getImagen(), grupo.getMiembros().toArray(new ContactoIndividual[0])));
+			.forEach(grupo -> usuario.createGrupo(grupo.getNombre(), grupo.getImagen()));
 		return usuario;
 	}
 

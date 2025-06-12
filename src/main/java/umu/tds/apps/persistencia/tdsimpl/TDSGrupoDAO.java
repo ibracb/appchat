@@ -70,31 +70,22 @@ public class TDSGrupoDAO implements GrupoDAO {
 	
 	@Override
 	public void create(Grupo grupo) {
-		Entidad eGrupo = null;
-		boolean noRegistrar = true;
-		try {
-			eGrupo = servPersistencia.recuperarEntidad(grupo.getId());
-		} catch (NullPointerException e) {
-			noRegistrar = false;
-		}
-		if(noRegistrar) {
-			return;
-		}
-		TDSMensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
-		grupo.getMensajes().forEach(mensaje -> {
-			adaptadorMensaje.create(mensaje);
+		System.out.println(grupo.getNombre());
+		grupo.getMiembros().forEach(m -> {
+			System.out.println(m.getNombre());
 		});
-		eGrupo = new Entidad();
+		Entidad eGrupo = new Entidad();
 		eGrupo.setNombre(ENTIDAD_GRUPO);
 		eGrupo.setPropiedades(
 			new ArrayList<Propiedad>(Arrays.asList(
-				new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_ID, String.valueOf(grupo.getId())),
 				new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_NOMBRE, grupo.getNombre()),
-				new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES, getIdsMensajes(grupo.getMensajes())),
+				new Propiedad(TDSContactosUtilsDAO.PROPIEDAD_MENSAJES, ""),
 				new Propiedad(PROPIEDAD_IMAGEN, grupo.getImagen()),
-				new Propiedad(PROPIEDAD_MIEMBROS, getIdsContactos(grupo.getMiembros())))));
-		servPersistencia.registrarEntidad(eGrupo);
+				new Propiedad(PROPIEDAD_MIEMBROS, ""))));
+		eGrupo = servPersistencia.registrarEntidad(eGrupo);
 		grupo.setId(eGrupo.getId());
+		System.out.println("Id del egrupo: " + eGrupo.getId());
+		System.out.println("Id del grupo: " + grupo.getId());
 	}
 
 	@Override
@@ -137,7 +128,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 		Entidad eGrupo = servPersistencia.recuperarEntidad(id);
 		nombre = servPersistencia.recuperarPropiedadEntidad(eGrupo, TDSContactosUtilsDAO.PROPIEDAD_NOMBRE);
 		imagen = servPersistencia.recuperarPropiedadEntidad(eGrupo, PROPIEDAD_IMAGEN);
-		Grupo grupo = new Grupo(nombre, imagen, new ContactoIndividual[0]);
+		Grupo grupo = new Grupo(nombre, imagen);
 		grupo.setId(id);
 		PoolDAO.INSTANCE.addObject(grupo.getId(), grupo);
 		miembros = getContactosFromIds(servPersistencia.recuperarPropiedadEntidad(eGrupo, PROPIEDAD_MIEMBROS));

@@ -29,11 +29,6 @@ public class TDSMensajeDAO implements MensajeDAO {
 	private static final String ENTIDAD_MENSAJE = "Mensaje";
 	
 	/**
-	 * Identificador de la propiedad id.
-	 */
-	private static final String PROPIEDAD_ID = "id";
-	
-	/**
 	 * Identificador de la propiedad momentoEnvio.
 	 */
 	private static final String PROPIEDAD_MOMENTO_ENVIO = "momentoEnvio";
@@ -104,7 +99,6 @@ public class TDSMensajeDAO implements MensajeDAO {
 		eMensaje = new Entidad();
 		eMensaje.setNombre(ENTIDAD_MENSAJE);
 		eMensaje.setPropiedades(Arrays.asList(
-				new Propiedad(PROPIEDAD_ID, String.valueOf(mensaje.getId())),
 				new Propiedad(PROPIEDAD_MOMENTO_ENVIO, dateFormat.format(mensaje.getMomentoEnvio())),
 				new Propiedad(PROPIEDAD_TEXTO, mensaje.getTexto()),
 				new Propiedad(PROPIEDAD_EMOTICONO, String.valueOf(mensaje.getEmoticono())),

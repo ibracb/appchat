@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
@@ -64,22 +65,20 @@ public enum ExportPDF {
 			document.add(titulo);
 			Paragraph parrafoInicial = new Paragraph(MENSAJE_INICIAL);
 			document.add(parrafoInicial);
+			AtomicInteger contador1 = new AtomicInteger(1);
 			usuario.getContactosIndividuales().forEach(contacto -> {
-				int contador = 0;
-				Paragraph parrafo = new Paragraph(contador + contacto.getNombre() + ": " + contacto.getMovil());
+				Paragraph parrafo = new Paragraph(contador1.getAndIncrement() + ". " + contacto.getNombre() + ": " + contacto.getMovil());
 				document.add(parrafo);
-				contador++;
 			});
 			Paragraph parrafoGrupos = new Paragraph(MENSAJE_SEGUNDO);
 			document.add(parrafoGrupos);
+			AtomicInteger contador2 = new AtomicInteger(1);
 			usuario.getGrupos().forEach(grupo -> {
-				int contador = 0;
-				Paragraph parrafo = new Paragraph(contador + grupo.getNombre() + ":\n");
+				Paragraph parrafo = new Paragraph(contador2.getAndIncrement() + ". " + grupo.getNombre() + ":\n");
 				grupo.getMiembros().forEach(miembro -> {
 					parrafo.add("\t- " + miembro.getNombre() + ": " + miembro.getMovil());
 				});
 				document.add(parrafo);
-				contador++;
 			});
 			document.close();
 			pdfDocument.close();		

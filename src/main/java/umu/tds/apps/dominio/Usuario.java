@@ -133,8 +133,8 @@ public class Usuario {
 	 * @param miembros - Miembros que formarán parte del grupo.
 	 * @return true si se ha creado bien el grupo, false si no es así.
 	 */
-	public boolean createGrupo(String nombre, String imagen, ContactoIndividual...miembros) {
-		Grupo grupo = new Grupo(nombre, imagen, miembros);
+	public boolean createGrupo(String nombre, String imagen) {
+		Grupo grupo = new Grupo(nombre, imagen);
 		return contactos.add(grupo);
 	}
 	
@@ -296,6 +296,10 @@ public class Usuario {
 	 */
 	public void setFechaRegistro(LocalDate fechaRegistro) {
 		this.fechaRegistro = fechaRegistro;
+	}
+	
+	public Grupo crearGrupo(String nombre, String imagen) {
+		return new Grupo(nombre, imagen);
 	}
 	
 	/**

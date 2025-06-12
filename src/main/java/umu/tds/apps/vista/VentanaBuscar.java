@@ -11,7 +11,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -32,7 +31,6 @@ import com.toedter.calendar.JDateChooser;
 
 import umu.tds.apps.controlador.Controlador;
 import umu.tds.apps.dominio.Contacto;
-import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
