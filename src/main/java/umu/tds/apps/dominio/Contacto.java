@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+
 import umu.tds.apps.utils.Utils;
 
 /**
@@ -130,6 +131,7 @@ public abstract class Contacto implements Comparable<Contacto> {
 						&& mensaje.getMomentoEnvio().getYear()==Utils.FECHA_ACTUAL.getYear() && mensaje.getTipo().equals(TipoMensaje.ENVIADO))
 				.count();
 	}
+	
 	
 	@Override
 	public int compareTo(Contacto o) {

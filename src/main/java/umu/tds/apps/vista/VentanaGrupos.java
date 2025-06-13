@@ -51,6 +51,10 @@ public class VentanaGrupos extends JFrame {
 		JButton btnCrearGrupo = new JButton("Crear Grupo");
 		btnCrearGrupo.addActionListener(e -> crearGrupo());
 		panelBotones.add(btnCrearGrupo);
+		
+		JButton btnAnadirMiembros = new JButton("Añadir Miembros");
+		btnAnadirMiembros.addActionListener(e -> anadirMiembros());
+		panelBotones.add(btnAnadirMiembros);
 
 		JButton btnEliminarGrupo = new JButton("Eliminar Grupo");
 		btnEliminarGrupo.addActionListener(e -> eliminarGrupo());
@@ -140,7 +144,7 @@ public class VentanaGrupos extends JFrame {
 		Grupo seleccionado = listaGrupos.getSelectedValue();
 		if (seleccionado != null) {
 			JOptionPane.showMessageDialog(this,
-				"Nombre: " + seleccionado.getNombre(),
+				"Nombre: " + seleccionado.getNombre() + "\nMiembros: " + seleccionado.getMiembros().size(),
 				"Información del Grupo", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
@@ -150,5 +154,13 @@ public class VentanaGrupos extends JFrame {
 		dispose();
 		v.mostrarVentanaPrincipal(this.getSize(), this.getLocation());
 	}
+	
+	private void anadirMiembros() {
+		VentanaAnadirMiembros v = new VentanaAnadirMiembros();
+		Grupo seleccionado = listaGrupos.getSelectedValue();
+		dispose();
+		v.mostrarVentanaAnadirMiembros(this.getSize(), this.getLocation(), seleccionado);
+	}
+	
 
 }

@@ -15,6 +15,8 @@ public class AppChat {
 	public static void main(final String[] args){
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				// Cargar datos iniciales
+				DataLoader.cargarDatosIniciales();
 				try {
 					VentanaLogin ventana = new VentanaLogin();
 					ventana.setVisible(true);

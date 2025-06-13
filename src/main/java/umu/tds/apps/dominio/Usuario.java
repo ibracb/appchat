@@ -390,6 +390,19 @@ public class Usuario {
 				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
+	/**
+	 * Devuelve un conjunto de contactos individuales que no pertenecen al grupo
+	 * indicado.
+	 * @param grupo - El grupo del que se quieren obtener los contactos individuales no pertenecientes.
+	 * @return un conjunto de contactos individuales no pertenecientes al grupo.
+	 */
+	public Set<ContactoIndividual> getUsuariosNoPertenecientesAlGrupo(Grupo grupo) {
+		return getContactosIndividuales().stream()
+				.filter(c -> !grupo.getMiembros().contains(c))
+				.collect(Collectors.toCollection(TreeSet::new));
+	}
+	
+	
 	public Set<Grupo> getGrupos(){
 		return getContactos().stream()
 				.filter(contacto -> contacto instanceof Grupo)

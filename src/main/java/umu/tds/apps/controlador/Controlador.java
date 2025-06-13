@@ -361,4 +361,8 @@ public enum Controlador {
 		usuarioActual = null;
 	}
 	
+	public Set<ContactoIndividual> getUsuariosNoPertenecientesAlGrupo(Grupo grupo){
+		return usuarioActual.getUsuariosNoPertenecientesAlGrupo(grupo);
+	}
+	
 }
