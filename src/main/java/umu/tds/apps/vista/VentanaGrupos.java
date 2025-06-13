@@ -1,6 +1,7 @@
 package umu.tds.apps.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -39,28 +40,41 @@ public class VentanaGrupos extends JFrame {
 	protected VentanaGrupos() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		setTitle("Grupos");
+		setBackground(new Color(242, 216, 245));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(242, 216, 245));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelBotones = new JPanel();
+		panelBotones.setBackground(new Color(242, 216, 245));
 		contentPane.add(panelBotones, BorderLayout.SOUTH);
 
 		JButton btnCrearGrupo = new JButton("Crear Grupo");
+		btnCrearGrupo.setBackground(new Color(209, 188, 214));
 		btnCrearGrupo.addActionListener(e -> crearGrupo());
 		panelBotones.add(btnCrearGrupo);
 		
 		JButton btnAnadirMiembros = new JButton("Añadir Miembros");
+		btnAnadirMiembros.setBackground(new Color(209, 188, 214));
 		btnAnadirMiembros.addActionListener(e -> anadirMiembros());
 		panelBotones.add(btnAnadirMiembros);
 
 		JButton btnEliminarGrupo = new JButton("Eliminar Grupo");
+		btnEliminarGrupo.setBackground(new Color(209, 188, 214));
 		btnEliminarGrupo.addActionListener(e -> eliminarGrupo());
 		panelBotones.add(btnEliminarGrupo);
 		
+		JButton btnEliminarMiembros = new JButton("Eliminar Miembros");
+		btnEliminarMiembros.setBackground(new Color(209, 188, 214));
+		btnEliminarMiembros.addActionListener(e -> eliminarMiembros());
+		panelBotones.add(btnEliminarMiembros);
+		
 		JButton btnVolver = new JButton("Volver");
+		btnVolver.setBackground(new Color(209, 188, 214));
 		btnVolver.addActionListener(e -> volver());
 		panelBotones.add(btnVolver);
 		
@@ -78,6 +92,7 @@ public class VentanaGrupos extends JFrame {
         });
 		
 		JPanel panelGrupos = new JPanel();
+		panelGrupos.setBackground(new Color(242, 216, 245));
 		contentPane.add(panelGrupos, BorderLayout.CENTER);
 		panelGrupos.setLayout(new BorderLayout());
 
@@ -156,10 +171,25 @@ public class VentanaGrupos extends JFrame {
 	}
 	
 	private void anadirMiembros() {
-		VentanaAnadirMiembros v = new VentanaAnadirMiembros();
+		VentanaGestionarMiembros v = new VentanaGestionarMiembros();
 		Grupo seleccionado = listaGrupos.getSelectedValue();
-		dispose();
-		v.mostrarVentanaAnadirMiembros(this.getSize(), this.getLocation(), seleccionado);
+		if (seleccionado == null) {
+			JOptionPane.showMessageDialog(this, "Selecciona un grupo al que añadir miembros.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		} else {
+			dispose();
+			v.mostrarVentanaGestionarMiembros(this.getSize(), this.getLocation(), seleccionado, VentanaGestionarMiembros.MODO_ANADIR_MIEMBROS);
+		}
+	}
+	
+	private void eliminarMiembros() {
+		VentanaGestionarMiembros v = new VentanaGestionarMiembros();
+		Grupo seleccionado = listaGrupos.getSelectedValue();
+		if (seleccionado == null) {
+			JOptionPane.showMessageDialog(this, "Selecciona un grupo del que eliminar miembros.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		} else {
+			dispose();
+			v.mostrarVentanaGestionarMiembros(this.getSize(), this.getLocation(), seleccionado, VentanaGestionarMiembros.MODO_ELIMINAR_MIEMBROS);
+		}
 	}
 	
 

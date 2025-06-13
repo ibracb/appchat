@@ -364,5 +364,9 @@ public enum Controlador {
 	public Set<ContactoIndividual> getUsuariosNoPertenecientesAlGrupo(Grupo grupo){
 		return usuarioActual.getUsuariosNoPertenecientesAlGrupo(grupo);
 	}
+
+	public void actualizarGrupo(Grupo grupo) {
+		adaptadorGrupo.update(grupo);
+	}
 	
 }

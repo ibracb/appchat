@@ -8,12 +8,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.util.*;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 
@@ -21,17 +16,29 @@ import umu.tds.apps.controlador.Controlador;
 import umu.tds.apps.dominio.*;
 
 import java.awt.GridBagLayout;
-import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 
-public class VentanaAnadirMiembros extends JFrame {
+
+public class VentanaGestionarMiembros extends JFrame {
+	
+	private static final long serialVersionUID = 1L;
+	public static final String MODO_ANADIR_MIEMBROS = "Añadir Miembros";
+	public static final String MODO_ELIMINAR_MIEMBROS = "Eliminar Miembros";
+	
 	private JPanel contenedorContactos;
 	private JScrollPane scrollContactos;
 	private JButton btnCancelar;
 	private Grupo grupo;
 	private Map<JRadioButton, ContactoIndividual> botonesContacto = new HashMap<>();
+	private JButton btnPrincipal;
+	private GridBagLayout gridBagLayout;
+	private GridBagConstraints gbc_scroll;
+	private GridBagConstraints gbc_btnCancelar;
+	private GridBagConstraints gbc_btnAnadir;
+	private String modo;
+	
 
 	/**
 	 * Launch the application.
@@ -40,7 +47,7 @@ public class VentanaAnadirMiembros extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaAnadirMiembros window = new VentanaAnadirMiembros();
+					VentanaGestionarMiembros window = new VentanaGestionarMiembros();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,10 +56,11 @@ public class VentanaAnadirMiembros extends JFrame {
 		});
 	}
 	
-	protected void mostrarVentanaAnadirMiembros(Dimension tam, Point ubi, Grupo grupo) {
+	protected void mostrarVentanaGestionarMiembros(Dimension tam, Point ubi, Grupo grupo, String modo) {
 		contenedorContactos.removeAll();
 		this.grupo = grupo;
-		completarVentana(grupo);
+		this.modo = modo;
+		completarVentana();
 		setVisible(true);
 		setSize(tam);
 		setLocation(ubi);
@@ -60,7 +68,7 @@ public class VentanaAnadirMiembros extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public VentanaAnadirMiembros() {
+	public VentanaGestionarMiembros() {
 		initialize();
 	}
 
@@ -73,7 +81,7 @@ public class VentanaAnadirMiembros extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setBackground(new Color(242, 216, 245));
 		
-		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
@@ -92,7 +100,7 @@ public class VentanaAnadirMiembros extends JFrame {
 		scrollContactos.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollContactos.getViewport().setBackground(new Color(242, 216, 245));
 
-		GridBagConstraints gbc_scroll = new GridBagConstraints();
+		gbc_scroll = new GridBagConstraints();
 		gbc_scroll.gridx = 1;               // Comienza en columna 1
 		gbc_scroll.gridy = 1;               // Comienza en fila 1
 		gbc_scroll.gridwidth = 4;           // Ocupa 4 columnas
@@ -106,22 +114,22 @@ public class VentanaAnadirMiembros extends JFrame {
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setPreferredSize(new Dimension(100, 30));
 		btnCancelar.setFont(new Font("Georgia", Font.BOLD, 12));
-		GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
+		gbc_btnCancelar = new GridBagConstraints();
 		gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCancelar.gridx = 1;
 		gbc_btnCancelar.gridy = 4;
 		getContentPane().add(btnCancelar, gbc_btnCancelar);
 		btnCancelar.addActionListener(e -> accionCancelar());
 		
-		JButton btnAnadir = new JButton("Añadir");
-		btnAnadir.setPreferredSize(new Dimension(100, 30));
-		btnAnadir.setFont(new Font("Georgia", Font.BOLD, 12));
-		GridBagConstraints gbc_btnAnadir = new GridBagConstraints();
+		btnPrincipal = new JButton("Añadir");
+		btnPrincipal.setPreferredSize(new Dimension(100, 30));
+		btnPrincipal.setFont(new Font("Georgia", Font.BOLD, 12));
+		gbc_btnAnadir = new GridBagConstraints();
 		gbc_btnAnadir.insets = new Insets(0, 0, 5, 5);
 		gbc_btnAnadir.gridx = 4;
 		gbc_btnAnadir.gridy = 4;
-		getContentPane().add(btnAnadir, gbc_btnAnadir);
-		btnAnadir.addActionListener(e -> anadirContacto());
+		getContentPane().add(btnPrincipal, gbc_btnAnadir);
+		btnPrincipal.addActionListener(e -> accionBtnPrincipal());
 		
 	}
 	
@@ -141,19 +149,32 @@ public class VentanaAnadirMiembros extends JFrame {
         contenedorContactos.repaint();
     }
 	
-	public void anadirContacto() {
-	    List<JRadioButton> seleccionados = new ArrayList<>();
+	public void accionBtnPrincipal() {
+		List<JRadioButton> seleccionados = new ArrayList<>();
 	    for (JRadioButton b : botonesContacto.keySet()) {
 	        if (b.isSelected()) {
 	            seleccionados.add(b);
 	        }
 	    }
-		for (JRadioButton boton : seleccionados) {
-			ContactoIndividual contacto = botonesContacto.get(boton);
-			if (grupo.addMiembro(contacto)) {
-				Controlador.INSTANCE.getUsuarioActual().addContacto(contacto, grupo);
+		if (seleccionados.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Selecciona algún contacto.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		} else if (this.modo.equals(MODO_ANADIR_MIEMBROS)) {
+			for (JRadioButton boton : seleccionados) {
+				ContactoIndividual contacto = botonesContacto.get(boton);
+				if (grupo.addMiembro(contacto)) {
+					Controlador.INSTANCE.getUsuarioActual().addContacto(contacto, grupo);
+				}
 			}
+		} else if (this.modo.equals(MODO_ELIMINAR_MIEMBROS)) {
+			for (JRadioButton boton : seleccionados) {
+				ContactoIndividual contacto = botonesContacto.get(boton);
+				if (grupo.removeMiembro(contacto)) {
+					Controlador.INSTANCE.getUsuarioActual().removeContacto(contacto, grupo);
+				}
+			}   
+			
 		}
+		Controlador.INSTANCE.actualizarGrupo(grupo);
 		VentanaGrupos ventanaGrupos = new VentanaGrupos();
 		dispose();
 		ventanaGrupos.mostrarVentanaGrupos(getSize(), getLocation());
@@ -163,10 +184,18 @@ public class VentanaAnadirMiembros extends JFrame {
 	 * Método que completa la ventana con los contactos que no pertenecen al grupo.
 	 * @param grupo - Grupo al que se le quieren añadir miembros.
 	 */
-	public void completarVentana(Grupo grupo) {
-		Set<ContactoIndividual> contactos = Controlador.INSTANCE.getUsuariosNoPertenecientesAlGrupo(grupo);
-		for (ContactoIndividual contacto : contactos) {
-			crearBotonContacto(contacto);
+	public void completarVentana() {
+		
+		if (modo.equals(MODO_ANADIR_MIEMBROS)) {
+			Set<ContactoIndividual> contactos = Controlador.INSTANCE.getUsuariosNoPertenecientesAlGrupo(grupo);
+			for (ContactoIndividual contacto : contactos) {
+				crearBotonContacto(contacto);
+			}
+		} else if (modo.equals(MODO_ELIMINAR_MIEMBROS)) {
+			btnPrincipal.setText("Eliminar");
+			for (ContactoIndividual cI : grupo.getMiembros()) {
+                crearBotonContacto(cI);
+            }
 		}
 		
 	}
