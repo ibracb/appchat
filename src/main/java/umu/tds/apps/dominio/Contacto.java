@@ -145,5 +145,10 @@ public abstract class Contacto implements Comparable<Contacto> {
 	public String toString() {
 		return nombre;
 	}
+
+	public Mensaje getUltimoMensaje() {
+		if (mensajes.isEmpty()) return null;
+	    return ((TreeSet<Mensaje>) mensajes).last();
+	}
 	
 }

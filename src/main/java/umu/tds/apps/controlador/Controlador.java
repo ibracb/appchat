@@ -377,4 +377,8 @@ public enum Controlador {
 		adaptadorGrupo.update(grupo);
 	}
 	
+	public Mensaje getUltimoMensaje(Contacto contacto) {
+		return contacto.getUltimoMensaje();
+	}
+	
 }
