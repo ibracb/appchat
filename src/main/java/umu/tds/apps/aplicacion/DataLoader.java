@@ -34,7 +34,7 @@ public class DataLoader {
              * TELEFONO: 31
              * CONTRASEÑA: i
             */
-            Usuario ibra = new Usuario("ibre c", LocalDate.of(2003,Month.MAY,20), "i@um.es", "", "31", "i", "");
+            Usuario ibra = new Usuario("ibra cb", LocalDate.of(2003,Month.MAY,20), "i@um.es", "", "31", "i", "");
             usuarioDAO.create(ibra);
             
             /*
@@ -50,7 +50,7 @@ public class DataLoader {
              * TELEFONO: 13
              * CONTRASEÑA: i
             */
-            Usuario ibra2 = new Usuario("ibre c2", LocalDate.of(2003,Month.MAY,10), "i@um.es", "", "13", "i", "");
+            Usuario ibra2 = new Usuario("ibra cb2", LocalDate.of(2003,Month.MAY,10), "i@um.es", "", "13", "i", "");
             usuarioDAO.create(ibra2);
         }
     }

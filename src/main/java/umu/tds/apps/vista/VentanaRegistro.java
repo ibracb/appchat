@@ -11,15 +11,15 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
-import java.io.File;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,7 +29,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -361,34 +360,57 @@ public class VentanaRegistro extends JFrame {
 	}
 	
 	private void seleccionarImagen() {
-		JFileChooser selector = new JFileChooser();
-		selector.setDialogTitle("Selecciona un fichero PNG");
-		selector.setFileFilter(new FileNameExtensionFilter("Imágenes PNG", "png"));
-		int resultado = selector.showOpenDialog(null);
-		if (resultado == JFileChooser.APPROVE_OPTION) {
-			File archivo = selector.getSelectedFile();
-			String nombreArchivo = archivo.getName().toLowerCase();
-			if (nombreArchivo.endsWith(".png")) {
-				try {
-					rutaImagenSeleccionada = archivo.getCanonicalPath();
-					ImageIcon icono = new ImageIcon(rutaImagenSeleccionada);
-					int width = lblPerfil.getWidth();
-					int height = lblPerfil.getHeight();
-					int escalaAncho = (width > 0) ? width : 120;
-					int escalaAlto = (height > 0) ? height : 120;
-					Image imagenEscalada = icono.getImage().getScaledInstance( escalaAncho, escalaAlto, Image.SCALE_SMOOTH);
-					lblPerfil.setIcon(new ImageIcon(imagenEscalada));
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(this, "Error inesperado", "Vaya fail XD", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(this, "Por favor selecciona un fichero .png válido.", "Fichero no válido", JOptionPane.ERROR_MESSAGE);
-				seleccionarImagen();
-			}
+		String url = JOptionPane.showInputDialog(this, 
+			"Introduce la URL de la imagen:", 
+			"Seleccionar imagen desde internet", 
+			JOptionPane.PLAIN_MESSAGE);
+		
+		if (url != null && !url.trim().isEmpty()) {
+			cargarImagenDesdeURL(url.trim());
 		}
 	}
 
-
-	
+	@SuppressWarnings("deprecation")
+	private void cargarImagenDesdeURL(String urlString) {
+		try {
+			URL url = new URL(urlString);
+			BufferedImage image = ImageIO.read(url);
+			
+			if (image == null) {
+				JOptionPane.showMessageDialog(this, 
+					"El enlace no corresponde a una imagen válida.\nPor favor, introduce una URL de imagen válida.", 
+					"Imagen no válida", 
+					JOptionPane.ERROR_MESSAGE);
+				seleccionarImagen(); // Volver a intentar
+				return;
+			}
+			
+			// Guardar la URL como ruta de imagen seleccionada
+			rutaImagenSeleccionada = urlString;
+			
+			// Crear ImageIcon desde BufferedImage
+			ImageIcon icono = new ImageIcon(image);
+			
+			// Escalar la imagen
+			int width = lblPerfil.getWidth();
+			int height = lblPerfil.getHeight();
+			int escalaAncho = (width > 0) ? width : 120;
+			int escalaAlto = (height > 0) ? height : 120;
+			Image imagenEscalada = icono.getImage().getScaledInstance(escalaAncho, escalaAlto, Image.SCALE_SMOOTH);
+			
+			// Establecer la imagen en el label
+			lblPerfil.setIcon(new ImageIcon(imagenEscalada));
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, 
+				"Error al cargar la imagen desde la URL:\n" + e.getMessage() + 
+				"\n\nVerifica que:\n" +
+				"- La URL sea correcta\n" +
+				"- Tengas conexión a internet\n" +
+				"- El enlace apunte a una imagen válida (PNG, JPG, GIF, etc.)", 
+				"Error al cargar imagen", 
+				JOptionPane.ERROR_MESSAGE);
+			seleccionarImagen(); // Volver a intentar
+		}
+	}
 }

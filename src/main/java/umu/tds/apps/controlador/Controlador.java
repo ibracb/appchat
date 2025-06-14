@@ -312,6 +312,7 @@ public enum Controlador {
 	
 	public void cambiarImagenUsuarioActual(String imagen) {
 		usuarioActual.setImagen(imagen);
+		modificarUsuario();
 	}
 	
 	public boolean isPremiumUsuarioActual() {
@@ -320,10 +321,12 @@ public enum Controlador {
 	
 	public void activarPremiumUsuarioActual() {
 		usuarioActual.setPremium(true);
+		modificarUsuario();
 	}
 	
 	public void desactivarPremiumUsuarioActual() {
 		usuarioActual.setPremium(false);
+		modificarUsuario();
 	}
 	
 	public void añadirContacto(ContactoIndividual contacto, Grupo grupo) {

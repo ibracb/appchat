@@ -6,20 +6,24 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Point;
-import java.io.File;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.time.format.DateTimeFormatter;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -27,19 +31,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JTextField;
 
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
 import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -67,9 +65,9 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblNewLabel;
 	private JButton btnPdfChat;
 	private JPanel panelEnviarMensaje;
-	private JTextField textField;
 	private JButton btnEnviar;
 	private JTextArea textArea;
+	private JLabel lblImagenUsuario;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
@@ -115,6 +113,10 @@ public class VentanaPrincipal extends JFrame {
 		MTuContacto.setPreferredSize(new Dimension(170, 30));
 		MTuContacto.setAlignmentX(Component.LEFT_ALIGNMENT);
 		refrescarImagen();
+		
+		lblImagenUsuario = new JLabel("");
+		cargarImagenPerfilUsuario();
+		menuBar.add(lblImagenUsuario);
 		menuBar.add(MTuContacto);
 
 		MCambiarImagenPerfil = new JMenuItem("Cambiar imagen de perfil");
@@ -256,31 +258,88 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private void cambiarImagen() {
-		JFileChooser selector = new JFileChooser();
-		selector.setDialogTitle("Selecciona un fichero PNG");
-		selector.setFileFilter(new FileNameExtensionFilter("Imágenes PNG", "png"));
-		int resultado = selector.showOpenDialog(null);
-		if (resultado == JFileChooser.APPROVE_OPTION) {
-			File archivo = selector.getSelectedFile();
-			String nombreArchivo = archivo.getName().toLowerCase();
-			if (nombreArchivo.endsWith(".png")) {
-				try {
-					Controlador.INSTANCE.cambiarImagenUsuarioActual(archivo.getCanonicalPath());
-					refrescarImagen();
-					JOptionPane.showMessageDialog(this,
-							"Imagen de " + Controlador.INSTANCE.getNombreUsuarioActual() + " modificada",
-							"Cambio de imagen OK", JOptionPane.INFORMATION_MESSAGE);
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(this, "Error inesperado", "Vaya fail XD", JOptionPane.ERROR_MESSAGE);
-				}
-			} else {
-				JOptionPane.showMessageDialog(this, "Por favor selecciona un fichero .png válido.", "Fichero no válido",
-						JOptionPane.ERROR_MESSAGE);
-				cambiarImagen();
-			}
+		String url = JOptionPane.showInputDialog(this, 
+			"Introduce la URL de la imagen:", 
+			"Seleccionar imagen desde internet", 
+			JOptionPane.PLAIN_MESSAGE);
+		
+		if (url != null && !url.trim().isEmpty()) {
+			cargarImagenDesdeURL(url.trim());
 		}
 	}
 
+	@SuppressWarnings("deprecation")
+	private void cargarImagenDesdeURL(String urlString) {
+		try {
+			URL url = new URL(urlString);
+			BufferedImage image = ImageIO.read(url);
+			
+			if (image == null) {
+				JOptionPane.showMessageDialog(this, 
+					"El enlace no corresponde a una imagen válida.\nPor favor, introduce una URL de imagen válida.", 
+					"Imagen no válida", 
+					JOptionPane.ERROR_MESSAGE);
+				cambiarImagen(); // Volver a intentar
+				return;
+			}
+			
+			// Cambiar la imagen del usuario actual usando el controlador
+			Controlador.INSTANCE.cambiarImagenUsuarioActual(urlString);
+			
+			// Actualizar la imagen visualmente en la interfaz
+			actualizarImagenEnInterfaz(image);
+			
+			JOptionPane.showMessageDialog(this,
+				"Imagen de " + Controlador.INSTANCE.getNombreUsuarioActual() + " modificada",
+				"Cambio de imagen OK", JOptionPane.INFORMATION_MESSAGE);
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, 
+				"Error al cargar la imagen desde la URL:\n" + e.getMessage() + 
+				"\n\nVerifica que:\n" +
+				"- La URL sea correcta\n" +
+				"- Tengas conexión a internet\n" +
+				"- El enlace apunte a una imagen válida (PNG, JPG, GIF, etc.)", 
+				"Error al cargar imagen", 
+				JOptionPane.ERROR_MESSAGE);
+			cambiarImagen(); // Volver a intentar
+		}
+	}
+	
+	private void actualizarImagenEnInterfaz(BufferedImage image) {
+		int anchoDeseado = 16;  // altura/ancho fija que quieres para la barra
+		int altoDeseado = 16;
+		
+		Image imagenEscalada = image.getScaledInstance(anchoDeseado, altoDeseado, Image.SCALE_SMOOTH);
+		lblImagenUsuario.setIcon(new ImageIcon(imagenEscalada));
+		
+		// Establece tamaño fijo al JLabel para que no expanda la barra
+		lblImagenUsuario.setPreferredSize(new Dimension(anchoDeseado, altoDeseado));
+		
+		lblImagenUsuario.setMaximumSize(new Dimension(anchoDeseado, altoDeseado));
+		lblImagenUsuario.setMinimumSize(new Dimension(anchoDeseado, altoDeseado));
+		
+		lblImagenUsuario.revalidate();
+		lblImagenUsuario.repaint();
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void cargarImagenPerfilUsuario() {
+	    String rutaImagen = Controlador.INSTANCE.getImagenUsuarioActual();
+	    if (rutaImagen != null && !rutaImagen.isEmpty()) {
+	        try {
+	            URL url = new URL(rutaImagen);
+	            BufferedImage image = ImageIO.read(url);
+	            if (image != null) {
+	                actualizarImagenEnInterfaz(image);
+	            }
+	        } catch (Exception e) {
+	            // Manejar error (por ejemplo, mostrar imagen por defecto)
+	            System.err.println("No se pudo cargar la imagen del perfil: " + e.getMessage());
+	        }
+	    }
+	}
+	
 	private void refrescarImagen() {
 		String rutaImagen = Controlador.INSTANCE.getImagenUsuarioActual();
 		ImageIcon iconoOriginal = new ImageIcon(rutaImagen);
