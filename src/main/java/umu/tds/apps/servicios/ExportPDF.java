@@ -51,7 +51,7 @@ public enum ExportPDF {
 	 */
 	private ExportPDF() {}
 	
-	public boolean createPDF(Usuario usuario) {
+	public boolean createPdfListado(Usuario usuario) {
 		File fichero = new File(FactoriaProveedorRutaDescargas.INSTANCE.getProveedor().getRutaDescargas(),
 				INICIO_NOMBRE_PDF + usuario.getNombre() + PDF_EXTENSION);
 		try (PdfWriter pdfWriter = new PdfWriter(fichero)) {
@@ -76,7 +76,7 @@ public enum ExportPDF {
 			usuario.getGrupos().forEach(grupo -> {
 				Paragraph parrafo = new Paragraph(contador2.getAndIncrement() + ". " + grupo.getNombre() + ":\n");
 				grupo.getMiembros().forEach(miembro -> {
-					parrafo.add("\t- " + miembro.getNombre() + ": " + miembro.getMovil());
+					parrafo.add("  - " + miembro.getNombre() + ": " + miembro.getMovil() + "\n");
 				});
 				document.add(parrafo);
 			});

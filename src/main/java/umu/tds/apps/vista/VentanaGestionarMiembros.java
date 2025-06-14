@@ -68,7 +68,7 @@ public class VentanaGestionarMiembros extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public VentanaGestionarMiembros() {
+	protected VentanaGestionarMiembros() {
 		initialize();
 	}
 
@@ -137,7 +137,7 @@ public class VentanaGestionarMiembros extends JFrame {
 	 * Método que devuelve el panel de contactos.
 	 * @return JPanel contenedorContactos
 	 */
-	public void crearBotonContacto(ContactoIndividual contacto) {
+	private void crearBotonContacto(ContactoIndividual contacto) {
         JRadioButton botonContacto = new JRadioButton();
         botonContacto.setPreferredSize(new Dimension(100, 30));
         botonContacto.setFont(new Font("Georgia", Font.BOLD, 12));
@@ -149,7 +149,7 @@ public class VentanaGestionarMiembros extends JFrame {
         contenedorContactos.repaint();
     }
 	
-	public void accionBtnPrincipal() {
+	private void accionBtnPrincipal() {
 		List<JRadioButton> seleccionados = new ArrayList<>();
 	    for (JRadioButton b : botonesContacto.keySet()) {
 	        if (b.isSelected()) {
@@ -162,14 +162,14 @@ public class VentanaGestionarMiembros extends JFrame {
 			for (JRadioButton boton : seleccionados) {
 				ContactoIndividual contacto = botonesContacto.get(boton);
 				if (grupo.addMiembro(contacto)) {
-					Controlador.INSTANCE.getUsuarioActual().addContacto(contacto, grupo);
+					Controlador.INSTANCE.añadirContacto(contacto, grupo);
 				}
 			}
 		} else if (this.modo.equals(MODO_ELIMINAR_MIEMBROS)) {
 			for (JRadioButton boton : seleccionados) {
 				ContactoIndividual contacto = botonesContacto.get(boton);
 				if (grupo.removeMiembro(contacto)) {
-					Controlador.INSTANCE.getUsuarioActual().removeContacto(contacto, grupo);
+					Controlador.INSTANCE.eliminarContacto(contacto, grupo);
 				}
 			}   
 			
@@ -184,7 +184,7 @@ public class VentanaGestionarMiembros extends JFrame {
 	 * Método que completa la ventana con los contactos que no pertenecen al grupo.
 	 * @param grupo - Grupo al que se le quieren añadir miembros.
 	 */
-	public void completarVentana() {
+	private void completarVentana() {
 		
 		if (modo.equals(MODO_ANADIR_MIEMBROS)) {
 			Set<ContactoIndividual> contactos = Controlador.INSTANCE.getUsuariosNoPertenecientesAlGrupo(grupo);
@@ -200,7 +200,7 @@ public class VentanaGestionarMiembros extends JFrame {
 		
 	}
 	
-	public void accionCancelar() {
+	private void accionCancelar() {
 		VentanaGrupos ventanaGrupos = new VentanaGrupos();
 		dispose(); 
 		ventanaGrupos.mostrarVentanaGrupos(getSize(), getLocation());

@@ -326,6 +326,14 @@ public enum Controlador {
 		usuarioActual.setPremium(false);
 	}
 	
+	public void añadirContacto(ContactoIndividual contacto, Grupo grupo) {
+		usuarioActual.addContacto(contacto, grupo);
+	}
+	
+	public void eliminarContacto(ContactoIndividual contacto, Grupo grupo) {
+		usuarioActual.removeContacto(contacto, grupo);
+	}
+	
 	public double getDescuentoCalculadoUsuarioActual() {
 		return usuarioActual.getDescuento().getDescuento(Usuario.PRECIO_INICIAL, usuarioActual);
 	}
@@ -335,7 +343,7 @@ public enum Controlador {
 	}
 	
 	public boolean generarPdfListado() {
-		return ExportPDF.INSTANCE.createPDF(usuarioActual);
+		return ExportPDF.INSTANCE.createPdfListado(usuarioActual);
 	}
 	
 	public boolean generarPdfChat(ContactoIndividual contacto) {
