@@ -1,6 +1,7 @@
 package umu.tds.apps.controlador;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -209,9 +210,15 @@ public enum Controlador {
 		Usuario usuarioReceptor = contacto.getUsuario();
 		ContactoIndividual contactoInverso = usuarioReceptor.getContactoIndividual(usuarioActual.getMovil());
 		if(contactoInverso == null) {
-			contactoInverso = new ContactoIndividual(usuarioActual.getNombre(), usuarioReceptor);
+			//El contacto inverso debe tener como usuario al usuarioActual (el emisor)
+	        contactoInverso = new ContactoIndividual(usuarioActual.getNombre(), usuarioActual);
+	        adaptadorContactoIndividual.create(contactoInverso);
+	        //Añadir el contacto inverso al usuario receptor
+	        usuarioReceptor.addContacto(contactoInverso);
+	        adaptadorUsuario.update(usuarioReceptor);
+			/*contactoInverso = new ContactoIndividual(usuarioActual.getNombre(), usuarioReceptor);
 			adaptadorContactoIndividual.create(contactoInverso);
-			adaptadorUsuario.update(usuarioReceptor);
+			adaptadorUsuario.update(usuarioReceptor);*/
 		}
 		Mensaje mensajeRecibido = contactoInverso.nuevoMensaje(texto, emoticono, TipoMensaje.RECIBIDO);
 		adaptadorMensaje.create(mensajeRecibido);
@@ -381,6 +388,16 @@ public enum Controlador {
 	public void actualizarGrupo(Grupo grupo) {
 		adaptadorGrupo.update(grupo);
 	}
+	
+	public Set<Mensaje> getMensajesInvertidos(Contacto contacto) {
+		Set<Mensaje> invertidos = new TreeSet<>(
+			Comparator.comparing(Mensaje::getMomentoEnvio)
+					  .thenComparing(Mensaje::getId)
+		);
+		invertidos.addAll(contacto.getMensajes());
+		return invertidos;
+	}
+
 	
 	public Mensaje getUltimoMensaje(Contacto contacto) {
 		return contacto.getUltimoMensaje();

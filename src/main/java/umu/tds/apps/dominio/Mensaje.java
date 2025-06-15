@@ -53,7 +53,7 @@ public class Mensaje implements Comparable<Mensaje> {
 	 */
 	public Mensaje(String texto, int emoticono, TipoMensaje tipo) {
 		this.id = Utils.ID_DEFAULT;
-		this.momentoEnvio = Utils.FECHA_ACTUAL;
+		this.momentoEnvio = LocalDateTime.now();
 		if (emoticono > ICONO_NULL) {
 			this.emoticono = emoticono;
 			this.texto = TEXTO_NULL;

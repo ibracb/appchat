@@ -194,6 +194,7 @@ public class VentanaPrincipal extends JFrame {
 		panelInfo.add(lblContactoChat);
 		
 		btnPdfChat = new JButton("PDF Chat");
+		btnPdfChat.addActionListener(e -> gestionarPdfChat());
 		btnPdfChat.setFont(new Font("Georgia", Font.BOLD, 12));
 		panelInfo.add(btnPdfChat);
 		
@@ -244,23 +245,6 @@ public class VentanaPrincipal extends JFrame {
 		scrollChat.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollChat.setPreferredSize(new Dimension(400, 700));
 		getContentPane().add(scrollChat, BorderLayout.CENTER);*/
-		
-
-		crearMensaje("Hola", "IBRA", BubbleText.SENT);
-		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
-		crearMensaje("Hola", "IBRA", BubbleText.SENT);
-		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
-		crearMensaje("Hola", "IBRA", BubbleText.SENT);
-		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
-		crearMensaje("Hola", "IBRA", BubbleText.SENT);
-		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
-		crearMensaje("Hola", "IBRA", BubbleText.SENT);
-		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
-		crearMensaje("Hola", "IBRA", BubbleText.SENT);
-		crearMensaje("Hola", "MARIA", BubbleText.RECEIVED);
-		
-		
-		
 		
 	}
 
@@ -378,7 +362,18 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private void gestionarPdfChat() {
-		// TODO se debe implementar
+		if (Controlador.INSTANCE.isPremiumUsuarioActual()) {
+			if (Controlador.INSTANCE.generarPdfChat(contacto)) {
+				JOptionPane.showMessageDialog(this,
+						"Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo", "Pdf ok",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(this, "Error al generar el pdf. Prueba de nuevo", "Pdf mal",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "No eres premium. ESPABILA", "No premium", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void abrirPremium() {
@@ -439,7 +434,7 @@ public class VentanaPrincipal extends JFrame {
 	    chat.revalidate();
 	    chat.repaint();
 	    
-	    contacto.getMensajes().forEach(mensaje -> {
+	    Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
 	        // CAMBIO: Mostrar todos los mensajes, independientemente del emoticono
 	        // O usar >= en lugar de >
 	        if(mensaje.getTipo().equals(TipoMensaje.ENVIADO)) {
