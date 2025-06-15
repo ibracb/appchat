@@ -82,7 +82,8 @@ public class TDSMensajeDAO implements MensajeDAO {
 	 */
 	private TDSMensajeDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
 	}
 	
 	@Override

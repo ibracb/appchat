@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
@@ -235,7 +236,10 @@ public class VentanaPrincipal extends JFrame {
 		gbc_btnEnviar.gridy = 0;
 		panelEnviarMensaje.add(btnEnviar, gbc_btnEnviar);
 		
-		
+		Usuario u = Controlador.INSTANCE.getUsuarioActual();
+		for (ContactoIndividual c : u.getContactosIndividuales()) {
+			crearContenedoresContactos(c);
+		}
 		
 
 		/*chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
@@ -444,6 +448,7 @@ public class VentanaPrincipal extends JFrame {
 	            crearMensaje(mensaje.getTexto(), contacto.getNombre(), BubbleText.RECEIVED);
 	        }
 	    });
+	    refrescarPanelContactos();
 	}
 	
 	private void enviarTexto() {
@@ -464,54 +469,85 @@ public class VentanaPrincipal extends JFrame {
 		/*String texto = textArea.getText();
 		Controlador.INSTANCE.registrarMensajeContacto(contacto, texto, Mensaje.ICONO_NULL);
 		recuperarMensajes();*/
+	    
+	    refrescarPanelContactos();
 	}
 	
-	private void crearContenedoresContactos (Contacto contacto) {
-		Mensaje msg = Controlador.INSTANCE.getUltimoMensaje(contacto);
-		JPanel contendor = new JPanel(new GridBagLayout());
-		contendor.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
-		contendor.setBorder(BorderFactory.createLineBorder(new Color(135, 0, 146)));
-		contendor.setBackground(new Color(242, 216, 245));
-		
-		GridBagConstraints gbc_contenedor = new GridBagConstraints();
-		gbc_contenedor.insets = new Insets(5, 5, 5, 5);
-		gbc_contenedor.gridy = 0;
-		gbc_contenedor.gridx = 0;
-		gbc_contenedor.anchor = GridBagConstraints.WEST;
-	    JLabel lblFotoContacto = new JLabel(""); 
-	    // TODO Aqui habria que meter la foto
-	    contendor.add(lblFotoContacto, gbc_contenedor);
-		
-		
-		gbc_contenedor.insets = new Insets(5, 5, 5, 5);
-		gbc_contenedor.gridy = 0;
-		gbc_contenedor.gridx = 0;
-		gbc_contenedor.anchor = GridBagConstraints.CENTER;
-	    JLabel lblNombreContacto = new JLabel(contacto.getNombre()); 
-	    contendor.add(lblNombreContacto, gbc_contenedor);
-	    
+	private void crearContenedoresContactos(Contacto contacto) {
+	    Mensaje msg = Controlador.INSTANCE.getUltimoMensaje(contacto);
+	    if (msg == null) {
+	        msg = new Mensaje("", 0, TipoMensaje.ENVIADO);
+	    }
+
+	    JButton contenedor = new JButton();
+	    contenedor.setLayout(new GridBagLayout());
+	    contenedor.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+	    contenedor.setBackground(new Color(242, 216, 245));
+	    contenedor.setBorder(BorderFactory.createLineBorder(new Color(135, 0, 146)));
+
+	    contenedor.setFocusPainted(false);
+	    contenedor.setContentAreaFilled(false);
+	    contenedor.setOpaque(true);
+
+	    contenedor.addActionListener(e -> {
+	        if (contacto instanceof ContactoIndividual) {
+	            this.contacto = (ContactoIndividual) contacto;
+	            lblContactoChat.setText(contacto.getNombre());
+	            recuperarMensajes();
+	        }
+	    });
+
+	    GridBagConstraints gbc_contenedor = new GridBagConstraints();
 	    gbc_contenedor.insets = new Insets(5, 5, 5, 5);
-		gbc_contenedor.gridy = 0;
-		gbc_contenedor.gridx = 0;
-		gbc_contenedor.anchor = GridBagConstraints.EAST;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		String formatted = msg.getMomentoEnvio().format(formatter);
-	    JLabel lblFecha = new JLabel(formatted);
-	    contendor.add(lblFecha, gbc_contenedor);
-	    
+	    gbc_contenedor.gridy = 0;
+	    gbc_contenedor.gridx = 0;
+	    gbc_contenedor.anchor = GridBagConstraints.WEST;
+	    JLabel lblFotoContacto = new JLabel(""); 
+	    // TODO Aqui habria que meter la foto 
+	    contenedor.add(lblFotoContacto, gbc_contenedor);
+
+	    gbc_contenedor.gridx = 1;
+	    gbc_contenedor.anchor = GridBagConstraints.CENTER;
+	    contenedor.add(new JLabel(contacto.getNombre()), gbc_contenedor);
+
+	    gbc_contenedor.gridx = 2;
+	    gbc_contenedor.anchor = GridBagConstraints.EAST;
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+	    JLabel lblFecha = new JLabel(msg.getMomentoEnvio().format(formatter));
+	    contenedor.add(lblFecha, gbc_contenedor);
+
 	    gbc_contenedor.gridx = 0;
 	    gbc_contenedor.gridy = 1;
 	    gbc_contenedor.gridwidth = 3;
+	    gbc_contenedor.gridwidth = GridBagConstraints.REMAINDER;
 	    gbc_contenedor.fill = GridBagConstraints.HORIZONTAL;
-	    gbc_contenedor.anchor = GridBagConstraints.CENTER;
+	    gbc_contenedor.anchor = GridBagConstraints.WEST;
+	    gbc_contenedor.weightx = 1.0;
 	    JTextArea texto = new JTextArea(msg.getTexto());
-	    texto.setText(msg.getTexto());
 	    texto.setLineWrap(true);
 	    texto.setWrapStyleWord(true);
 	    texto.setEditable(false);
-	    texto.setBackground(new Color(255, 255, 255));
-	    contendor.add(texto, gbc_contenedor);
+	    texto.setBackground(new Color(180, 159, 185));
+	    texto.setMargin(new Insets(5, 5, 5, 5));
+	    
+	    texto.setAlignmentX(Component.LEFT_ALIGNMENT);
+	    contenedor.add(texto, gbc_contenedor);
+
+	    contactos.add(contenedor);
+	    contactos.revalidate();
+	    contactos.repaint();
 	}
+	
+	private void refrescarPanelContactos() {
+	    contactos.removeAll();  // Limpia todos los contenedores actuales
+	    Usuario u = Controlador.INSTANCE.getUsuarioActual();
+	    for (ContactoIndividual c : u.getContactosIndividuales()) {
+	        crearContenedoresContactos(c);
+	    }
+	    contactos.revalidate();
+	    contactos.repaint();
+	}
+
 	
 	
 }
