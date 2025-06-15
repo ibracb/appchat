@@ -166,7 +166,12 @@ public class Mensaje implements Comparable<Mensaje> {
 	
 	@Override
 	public int compareTo(Mensaje o) {
-		return o.getMomentoEnvio().compareTo(this.getMomentoEnvio());
+		int resultado = o.getMomentoEnvio().compareTo(this.getMomentoEnvio());
+	    if (resultado == 0) {
+	        // Si tienen el mismo momento de envío, comparar por ID
+	        resultado = Integer.compare(this.id, o.id);
+	    }
+	    return resultado;
 	}
 	
 }
