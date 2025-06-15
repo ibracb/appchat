@@ -185,7 +185,7 @@ public class VentanaLogin extends JFrame {
 	        return;
 	    }
 		if(Controlador.INSTANCE.loginUsuario(movil, contrasena)) {
-			JOptionPane.showMessageDialog(this, "¡Hola de nuevo, " + Controlador.INSTANCE.getUsuarioActual().getNombre() + "!");
+			JOptionPane.showMessageDialog(this, "¡Hola de nuevo, " + Controlador.INSTANCE.getNombreUsuarioActual() + "!");
 			VentanaPrincipal vPrincipal = new VentanaPrincipal();
 			dispose();
 			vPrincipal.mostrarVentanaPrincipal(this.getSize(), this.getLocation());;
@@ -198,7 +198,7 @@ public class VentanaLogin extends JFrame {
 	private void accederRegistro() {
 		VentanaRegistro registro = new VentanaRegistro();
 		dispose();
-		registro.mostrarRegistro(this.getSize(), this.getLocation());;
+		registro.mostrarRegistro(this.getSize(), this.getLocation());
 	}
 
 }

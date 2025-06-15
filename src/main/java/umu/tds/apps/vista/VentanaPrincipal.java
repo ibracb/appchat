@@ -14,7 +14,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.time.format.DateTimeFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -31,7 +30,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
 
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
@@ -187,7 +185,7 @@ public class VentanaPrincipal extends JFrame {
 		panelCentral.add(panelInfo, BorderLayout.NORTH);
 		
 		if(contacto != null) {
-			lblContactoChat = new JLabel(contacto.getNombre());
+			lblContactoChat = new JLabel(Controlador.INSTANCE.getNombreContacto(contacto));
 		}
 		else {
 			lblContactoChat = new JLabel("Nombre contacto");
@@ -237,18 +235,9 @@ public class VentanaPrincipal extends JFrame {
 		panelEnviarMensaje.add(btnEnviar, gbc_btnEnviar);
 		
 		Usuario u = Controlador.INSTANCE.getUsuarioActual();
-		for (ContactoIndividual c : u.getContactosIndividuales()) {
+		for (ContactoIndividual c : Controlador.INSTANCE.getContactosIndividuales(u)) {
 			crearContenedoresContactos(c);
 		}
-		
-
-		/*chat.setLayout(new BoxLayout(chat, BoxLayout.Y_AXIS));
-		chat.setBackground(Color.WHITE); // Mejora estética
-		scrollChat = new JScrollPane(chat);
-		scrollChat.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollChat.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollChat.setPreferredSize(new Dimension(400, 700));
-		getContentPane().add(scrollChat, BorderLayout.CENTER);*/
 		
 	}
 
@@ -386,7 +375,6 @@ public class VentanaPrincipal extends JFrame {
 					JOptionPane.YES_NO_OPTION);
 			if (respuestaActivar == JOptionPane.YES_OPTION) {
 				Controlador.INSTANCE.activarPremiumUsuarioActual();
-				Controlador.INSTANCE.modificarUsuario();
 				JOptionPane.showMessageDialog(this,
 						"Premium activado. Gracias por esos "
 								+ (Usuario.PRECIO_INICIAL - Controlador.INSTANCE.getDescuentoCalculadoUsuarioActual())
@@ -422,10 +410,10 @@ public class VentanaPrincipal extends JFrame {
 		v.mostrarVentanaBuscar(this.getSize(), this.getLocation());
 	}
 
-	private void crearMensaje(String mensaje, String usuario, int tipo) {
+	private void crearMensaje(String mensaje, String usuarioConFecha, int tipo) {
 		Color color = (tipo == BubbleText.RECEIVED) ? Color.PINK : Color.CYAN;
 		
-		BubbleText burbuja = new BubbleText(chat, mensaje, color, usuario, tipo);
+		BubbleText burbuja = new BubbleText(chat, mensaje, color, usuarioConFecha, tipo);
 		burbuja.setMaximumSize(new Dimension(380, Integer.MAX_VALUE));
 		chat.add(burbuja);
 		chat.revalidate();
@@ -437,39 +425,25 @@ public class VentanaPrincipal extends JFrame {
 		chat.removeAll();
 	    chat.revalidate();
 	    chat.repaint();
-	    
 	    Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
-	        // CAMBIO: Mostrar todos los mensajes, independientemente del emoticono
-	        // O usar >= en lugar de >
-	        if(mensaje.getTipo().equals(TipoMensaje.ENVIADO)) {
-	            crearMensaje(mensaje.getTexto(), Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT);
+	        if(Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.ENVIADO)) {
+	            crearMensaje(Controlador.INSTANCE.getTextoMensaje(mensaje), Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT);
 	        }
-	        else if(mensaje.getTipo().equals(TipoMensaje.RECIBIDO)) {
-	            crearMensaje(mensaje.getTexto(), contacto.getNombre(), BubbleText.RECEIVED);
+	        else if(Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.RECIBIDO)) {
+	            crearMensaje(Controlador.INSTANCE.getTextoMensaje(mensaje), Controlador.INSTANCE.getNombreContacto(contacto), BubbleText.RECEIVED);
 	        }
 	    });
 	    refrescarPanelContactos();
 	}
 	
 	private void enviarTexto() {
-		String texto = textArea.getText().trim(); // Añadido trim() para evitar espacios
-	    
-	    // Verificar que el texto no esté vacío
+		String texto = textArea.getText().trim();
 	    if (texto.isEmpty()) {
 	        return;
 	    }
-	    
 	    Controlador.INSTANCE.registrarMensajeContacto(contacto, texto, Mensaje.ICONO_NULL);
-	    
-	    // LIMPIAR EL CAMPO DE TEXTO - esto es lo que faltaba
 	    textArea.setText("");
-	    
-	    // Recuperar y mostrar los mensajes actualizados
 	    recuperarMensajes();
-		/*String texto = textArea.getText();
-		Controlador.INSTANCE.registrarMensajeContacto(contacto, texto, Mensaje.ICONO_NULL);
-		recuperarMensajes();*/
-	    
 	    refrescarPanelContactos();
 	}
 	
@@ -492,7 +466,7 @@ public class VentanaPrincipal extends JFrame {
 	    contenedor.addActionListener(e -> {
 	        if (contacto instanceof ContactoIndividual) {
 	            this.contacto = (ContactoIndividual) contacto;
-	            lblContactoChat.setText(contacto.getNombre());
+	            lblContactoChat.setText(Controlador.INSTANCE.getNombreContacto(contacto));
 	            recuperarMensajes();
 	        }
 	    });
@@ -508,12 +482,11 @@ public class VentanaPrincipal extends JFrame {
 
 	    gbc_contenedor.gridx = 1;
 	    gbc_contenedor.anchor = GridBagConstraints.CENTER;
-	    contenedor.add(new JLabel(contacto.getNombre()), gbc_contenedor);
+	    contenedor.add(new JLabel(Controlador.INSTANCE.getNombreContacto(contacto)), gbc_contenedor);
 
 	    gbc_contenedor.gridx = 2;
 	    gbc_contenedor.anchor = GridBagConstraints.EAST;
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-	    JLabel lblFecha = new JLabel(msg.getMomentoEnvio().format(formatter));
+	    JLabel lblFecha = new JLabel(Controlador.INSTANCE.getMomentoEnvioMensaje(msg));
 	    contenedor.add(lblFecha, gbc_contenedor);
 
 	    gbc_contenedor.gridx = 0;
@@ -523,7 +496,7 @@ public class VentanaPrincipal extends JFrame {
 	    gbc_contenedor.fill = GridBagConstraints.HORIZONTAL;
 	    gbc_contenedor.anchor = GridBagConstraints.WEST;
 	    gbc_contenedor.weightx = 1.0;
-	    JTextArea texto = new JTextArea(msg.getTexto());
+	    JTextArea texto = new JTextArea(Controlador.INSTANCE.getTextoMensaje(msg));
 	    texto.setLineWrap(true);
 	    texto.setWrapStyleWord(true);
 	    texto.setEditable(false);
@@ -539,9 +512,9 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void refrescarPanelContactos() {
-	    contactos.removeAll();  // Limpia todos los contenedores actuales
+	    contactos.removeAll();
 	    Usuario u = Controlador.INSTANCE.getUsuarioActual();
-	    for (ContactoIndividual c : u.getContactosIndividuales()) {
+	    for (ContactoIndividual c : Controlador.INSTANCE.getContactosIndividuales(u)) {
 	        crearContenedoresContactos(c);
 	    }
 	    contactos.revalidate();

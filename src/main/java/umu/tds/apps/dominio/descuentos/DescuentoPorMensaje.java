@@ -8,7 +8,7 @@ import umu.tds.apps.dominio.Usuario;
 public class DescuentoPorMensaje implements Descuento {
 	
 	/**
-	 * 10% de descuento que se le aplica al precio inicial, tras haber alcanzado los 200 mensajes en el mes actual.
+	 * 10% de descuento que se le aplica al precio inicial, tras haber alcanzado los 16 mensajes en el mes actual.
 	 */
 	private static final double DESCUENTO_FIJO_MENSAJE = 0.1;
 	
@@ -20,7 +20,7 @@ public class DescuentoPorMensaje implements Descuento {
 	/**
 	 * Número de mensajes por los que se aplica el descuento fijo.
 	 */
-	private static final int NUM_MENSAJES_DESCUENTO_FIJO = 200;
+	private static final int NUM_MENSAJES_DESCUENTO_FIJO = 16;
 	
 	@Override
 	public boolean isAplicable(Usuario usuario) {

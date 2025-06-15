@@ -143,7 +143,7 @@ public class VentanaGrupos extends JFrame {
 		if (seleccionado != null) {
 			int confirm = JOptionPane.showConfirmDialog(
 				this,
-				"¿Eliminar grupo \"" + seleccionado.getNombre() + "\"?",
+				"¿Eliminar grupo \"" + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\"?",
 				"Confirmar eliminación",
 				JOptionPane.YES_NO_OPTION);
 			if (confirm == JOptionPane.YES_OPTION) {
@@ -159,7 +159,7 @@ public class VentanaGrupos extends JFrame {
 		Grupo seleccionado = listaGrupos.getSelectedValue();
 		if (seleccionado != null) {
 			JOptionPane.showMessageDialog(this,
-				"Nombre: " + seleccionado.getNombre() + "\nMiembros: " + seleccionado.getMiembros().size(),
+				"Nombre: " + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\nMiembros: " + Controlador.INSTANCE.getNumMiembros(seleccionado),
 				"Información del Grupo", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

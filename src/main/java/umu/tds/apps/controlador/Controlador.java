@@ -1,11 +1,11 @@
 package umu.tds.apps.controlador;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
@@ -289,11 +289,12 @@ public enum Controlador {
 		return usuarioActual;
 	}
 	
+	public Set<ContactoIndividual> getContactosIndividuales(Usuario usuario) {
+		return usuario.getContactosIndividuales();
+	}
+	
 	public Set<ContactoIndividual> getContactosIndividualesUsuarioActual(){
-		return getUsuarioActual().getContactos().stream()
-				.filter(contacto -> contacto instanceof ContactoIndividual)
-				.map(contacto -> (ContactoIndividual) contacto)
-				.collect(Collectors.toCollection(TreeSet::new));
+		return usuarioActual.getContactosIndividuales();
 	}
 	
 	public void modificarUsuario() {
@@ -329,6 +330,7 @@ public enum Controlador {
 	}
 	
 	public void activarPremiumUsuarioActual() {
+		actualizarDescuentoUsuarioActual();
 		usuarioActual.setPremium(true);
 		modificarUsuario();
 	}
@@ -369,7 +371,15 @@ public enum Controlador {
 	public String getMovilUsuarioActual() {
 		return usuarioActual.getMovil();
 	}
-
+	
+	public Usuario getUsuarioContactoIndividual(ContactoIndividual contacto) {
+		return contacto.getUsuario();
+	}
+	
+	public String getMovilContactoIndividual(ContactoIndividual contacto) {
+		return getUsuarioContactoIndividual(contacto).getMovil();
+	}
+	
 	public Grupo recuperarGrupo(String nombre) {
 		return usuarioActual.getGrupos().stream()
 	            .filter(grupo -> nombre.equals(grupo.getNombre()))
@@ -397,10 +407,37 @@ public enum Controlador {
 		invertidos.addAll(contacto.getMensajes());
 		return invertidos;
 	}
-
+	
+	public String getMomentoEnvioMensaje(Mensaje mensaje) {
+		return mensaje.getMomentoEnvio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+	}
+	
+	public String getNombreContacto(Contacto contacto) {
+		return contacto.getNombre();
+	}
+	
+	public String getTextoMensaje(Mensaje mensaje) {
+		return mensaje.getTexto();
+	}
+	
+	public TipoMensaje getTipoMensaje(Mensaje mensaje) {
+		return mensaje.getTipo();
+	}
 	
 	public Mensaje getUltimoMensaje(Contacto contacto) {
 		return contacto.getUltimoMensaje();
+	}
+	
+	public Set<ContactoIndividual> getMiembros(Grupo grupo) {
+		return grupo.getMiembros();
+	}
+	
+	public void actualizarDescuentoUsuarioActual() {
+		usuarioActual.updateDescuento();
+	}
+	
+	public int getNumMiembros(Grupo grupo) {
+		return getMiembros(grupo).size();
 	}
 	
 }

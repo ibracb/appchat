@@ -142,7 +142,7 @@ public class VentanaGestionarMiembros extends JFrame {
         botonContacto.setPreferredSize(new Dimension(100, 30));
         botonContacto.setFont(new Font("Georgia", Font.BOLD, 12));
         botonContacto.setBackground(new Color(209, 188, 214));
-        botonContacto.setText(contacto.getNombre());
+        botonContacto.setText(Controlador.INSTANCE.getNombreContacto(contacto));
         botonesContacto.put(botonContacto, contacto);
         contenedorContactos.add(botonContacto);
         contenedorContactos.revalidate();
@@ -193,7 +193,7 @@ public class VentanaGestionarMiembros extends JFrame {
 			}
 		} else if (modo.equals(MODO_ELIMINAR_MIEMBROS)) {
 			btnPrincipal.setText("Eliminar");
-			for (ContactoIndividual cI : grupo.getMiembros()) {
+			for (ContactoIndividual cI : Controlador.INSTANCE.getMiembros(grupo)) {
                 crearBotonContacto(cI);
             }
 		}

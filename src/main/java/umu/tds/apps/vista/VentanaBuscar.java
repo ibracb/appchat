@@ -311,31 +311,6 @@ public class VentanaBuscar extends JFrame {
 		    fecha = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		}
 		
-		
-		/*ESTO SE USA PARA PROBAR LA VISTA, NO SE DEBE USAR EN EL PROYECTO FINAL Y HAY QUE BORRARLO
-		Mensaje msg = new Mensaje("Mensaje ejemplo, aquí iría el texto del mensaje", 0, TipoMensaje.ENVIADO); // Crear un mensaje de ejemplo
-		Usuario usuarioEjemplo = new Usuario("Usuario Ejemplo", LocalDate.of(2004, 7, 15), "ue@um.es", null, "123", "ue", "Hola"); // Crear un usuario de ejemplo
-		Contacto contactoEjemplo = new ContactoIndividual("Contacto Ejemplo", usuarioEjemplo); // Crear un contacto de ejemplo
-		crearMensaje(msg, contactoEjemplo); // Ejemplo de cómo crear un mensaje
-		Mensaje msg2 = new Mensaje("Mensaje ejemplo 2, aquí iría el texto del mensaje", 0, TipoMensaje.ENVIADO); // Crear un mensaje de ejemplo
-		crearMensaje(msg2, contactoEjemplo);
-		Mensaje msg3 = new Mensaje("Mensaje ejemplo 3, aquí iría el texto del mensaje", 0, TipoMensaje.ENVIADO); // Crear un mensaje de ejemplo
-		crearMensaje(msg3, contactoEjemplo);
-		crearMensaje(msg2, contactoEjemplo);
-		crearMensaje(msg, contactoEjemplo);
-		crearMensaje(msg3, contactoEjemplo);
-		crearMensaje(msg2, contactoEjemplo);
-		crearMensaje(msg, contactoEjemplo);
-		crearMensaje(msg3, contactoEjemplo);
-		crearMensaje(msg2, contactoEjemplo);
-		crearMensaje(msg, contactoEjemplo);
-		crearMensaje(msg3, contactoEjemplo);
-		crearMensaje(msg2, contactoEjemplo);
-		crearMensaje(msg, contactoEjemplo);
-		crearMensaje(msg3, contactoEjemplo);
-		crearMensaje(msg2, contactoEjemplo);
-		crearMensaje(msg, contactoEjemplo);*/
-		
 		if (texto.isEmpty() && telefono.isEmpty() && contacto.isEmpty() && fecha == null) {
 			JOptionPane.showMessageDialog(this,
 					"No hay datos que buscar. Por favor, complete al menos uno de los campos.",

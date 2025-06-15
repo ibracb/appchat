@@ -45,7 +45,7 @@ public class VentanaContactos extends JFrame {
         listaContactos = new JList<>(modeloLista);
         listaContactos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listaContactos.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-            String texto = (value != null) ? value.getNombre() : "Contacto inválido";
+            String texto = (value != null) ? Controlador.INSTANCE.getNombreContacto(value) : "Contacto inválido";
             JLabel label = new JLabel(texto);
             if (isSelected) {
                 label.setBackground(list.getSelectionBackground());
@@ -132,7 +132,7 @@ public class VentanaContactos extends JFrame {
         if (seleccionado != null) {
             int confirm = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Eliminar contacto \"" + seleccionado.getNombre() + "\"?",
+                    "¿Eliminar contacto \"" + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\"?",
                     "Confirmar eliminación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
@@ -147,7 +147,7 @@ public class VentanaContactos extends JFrame {
     private void mostrarInformacionContacto() {
     	ContactoIndividual seleccionado = listaContactos.getSelectedValue();
     	if (seleccionado != null) {
-    		String mensaje = "Nombre:\t" + seleccionado.getNombre() + "\nMóvil:\t" + seleccionado.getMovil();
+    		String mensaje = "Nombre:\t" + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\nMóvil:\t" + Controlador.INSTANCE.getMovilContactoIndividual(seleccionado);
 
     		Object[] opciones = {"Aceptar", "Chatear"};
     		int resultado = JOptionPane.showOptionDialog(
