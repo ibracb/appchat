@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -98,14 +99,21 @@ public class TDSMensajeDAO implements MensajeDAO {
 		}
 		eMensaje = new Entidad();
 		eMensaje.setNombre(ENTIDAD_MENSAJE);
+
+		// Convertir LocalDateTime a Date para el formateo
+		LocalDateTime momentoEnvio = mensaje.getMomentoEnvio();
+		Date date = Date.from(momentoEnvio.atZone(ZoneId.systemDefault()).toInstant());
+
 		eMensaje.setPropiedades(Arrays.asList(
-				new Propiedad(PROPIEDAD_MOMENTO_ENVIO, dateFormat.format(mensaje.getMomentoEnvio())),
-				new Propiedad(PROPIEDAD_TEXTO, mensaje.getTexto()),
-				new Propiedad(PROPIEDAD_EMOTICONO, String.valueOf(mensaje.getEmoticono())),
-				new Propiedad(PROPIEDAD_TIPO, mensaje.getTipo().toString().toLowerCase())));
+			new Propiedad(PROPIEDAD_MOMENTO_ENVIO, dateFormat.format(date)),
+			new Propiedad(PROPIEDAD_TEXTO, mensaje.getTexto()),
+			new Propiedad(PROPIEDAD_EMOTICONO, String.valueOf(mensaje.getEmoticono())),
+			new Propiedad(PROPIEDAD_TIPO, mensaje.getTipo().toString().toLowerCase())
+		));
 		eMensaje = servPersistencia.registrarEntidad(eMensaje);
 		mensaje.setId(eMensaje.getId());
 	}
+
 	
 	@Override
 	public void delete(Mensaje mensaje) {
@@ -152,7 +160,8 @@ public class TDSMensajeDAO implements MensajeDAO {
 		}
 		texto = servPersistencia.recuperarPropiedadEntidad(eMensaje, PROPIEDAD_TEXTO);
 		emoticono = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eMensaje, PROPIEDAD_EMOTICONO));
-		tipo = TipoMensaje.valueOf(servPersistencia.recuperarPropiedadEntidad(eMensaje, PROPIEDAD_TIPO));
+		String tipoStr = servPersistencia.recuperarPropiedadEntidad(eMensaje, PROPIEDAD_TIPO);
+		tipo = TipoMensaje.valueOf(tipoStr.toUpperCase());
 		Mensaje mensaje = new Mensaje(texto, emoticono, tipo);
 		mensaje.setId(id);
 		mensaje.setMomentoEnvio(momentoEnvio);

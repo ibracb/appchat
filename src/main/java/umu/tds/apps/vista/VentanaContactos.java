@@ -143,14 +143,33 @@ public class VentanaContactos extends JFrame {
             JOptionPane.showMessageDialog(this, "Selecciona un contacto para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }
-
+    
     private void mostrarInformacionContacto() {
-        ContactoIndividual seleccionado = listaContactos.getSelectedValue();
-        if (seleccionado != null) {
-            JOptionPane.showMessageDialog(this,
-                    "Nombre: " + seleccionado.getNombre() + "\nMóvil: " + seleccionado.getMovil(),
-                    "Información del Contacto", JOptionPane.INFORMATION_MESSAGE);
-        }
+    	ContactoIndividual seleccionado = listaContactos.getSelectedValue();
+    	if (seleccionado != null) {
+    		String mensaje = "Nombre:\t" + seleccionado.getNombre() + "\nMóvil:\t" + seleccionado.getMovil();
+
+    		Object[] opciones = {"Aceptar", "Chatear"};
+    		int resultado = JOptionPane.showOptionDialog(
+    			this,
+    			mensaje,
+    			"Información del Contacto",
+    			JOptionPane.DEFAULT_OPTION,
+    			JOptionPane.INFORMATION_MESSAGE,
+    			null,
+    			opciones,
+    			opciones[0]
+    		);
+    		if (resultado == 1) {
+    			chatear(seleccionado);
+    		}
+    	}
+    }
+    
+    private void chatear(ContactoIndividual contacto) {
+    	VentanaPrincipal v = new VentanaPrincipal(contacto);
+    	dispose();
+    	v.mostrarVentanaPrincipal(getSize(), getLocation());
     }
     
     private void volver() {

@@ -201,10 +201,11 @@ public enum Controlador {
 	 * @param texto - Texto empleado en el mensaje.
 	 * @param emoticono - Emoticono empleado en el mensaje.
 	 */
-	public void registrarMensajeContacto(ContactoIndividual contacto, String texto, int emoticono, TipoMensaje tipo) {
-		Mensaje mensaje = contacto.nuevoMensaje(texto, emoticono, tipo);
+	public void registrarMensajeContacto(ContactoIndividual contacto, String texto, int emoticono) {
+		Mensaje mensaje = contacto.nuevoMensaje(texto, emoticono, TipoMensaje.ENVIADO);
 		adaptadorMensaje.create(mensaje);
 		adaptadorContactoIndividual.update(contacto);
+		adaptadorUsuario.update(usuarioActual);
 		Usuario usuarioReceptor = contacto.getUsuario();
 		ContactoIndividual contactoInverso = usuarioReceptor.getContactoIndividual(usuarioActual.getMovil());
 		if(contactoInverso == null) {
@@ -212,9 +213,10 @@ public enum Controlador {
 			adaptadorContactoIndividual.create(contactoInverso);
 			adaptadorUsuario.update(usuarioReceptor);
 		}
-		Mensaje mensajeRecibido = contactoInverso.nuevoMensaje(texto, emoticono, tipo);
+		Mensaje mensajeRecibido = contactoInverso.nuevoMensaje(texto, emoticono, TipoMensaje.RECIBIDO);
 		adaptadorMensaje.create(mensajeRecibido);
 		adaptadorContactoIndividual.update(contactoInverso);
+		adaptadorUsuario.update(usuarioReceptor);
 	}
 	
 	/**
@@ -223,11 +225,11 @@ public enum Controlador {
 	 * @param texto - Texto empleado en el mensaje.
 	 * @param emoticono - Emoticono empleado en el mensaje.
 	 */
-	public void registrarMensajeGrupo(Grupo grupo, String texto, int emoticono, TipoMensaje tipo) {
-		Mensaje mensaje = grupo.nuevoMensaje(texto, emoticono, tipo);
+	public void registrarMensajeGrupo(Grupo grupo, String texto, int emoticono) {
+		Mensaje mensaje = grupo.nuevoMensaje(texto, emoticono, TipoMensaje.ENVIADO);
 		adaptadorMensaje.create(mensaje);
 		adaptadorGrupo.update(grupo);
-		grupo.getMiembros().forEach(miembro -> registrarMensajeContacto(miembro, texto, emoticono, tipo));
+		grupo.getMiembros().forEach(miembro -> registrarMensajeContacto(miembro, texto, emoticono));
 	}
 	
 	/**

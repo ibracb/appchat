@@ -18,7 +18,7 @@ public class Mensaje implements Comparable<Mensaje> {
 	/**
 	 * Valor entero que especifica que un mensaje no tiene emoticono
 	 */
-	public static final int ICONO_NULL = -1;
+	public static final int ICONO_NULL = 0;
 	
 	/**
 	 * Identificador único asociado al mensaje.
@@ -54,7 +54,7 @@ public class Mensaje implements Comparable<Mensaje> {
 	public Mensaje(String texto, int emoticono, TipoMensaje tipo) {
 		this.id = Utils.ID_DEFAULT;
 		this.momentoEnvio = Utils.FECHA_ACTUAL;
-		if (emoticono > 0) {
+		if (emoticono > ICONO_NULL) {
 			this.emoticono = emoticono;
 			this.texto = TEXTO_NULL;
 		} else {

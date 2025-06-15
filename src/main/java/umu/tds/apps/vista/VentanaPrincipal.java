@@ -31,12 +31,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
 import umu.tds.apps.dominio.Contacto;
+import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Mensaje;
+import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
 
 public class VentanaPrincipal extends JFrame {
@@ -62,12 +63,13 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panelCentral;
 	private JPanel panelInfo;
 	private JScrollPane scrollPane;
-	private JLabel lblNewLabel;
+	private JLabel lblContactoChat;
 	private JButton btnPdfChat;
 	private JPanel panelEnviarMensaje;
 	private JButton btnEnviar;
 	private JTextArea textArea;
 	private JLabel lblImagenUsuario;
+	private ContactoIndividual contacto;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
@@ -79,9 +81,15 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 	}
-
+	
 	protected VentanaPrincipal() {
 		initialize();
+	}
+	
+	protected VentanaPrincipal(ContactoIndividual contacto) {
+		this.contacto = contacto;
+		initialize();
+		recuperarMensajes();
 	}
 
 	protected void mostrarVentanaPrincipal(Dimension tam, Point ubi) {
@@ -177,8 +185,13 @@ public class VentanaPrincipal extends JFrame {
 		panelInfo = new JPanel();
 		panelCentral.add(panelInfo, BorderLayout.NORTH);
 		
-		lblNewLabel = new JLabel("NOMBRE DEL CONTACTO");
-		panelInfo.add(lblNewLabel);
+		if(contacto != null) {
+			lblContactoChat = new JLabel(contacto.getNombre());
+		}
+		else {
+			lblContactoChat = new JLabel("Nombre contacto");
+		}
+		panelInfo.add(lblContactoChat);
 		
 		btnPdfChat = new JButton("PDF Chat");
 		btnPdfChat.setFont(new Font("Georgia", Font.BOLD, 12));
@@ -214,6 +227,7 @@ public class VentanaPrincipal extends JFrame {
 		panelEnviarMensaje.add(textArea, gbc_textArea);
 
 		btnEnviar = new JButton("Enviar");
+		btnEnviar.addActionListener(e -> enviarTexto());
 		GridBagConstraints gbc_btnEnviar = new GridBagConstraints();
 		gbc_btnEnviar.insets = new Insets(5, 5, 5, 5);
 		gbc_btnEnviar.gridx = 1;
@@ -418,6 +432,43 @@ public class VentanaPrincipal extends JFrame {
 		chat.revalidate();
 		chat.repaint();
 		scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+	}
+	
+	private void recuperarMensajes() {
+		chat.removeAll();
+	    chat.revalidate();
+	    chat.repaint();
+	    
+	    contacto.getMensajes().forEach(mensaje -> {
+	        // CAMBIO: Mostrar todos los mensajes, independientemente del emoticono
+	        // O usar >= en lugar de >
+	        if(mensaje.getTipo().equals(TipoMensaje.ENVIADO)) {
+	            crearMensaje(mensaje.getTexto(), Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT);
+	        }
+	        else if(mensaje.getTipo().equals(TipoMensaje.RECIBIDO)) {
+	            crearMensaje(mensaje.getTexto(), contacto.getNombre(), BubbleText.RECEIVED);
+	        }
+	    });
+	}
+	
+	private void enviarTexto() {
+		String texto = textArea.getText().trim(); // Añadido trim() para evitar espacios
+	    
+	    // Verificar que el texto no esté vacío
+	    if (texto.isEmpty()) {
+	        return;
+	    }
+	    
+	    Controlador.INSTANCE.registrarMensajeContacto(contacto, texto, Mensaje.ICONO_NULL);
+	    
+	    // LIMPIAR EL CAMPO DE TEXTO - esto es lo que faltaba
+	    textArea.setText("");
+	    
+	    // Recuperar y mostrar los mensajes actualizados
+	    recuperarMensajes();
+		/*String texto = textArea.getText();
+		Controlador.INSTANCE.registrarMensajeContacto(contacto, texto, Mensaje.ICONO_NULL);
+		recuperarMensajes();*/
 	}
 	
 	private void crearContenedoresContactos (Contacto contacto) {
