@@ -342,7 +342,7 @@ public class VentanaRegistro extends JFrame {
 		String contraseña = new String(passwordField.getPassword());
 		String contraseñaOk = new String(passwordFieldOk.getPassword()); 
 		String saludo = textArea.getText();
-		if(contraseña.equals(contraseñaOk) && Controlador.INSTANCE.registrarUsuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo)) {
+		if(contraseña.equals(contraseñaOk) && movil.matches("\\d+") && Controlador.INSTANCE.registrarUsuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo)) {
 			dispose();
 			JOptionPane.showMessageDialog(this, "¡Bienvenido a AppChat, " + nombre + "!");			
 			VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();

@@ -64,5 +64,9 @@ public class ContactoIndividual extends Contacto {
 		return usuario.getSaludo();
 	}
 	
+	public boolean isAñadido() {
+		return !getNombre().matches("\\d+");
+	}
+	
 	
 }

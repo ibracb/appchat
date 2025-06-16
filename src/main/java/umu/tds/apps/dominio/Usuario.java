@@ -398,7 +398,7 @@ public class Usuario {
 	 */
 	public Set<ContactoIndividual> getUsuariosNoPertenecientesAlGrupo(Grupo grupo) {
 		return getContactosIndividuales().stream()
-				.filter(c -> !grupo.getMiembros().contains(c))
+				.filter(c -> !grupo.getMiembros().contains(c) && c.isAñadido())
 				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	

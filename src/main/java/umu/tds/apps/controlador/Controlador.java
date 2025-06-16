@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
@@ -211,7 +212,7 @@ public enum Controlador {
 		ContactoIndividual contactoInverso = usuarioReceptor.getContactoIndividual(usuarioActual.getMovil());
 		if(contactoInverso == null) {
 			//El contacto inverso debe tener como usuario al usuarioActual (el emisor)
-	        contactoInverso = new ContactoIndividual(usuarioActual.getNombre(), usuarioActual);
+	        contactoInverso = new ContactoIndividual(usuarioActual.getMovil(), usuarioActual);
 	        adaptadorContactoIndividual.create(contactoInverso);
 	        //Añadir el contacto inverso al usuario receptor
 	        usuarioReceptor.addContacto(contactoInverso);
@@ -438,6 +439,12 @@ public enum Controlador {
 	
 	public int getNumMiembros(Grupo grupo) {
 		return getMiembros(grupo).size();
+	}
+	
+	public Set<ContactoIndividual> getContactosIndividualesAñadidosUsuarioActual() {
+		return usuarioActual.getContactosIndividuales().stream()
+				.filter(contacto -> contacto.isAñadido())
+				.collect(Collectors.toCollection(TreeSet::new));
 	}
 	
 }

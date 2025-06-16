@@ -86,7 +86,7 @@ public class VentanaContactos extends JFrame {
 
     private void cargarContactos() {
         modeloLista.clear();
-        Controlador.INSTANCE.getContactosIndividualesUsuarioActual().stream()
+        Controlador.INSTANCE.getContactosIndividualesAñadidosUsuarioActual().stream()
             .filter(c -> c != null)
             .forEach(modeloLista::addElement);
     }
