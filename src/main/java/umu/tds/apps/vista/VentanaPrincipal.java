@@ -355,7 +355,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private void gestionarPdfChat() {
-		if (Controlador.INSTANCE.isPremiumUsuarioActual()) {
+		if (Controlador.INSTANCE.isPremiumUsuarioActual() && contacto != null) {
 			if (Controlador.INSTANCE.generarPdfChat(contacto)) {
 				JOptionPane.showMessageDialog(this,
 						"Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo", "Pdf ok",
@@ -365,7 +365,7 @@ public class VentanaPrincipal extends JFrame {
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "No eres premium. ESPABILA", "No premium", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "O No eres premium, o nas asignado contacto. ESPABILA", "Espabila", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

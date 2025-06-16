@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
@@ -217,9 +216,6 @@ public enum Controlador {
 	        //Añadir el contacto inverso al usuario receptor
 	        usuarioReceptor.addContacto(contactoInverso);
 	        adaptadorUsuario.update(usuarioReceptor);
-			/*contactoInverso = new ContactoIndividual(usuarioActual.getNombre(), usuarioReceptor);
-			adaptadorContactoIndividual.create(contactoInverso);
-			adaptadorUsuario.update(usuarioReceptor);*/
 		}
 		Mensaje mensajeRecibido = contactoInverso.nuevoMensaje(texto, emoticono, TipoMensaje.RECIBIDO);
 		adaptadorMensaje.create(mensajeRecibido);
@@ -442,9 +438,7 @@ public enum Controlador {
 	}
 	
 	public Set<ContactoIndividual> getContactosIndividualesAñadidosUsuarioActual() {
-		return usuarioActual.getContactosIndividuales().stream()
-				.filter(contacto -> contacto.isAñadido())
-				.collect(Collectors.toCollection(TreeSet::new));
+		return usuarioActual.getContactosIndividualesAñadidos();
 	}
 	
 }

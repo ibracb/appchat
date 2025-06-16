@@ -60,7 +60,7 @@ public enum ExportPDF {
 			Document document = new Document(pdfDocument);
 
 			agregarTitulo(document, usuario.getNombre());
-			agregarListadoContactos(document, usuario.getContactosIndividuales());
+			agregarListadoContactos(document, usuario.getContactosIndividualesAñadidos());
 			agregarListadoGrupos(document, usuario);
 
 			document.close();

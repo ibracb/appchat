@@ -423,5 +423,11 @@ public class Usuario {
 	public void removeContacto(Contacto contacto) {
 		contactos.remove(contacto);
 	}
+
+	public Set<ContactoIndividual> getContactosIndividualesAñadidos() {
+		return getContactosIndividuales().stream()
+				.filter(contacto -> contacto.isAñadido())
+				.collect(Collectors.toCollection(TreeSet::new));
+	}
 	
 }
