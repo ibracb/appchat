@@ -13,7 +13,7 @@ public class Grupo extends Contacto {
 	/**
 	 * Imagen por defecto que tiene un grupo si no tiene asignada una imagen
 	 */
-	private static final String IMAGEN_DEFAULT = "src/main/resources/imagenes/perfil_grupo.png";
+	private static final String IMAGEN_DEFAULT = "https://cdn-icons-png.flaticon.com/512/25/25437.png";
 	
 	/**
 	 * Ruta que representa la imagen de perfil del grupo.
@@ -34,6 +34,12 @@ public class Grupo extends Contacto {
 	public Grupo(String nombre, String imagen) {
 		super(nombre);
 		setImagen(imagen);
+		this.miembros = new TreeSet<ContactoIndividual>();
+	}
+	
+	public Grupo(String nombre) {
+		super(nombre);
+		setImagen(IMAGEN_DEFAULT);
 		this.miembros = new TreeSet<ContactoIndividual>();
 	}
 	

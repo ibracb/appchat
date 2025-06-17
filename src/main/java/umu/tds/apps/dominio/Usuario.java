@@ -24,6 +24,8 @@ public class Usuario {
 	
 	public static final double PRECIO_INICIAL = 40.0;
 	
+	public static final String IMAGEN_DEFAULT = "https://imagenes.eltiempo.com/files/image_600_455/files/fp/uploads/2025/04/01/67ec4ef31f2ce.r_d.866-866-3464.jpeg";
+	
 	/**
 	 * Identificador asociado a un usuario.
 	 */
@@ -101,6 +103,21 @@ public class Usuario {
 		this.fechaRegistro = Utils.FECHA_ACTUAL.toLocalDate();
 		this.email = email;
 		setImagen(imagen);
+		this.movil = movil;
+		this.contraseña = contraseña;
+		setSaludo(saludo);
+		this.premium = false;
+		this.contactos = new TreeSet<Contacto>();
+		updateDescuento();
+	}
+	
+	public Usuario(String nombre, LocalDate fechaNacimiento, String email, String movil, String contraseña, String saludo) {
+		this.id = Utils.ID_DEFAULT;
+		this.nombre = nombre;
+		this.fechaNacimiento = fechaNacimiento;
+		this.fechaRegistro = Utils.FECHA_ACTUAL.toLocalDate();
+		this.email = email;
+		setImagen(IMAGEN_DEFAULT);
 		this.movil = movil;
 		this.contraseña = contraseña;
 		setSaludo(saludo);

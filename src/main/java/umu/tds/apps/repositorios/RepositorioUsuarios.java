@@ -8,6 +8,7 @@ import java.util.Set;
 
 import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
+import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.persistencia.DAOException;
@@ -141,6 +142,16 @@ public enum RepositorioUsuarios {
 				.filter(contacto -> contacto instanceof ContactoIndividual && contacto.getMensajes().contains(mensaje))
 				.findFirst()
 				.get();
+	}
+	
+	public String getFotoContacto (Contacto contacto) {
+		String imagen = null;
+		if (contacto instanceof ContactoIndividual) {
+			imagen = ((ContactoIndividual) contacto).getUsuario().getImagen();
+		} else if (contacto instanceof Grupo) {
+			imagen = ((Grupo) contacto).getImagen();
+		}
+        return imagen;
 	}
 	
 }

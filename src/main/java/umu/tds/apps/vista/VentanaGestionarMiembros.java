@@ -39,23 +39,6 @@ public class VentanaGestionarMiembros extends JFrame {
 	private GridBagConstraints gbc_btnAnadir;
 	private String modo;
 	
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaGestionarMiembros window = new VentanaGestionarMiembros();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
 	protected void mostrarVentanaGestionarMiembros(Dimension tam, Point ubi, Grupo grupo, String modo) {
 		contenedorContactos.removeAll();
 		this.grupo = grupo;

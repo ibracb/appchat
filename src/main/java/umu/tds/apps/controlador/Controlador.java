@@ -441,4 +441,19 @@ public enum Controlador {
 		return usuarioActual.getContactosIndividualesAñadidos();
 	}
 	
+	public boolean isContactoIndividualAñadido(ContactoIndividual contacto) {
+		return contacto.isAñadido();
+	}
+	
+	public void actualizarNombreContacto(ContactoIndividual contacto, String nuevoNombre) {
+	    contacto.setNombre(nuevoNombre);
+	    adaptadorContactoIndividual.update(contacto);
+	}
+	
+	public String getImagenContacto(Contacto contacto) {
+	    return RepositorioUsuarios.INSTANCE.getFotoContacto(contacto); // o como sea que almacenes la URL
+	}
+
+
+	
 }

@@ -68,21 +68,6 @@ public class VentanaBuscar extends JFrame {
 	private JScrollPane scrollMensajes;
 	private JPanel contenedorMensajes;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaBuscar window = new VentanaBuscar();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	
 	protected void mostrarVentanaBuscar(Dimension tam, Point ubi) {
 		contenedorMensajes.removeAll();
