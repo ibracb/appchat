@@ -149,7 +149,7 @@ public abstract class Contacto implements Comparable<Contacto> {
 	public Mensaje getUltimoMensaje() {
 	    if (mensajes.isEmpty()) return null;
 	    TreeSet<Mensaje> ordenados = new TreeSet<>(mensajes);
-	    return ordenados.first();
+	    return ordenados.last();
 	}
 	
 }

@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
@@ -85,12 +86,6 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	protected void mostrarVentanaPrincipal(Dimension tam, Point ubi) {
-		setVisible(true);
-		setSize(tam);
-		setLocation(ubi);
-	}
-
-	protected void mostrarVentanaPrincipal(Dimension tam, Point ubi, Contacto contacto) {
 		setVisible(true);
 		setSize(tam);
 		setLocation(ubi);
@@ -252,10 +247,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		
 
-		Usuario u = Controlador.INSTANCE.getUsuarioActual();
-		for (ContactoIndividual c : Controlador.INSTANCE.getContactosIndividuales(u)) {
-			crearContenedoresContactos(c);
-		}
+		refrescarPanelContactos();
 
 	}
 
@@ -478,11 +470,6 @@ public class VentanaPrincipal extends JFrame {
 	    scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
 	}
 
-	// Método sobrecargado para mantener compatibilidad con mensajes de texto
-	private void crearMensaje(String mensaje, String usuarioConFecha, int tipo) {
-	    crearMensaje(mensaje, usuarioConFecha, tipo, Mensaje.ICONO_NULL);
-	}
-
 
 
 	private void recuperarMensajes() {
@@ -501,7 +488,14 @@ public class VentanaPrincipal extends JFrame {
 	        }
 	    });
 	    
+	    
+	    
+	    SwingUtilities.invokeLater(() -> {
+	        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+	    });
+	    
 	    refrescarPanelContactos();
+
 	}
 
 	private void enviarTexto() {
@@ -521,9 +515,8 @@ public class VentanaPrincipal extends JFrame {
 			isAnadido = Controlador.INSTANCE.isContactoIndividualAñadido((ContactoIndividual) contacto);
 		}
 		Mensaje msg = Controlador.INSTANCE.getUltimoMensaje(contacto);
-		if (msg == null) {
-			msg = new Mensaje("", 0, TipoMensaje.ENVIADO);
-		}
+		boolean tieneMensaje = msg != null;
+
 
 		JButton contenedor = new JButton();
 		contenedor.setLayout(new GridBagLayout());
@@ -576,8 +569,12 @@ public class VentanaPrincipal extends JFrame {
 
 		gbc_contenedor.gridx = 2;
 		gbc_contenedor.anchor = GridBagConstraints.EAST;
-		JLabel lblFecha = new JLabel(Controlador.INSTANCE.getMomentoEnvioMensaje(msg));
+		JLabel lblFecha = new JLabel();
+		if (tieneMensaje && msg.getMomentoEnvio() != null) {
+		    lblFecha.setText(Controlador.INSTANCE.getMomentoEnvioMensaje(msg));
+		}
 		contenedor.add(lblFecha, gbc_contenedor);
+
 
 		gbc_contenedor.gridx = 0;
 		gbc_contenedor.gridy = 1;
@@ -590,22 +587,34 @@ public class VentanaPrincipal extends JFrame {
 		panelTextoBoton.setLayout(new BoxLayout(panelTextoBoton, BoxLayout.X_AXIS));
 		panelTextoBoton.setOpaque(false); // para heredar el fondo del contenedor
 
-		if (msg.getEmoticono() != Mensaje.ICONO_NULL) {
-		    // Obtener el emoji desde BubbleText
-			ImageIcon original = BubbleText.getEmoji(msg.getEmoticono());
-			Image scaledImage = original.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH); // tamaño deseado
-			ImageIcon scaledIcon = new ImageIcon(scaledImage);
-			JLabel lblEmoji = new JLabel(scaledIcon);
-		    panelTextoBoton.add(lblEmoji);
-		} else {
-		    JTextArea texto = new JTextArea(Controlador.INSTANCE.getTextoMensaje(msg));
-		    texto.setLineWrap(true);
-		    texto.setWrapStyleWord(true);
-		    texto.setEditable(false);
-		    texto.setBackground(new Color(180, 159, 185));
-		    texto.setMargin(new Insets(5, 5, 5, 5));
-		    panelTextoBoton.add(texto);
+		if (tieneMensaje) {
+		    if (msg.getEmoticono() != Mensaje.ICONO_NULL) {
+		    	ImageIcon original = BubbleText.getEmoji(msg.getEmoticono());
+		    	if (original != null) {
+		    	    Image scaledImage = original.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+		    	    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+		    	    JLabel lblEmoji = new JLabel(scaledIcon);
+		    	    lblEmoji.setOpaque(true);
+		    	    lblEmoji.setBackground(new Color(180, 159, 185));
+		    	    lblEmoji.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		    	    lblEmoji.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		    	    // Hacer que llene el ancho restante
+		    	    lblEmoji.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
+		    	    panelTextoBoton.add(lblEmoji);
+		    	}
+		    } else {
+		        JTextArea texto = new JTextArea(Controlador.INSTANCE.getTextoMensaje(msg));
+		        texto.setLineWrap(true);
+		        texto.setWrapStyleWord(true);
+		        texto.setEditable(false);
+		        texto.setBackground(new Color(180, 159, 185));
+		        texto.setMargin(new Insets(5, 5, 5, 5));
+		        panelTextoBoton.add(texto);
+		    }
 		}
+
 
 
 
@@ -639,16 +648,16 @@ public class VentanaPrincipal extends JFrame {
 
 	    Usuario u = Controlador.INSTANCE.getUsuarioActual();
 
-	    // Obtener contactos individuales del usuario
-	    List<ContactoIndividual> listaContactos = new ArrayList<>(Controlador.INSTANCE.getContactosIndividuales(u));
+	    // Obtener todos los contactos del usuario (grupos + individuales)
+	    List<Contacto> listaContactos = new ArrayList<>(u.getContactos());
 
 	    // Separar contactos con y sin mensajes
-	    List<ContactoIndividual> conMensajes = new ArrayList<>();
-	    List<ContactoIndividual> sinMensajes = new ArrayList<>();
+	    List<Contacto> conMensajes = new ArrayList<>();
+	    List<Contacto> sinMensajes = new ArrayList<>();
 
-	    for (ContactoIndividual c : listaContactos) {
+	    for (Contacto c : listaContactos) {
 	        Mensaje m = Controlador.INSTANCE.getUltimoMensaje(c);
-	        if (m != null && m.getTexto() != null && !m.getTexto().isEmpty()) {
+	        if (m != null && m.getMomentoEnvio() != null) {
 	            conMensajes.add(c);
 	        } else {
 	            sinMensajes.add(c);
@@ -659,20 +668,21 @@ public class VentanaPrincipal extends JFrame {
 	    conMensajes.sort((c1, c2) -> {
 	        LocalDateTime tiempo1 = Controlador.INSTANCE.getUltimoMensaje(c1).getMomentoEnvio();
 	        LocalDateTime tiempo2 = Controlador.INSTANCE.getUltimoMensaje(c2).getMomentoEnvio();
-	        return tiempo2.compareTo(tiempo1);
+	        return tiempo2.compareTo(tiempo1); // Más reciente primero
 	    });
 
 	    // Crear los contenedores en orden
-	    for (ContactoIndividual c : conMensajes) {
+	    for (Contacto c : conMensajes) {
 	        crearContenedoresContactos(c);
 	    }
-	    for (ContactoIndividual c : sinMensajes) {
+	    for (Contacto c : sinMensajes) {
 	        crearContenedoresContactos(c);
 	    }
 
 	    contactos.revalidate();
 	    contactos.repaint();
 	}
+
 
 	private void anadirContacto(ContactoIndividual contacto) {
 		JTextField campoNombre = new JTextField();
