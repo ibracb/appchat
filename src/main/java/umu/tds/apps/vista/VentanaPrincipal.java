@@ -460,42 +460,48 @@ public class VentanaPrincipal extends JFrame {
 		v.mostrarVentanaBuscar(this.getSize(), this.getLocation());
 	}
 
+	// Método corregido que recibe el emoji como parámetro
+	private void crearMensaje(String mensaje, String usuarioConFecha, int tipo, int emojiIndex) {
+	    Color color = (tipo == BubbleText.RECEIVED) ? Color.PINK : Color.CYAN;
+
+	    if (mensaje.isEmpty() && emojiIndex != Mensaje.ICONO_NULL) {
+	        // Usar el emoji que se pasa como parámetro, no el último mensaje
+	        BubbleText burbuja = new BubbleText(chat, emojiIndex, color, usuarioConFecha, tipo, 12);
+	        chat.add(burbuja);
+	    } else {
+	        BubbleText burbuja = new BubbleText(chat, mensaje, color, usuarioConFecha, tipo);
+	        chat.add(burbuja);
+	    }
+
+	    chat.revalidate();
+	    chat.repaint();
+	    scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+	}
+
+	// Método sobrecargado para mantener compatibilidad con mensajes de texto
 	private void crearMensaje(String mensaje, String usuarioConFecha, int tipo) {
-		Color color = (tipo == BubbleText.RECEIVED) ? Color.PINK : Color.CYAN;
-
-		if (mensaje.isEmpty()) {
-			Mensaje m = Controlador.INSTANCE.getUltimoMensaje(contacto);
-			int emoji = m.getEmoticono();
-
-			// Usar tamaño más pequeño
-			BubbleText burbuja = new BubbleText(chat, emoji, color, usuarioConFecha, tipo, 12);
-			chat.add(burbuja);
-		} else {
-			BubbleText burbuja = new BubbleText(chat, mensaje, color, usuarioConFecha, tipo);
-			chat.add(burbuja);
-		}
-
-		chat.revalidate();
-		chat.repaint();
-		scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+	    crearMensaje(mensaje, usuarioConFecha, tipo, Mensaje.ICONO_NULL);
 	}
 
 
 
 	private void recuperarMensajes() {
 		chat.removeAll();
-		chat.revalidate();
-		chat.repaint();
-		Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
-			if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.ENVIADO)) {
-				crearMensaje(Controlador.INSTANCE.getTextoMensaje(mensaje),
-						Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT);
-			} else if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.RECIBIDO)) {
-				crearMensaje(Controlador.INSTANCE.getTextoMensaje(mensaje),
-						Controlador.INSTANCE.getNombreContacto(contacto), BubbleText.RECEIVED);
-			}
-		});
-		refrescarPanelContactos();
+	    chat.revalidate();
+	    chat.repaint();
+	    
+	    Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
+	        String textoMensaje = Controlador.INSTANCE.getTextoMensaje(mensaje);
+	        int emojiMensaje = mensaje.getEmoticono(); // Obtener el emoji de ESTE mensaje específico
+	        
+	        if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.ENVIADO)) {
+	            crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT, emojiMensaje);
+	        } else if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.RECIBIDO)) {
+	            crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreContacto(contacto), BubbleText.RECEIVED, emojiMensaje);
+	        }
+	    });
+	    
+	    refrescarPanelContactos();
 	}
 
 	private void enviarTexto() {
