@@ -61,6 +61,7 @@ public class VentanaGestionarMiembros extends JFrame {
 	private void initialize() {
 		setBounds(100, 100, 798, 529);
 		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setTitle("Gestionar Miembros del Grupo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setBackground(new Color(242, 216, 245));
 		

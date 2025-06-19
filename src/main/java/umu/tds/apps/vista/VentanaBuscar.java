@@ -89,6 +89,7 @@ public class VentanaBuscar extends JFrame {
 	private void initialize() {
 		setBounds(100, 100, 798, 529);
 		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setTitle("Buscar en AppChat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
@@ -299,7 +300,7 @@ public class VentanaBuscar extends JFrame {
 		if (texto.isEmpty() && telefono.isEmpty() && contacto.isEmpty() && fecha == null) {
 			JOptionPane.showMessageDialog(this,
 					"No hay datos que buscar. Por favor, complete al menos uno de los campos.",
-					"Mensaje busquedad", JOptionPane.INFORMATION_MESSAGE);
+					"Mensaje busqueda", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			//Se llama a la función para filtrar los mensajes del controlador
 			Map<Mensaje, Contacto> mensajes = Controlador.INSTANCE.filtrarMensajes(Controlador.INSTANCE.getUsuarioActual(), texto, telefono, contacto, fecha);

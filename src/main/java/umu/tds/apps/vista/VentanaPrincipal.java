@@ -95,6 +95,7 @@ public class VentanaPrincipal extends JFrame {
 		setBounds(100, 100, 601, 449);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setTitle("AppChat");
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
 		panel = new JPanel();

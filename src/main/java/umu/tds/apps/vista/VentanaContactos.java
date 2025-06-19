@@ -1,12 +1,14 @@
 package umu.tds.apps.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,7 +37,9 @@ public class VentanaContactos extends JFrame {
 
     protected VentanaContactos() {
         setTitle("Contactos Individuales");
+        setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBackground(new Color(242, 216, 245));
         setSize(400, 300);
         setLocationRelativeTo(null);
 
@@ -72,6 +76,7 @@ public class VentanaContactos extends JFrame {
         });
 
         JPanel botonesPanel = new JPanel();
+        botonesPanel.setBackground(new Color(242, 216, 245));
         botonesPanel.add(btnAgregar);
         botonesPanel.add(btnEliminar);
 
