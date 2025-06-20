@@ -78,7 +78,7 @@ public enum Controlador {
 	}
 
 	public boolean isUsuarioRegistrado(String movil) {
-		return RepositorioUsuarios.INSTANCE.findUsuario(movil) != null;
+		return repositorioUsuarios.findUsuario(movil) != null;
 	}
 
 	/**
@@ -174,7 +174,7 @@ public enum Controlador {
 			return false;
 		}
 
-		Usuario usuarioContacto = RepositorioUsuarios.INSTANCE.findUsuario(movilContacto);
+		Usuario usuarioContacto = repositorioUsuarios.findUsuario(movilContacto);
 		if (usuarioContacto == null) {
 			return false;
 		}
@@ -249,12 +249,9 @@ public enum Controlador {
 		Usuario usuarioReceptor = contacto.getUsuario();
 		ContactoIndividual contactoInverso = usuarioReceptor.getContactoIndividual(usuarioActual.getMovil());
 		if (contactoInverso == null) {
-			// El contacto inverso debe tener como usuario al usuarioActual (el emisor)
-			contactoInverso = new ContactoIndividual(usuarioActual.getMovil(), usuarioActual);
-			adaptadorContactoIndividual.create(contactoInverso);
-			// Añadir el contacto inverso al usuario receptor
-			usuarioReceptor.addContacto(contactoInverso);
-			adaptadorUsuario.update(usuarioReceptor);
+			contactoInverso = usuarioReceptor.crearContactoIndividualDesconocido(usuarioActual);
+	        adaptadorContactoIndividual.create(contactoInverso);
+	        adaptadorUsuario.update(usuarioReceptor);
 		}
 		Mensaje mensajeRecibido = contactoInverso.nuevoMensaje(texto, emoticono, TipoMensaje.RECIBIDO);
 		adaptadorMensaje.create(mensajeRecibido);
@@ -486,7 +483,13 @@ public enum Controlador {
 	}
 
 	public String getImagenContacto(Contacto contacto) {
-		return RepositorioUsuarios.INSTANCE.getFotoContacto(contacto); // o como sea que almacenes la URL
+		String imagen = null;
+		if (contacto instanceof ContactoIndividual) {
+			imagen = ((ContactoIndividual) contacto).getUsuario().getImagen();
+		} else if (contacto instanceof Grupo) {
+			imagen = ((Grupo) contacto).getImagen();
+		}
+        return imagen;
 	}
 	
 	public boolean isContactoIndividual(Contacto contacto) {
@@ -495,6 +498,18 @@ public enum Controlador {
 	
 	public boolean isGrupo(Contacto contacto) {
 		return contacto instanceof Grupo;
+	}
+	
+	public int getEmojiMensaje(Mensaje mensaje) {
+		return mensaje.getEmoticono();
+	}
+	
+	public String getNombreUsuario(Usuario usuario) {
+		return usuario.getNombre();
+	}
+	
+	public Contacto encontrarContacto(Map<Mensaje, Contacto> mensajes, Mensaje mensaje) {
+		return mensajes.get(mensaje);
 	}
 	
 }

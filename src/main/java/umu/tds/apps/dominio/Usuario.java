@@ -155,6 +155,12 @@ public class Usuario {
 		return contactos.add(grupo);
 	}
 	
+	public ContactoIndividual crearContactoIndividualDesconocido(Usuario usuario) {
+	    ContactoIndividual contacto = new ContactoIndividual(usuario.getMovil(), usuario);
+	    addContacto(contacto);
+	    return contacto;
+	}
+	
 	public void addContacto(ContactoIndividual contacto) {
 		 contactos.add(contacto);
 	 }

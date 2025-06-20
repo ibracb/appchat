@@ -70,10 +70,6 @@ public class TDSGrupoDAO implements GrupoDAO {
 	
 	@Override
 	public void create(Grupo grupo) {
-		System.out.println(grupo.getNombre());
-		grupo.getMiembros().forEach(m -> {
-			System.out.println(m.getNombre());
-		});
 		Entidad eGrupo = new Entidad();
 		eGrupo.setNombre(ENTIDAD_GRUPO);
 		eGrupo.setPropiedades(

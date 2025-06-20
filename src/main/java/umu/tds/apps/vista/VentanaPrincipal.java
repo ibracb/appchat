@@ -374,8 +374,7 @@ public class VentanaPrincipal extends JFrame {
 					actualizarImagenEnInterfaz(image);
 				}
 			} catch (Exception e) {
-				// Manejar error (por ejemplo, mostrar imagen por defecto)
-				System.err.println("No se pudo cargar la imagen del perfil: " + e.getMessage());
+				JOptionPane.showMessageDialog(this, "No se cargó la imagen. Una lástima...");
 			}
 		}
 	}
@@ -489,7 +488,7 @@ public class VentanaPrincipal extends JFrame {
 
 		Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
 			String textoMensaje = Controlador.INSTANCE.getTextoMensaje(mensaje);
-			int emojiMensaje = mensaje.getEmoticono(); // Obtener el emoji de ESTE mensaje específico
+			int emojiMensaje = Controlador.INSTANCE.getEmojiMensaje(mensaje); // Obtener el emoji de ESTE mensaje específico
 
 			if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.ENVIADO)) {
 				crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT,
@@ -547,11 +546,6 @@ public class VentanaPrincipal extends JFrame {
 			this.contacto = contacto;
 		    lblContactoChat.setText(Controlador.INSTANCE.getNombreContacto(contacto));
 		    recuperarMensajes();
-			/*if (contacto instanceof ContactoIndividual) {
-				this.contacto = (ContactoIndividual) contacto;
-				lblContactoChat.setText(Controlador.INSTANCE.getNombreContacto(contacto));
-				recuperarMensajes();
-			}*/
 		});
 
 		GridBagConstraints gbc_contenedor = new GridBagConstraints();
@@ -605,8 +599,8 @@ public class VentanaPrincipal extends JFrame {
 		panelTextoBoton.setOpaque(false); // para heredar el fondo del contenedor
 
 		if (tieneMensaje) {
-			if (msg.getEmoticono() != Mensaje.ICONO_NULL) {
-				ImageIcon original = BubbleText.getEmoji(msg.getEmoticono());
+			if (Controlador.INSTANCE.getEmojiMensaje(msg) != Mensaje.ICONO_NULL) {
+				ImageIcon original = BubbleText.getEmoji(Controlador.INSTANCE.getEmojiMensaje(msg));
 				if (original != null) {
 					Image scaledImage = original.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 					ImageIcon scaledIcon = new ImageIcon(scaledImage);

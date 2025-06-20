@@ -249,9 +249,9 @@ public class VentanaBuscar extends JFrame {
 	    gbc_mensaje.anchor = GridBagConstraints.WEST;
 	    JLabel lblEmisor = new JLabel(""); 
 		if (emisor == null) {
-			 lblEmisor.setText(contacto.getNombre());
+			 lblEmisor.setText(Controlador.INSTANCE.getNombreContacto(contacto));
 		} else {
-			lblEmisor.setText(emisor.getNombre());
+			lblEmisor.setText(Controlador.INSTANCE.getNombreUsuario(emisor));
 		}
 	    mensaje.add(lblEmisor, gbc_mensaje);
 
@@ -260,9 +260,9 @@ public class VentanaBuscar extends JFrame {
 	    gbc_mensaje.anchor = GridBagConstraints.EAST;
 	    JLabel lblReceptor = new JLabel("");
 	    if (receptor == null) {
-        	lblReceptor.setText(contacto.getNombre());
+        	lblReceptor.setText(Controlador.INSTANCE.getNombreContacto(contacto));
         } else {
-        	lblReceptor.setText(receptor.getNombre());
+        	lblReceptor.setText(Controlador.INSTANCE.getNombreUsuario(receptor));
         }
 	    mensaje.add(lblReceptor, gbc_mensaje);
 
@@ -273,7 +273,7 @@ public class VentanaBuscar extends JFrame {
 	    gbc_mensaje.fill = GridBagConstraints.HORIZONTAL;
 	    gbc_mensaje.anchor = GridBagConstraints.CENTER;
 	    JTextArea texto = new JTextArea("");
-	    texto.setText(msg.getTexto());
+	    texto.setText(Controlador.INSTANCE.getTextoMensaje(msg));
 	    texto.setLineWrap(true);
 	    texto.setWrapStyleWord(true);
 	    texto.setEditable(false);
@@ -305,7 +305,7 @@ public class VentanaBuscar extends JFrame {
 			Map<Mensaje, Contacto> mensajes = Controlador.INSTANCE.filtrarMensajes(Controlador.INSTANCE.getUsuarioActual(), texto, telefono, contacto, fecha);
 			//Bucle for para cada mensaje que se encuentre con los filtros
 			for (Mensaje mensaje : mensajes.keySet()) {
-				Contacto contactoEncontrado = mensajes.get(mensaje);
+				Contacto contactoEncontrado = Controlador.INSTANCE.encontrarContacto(mensajes, mensaje);
 				crearMensaje(mensaje, contactoEncontrado);
 			}
 		}

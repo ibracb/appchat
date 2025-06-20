@@ -160,12 +160,30 @@ public class VentanaGrupos extends JFrame {
 	private void mostrarInformacionGrupo() {
 		Grupo seleccionado = listaGrupos.getSelectedValue();
 		if (seleccionado != null) {
-			JOptionPane.showMessageDialog(this,
-				"Nombre: " + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\nMiembros: " + Controlador.INSTANCE.getNumMiembros(seleccionado),
-				"Información del Grupo", JOptionPane.INFORMATION_MESSAGE);
+			String mensaje = "Nombre:\t" + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\nMiembros:\t" + Controlador.INSTANCE.getNumMiembros(seleccionado);
+			Object[] opciones = {"Aceptar", "Chatear"};
+			int resultado = JOptionPane.showOptionDialog(
+				this,
+				mensaje,
+				"Información del Grupo",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				opciones,
+				opciones[0]
+			);
+			if (resultado == 1) {
+				chatear(seleccionado);
+			}
 		}
 	}
-
+	
+	private void chatear(Grupo grupo) {
+    	VentanaPrincipal v = new VentanaPrincipal(grupo);
+    	dispose();
+    	v.mostrarVentanaPrincipal(getSize(), getLocation());
+    }
+	
 	private void volver() {
 		VentanaPrincipal v = new VentanaPrincipal();
 		dispose();
