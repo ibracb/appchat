@@ -102,7 +102,7 @@ public class VentanaPrincipal extends JFrame {
 	private void initialize() {
 		setBounds(100, 100, 601, 449);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.png")).getImage());
 		setTitle("AppChat");
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
