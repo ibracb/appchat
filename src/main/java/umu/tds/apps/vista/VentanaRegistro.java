@@ -403,7 +403,7 @@ public class VentanaRegistro extends JFrame {
 		}
 	}
 
-	//@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	private void cargarImagenDesdeURL(String urlString) {
 		try {
 			URL url = new URL(urlString);

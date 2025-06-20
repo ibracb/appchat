@@ -140,10 +140,10 @@ public enum Controlador {
 				usuarioActual = usuario;
 				return 0; // Inicio de sesión exitoso
 			} else {
-				return 1; // Contraseña incorrecta
+				return -1; // Contraseña incorrecta
 			}
 		}
-		return 2; // Usuario no encontrado;
+		return -2; // Usuario no encontrado;
 	}
 
 	/**
@@ -488,5 +488,13 @@ public enum Controlador {
 	public String getImagenContacto(Contacto contacto) {
 		return RepositorioUsuarios.INSTANCE.getFotoContacto(contacto); // o como sea que almacenes la URL
 	}
-
+	
+	public boolean isContactoIndividual(Contacto contacto) {
+		return contacto instanceof ContactoIndividual;
+	}
+	
+	public boolean isGrupo(Contacto contacto) {
+		return contacto instanceof Grupo;
+	}
+	
 }

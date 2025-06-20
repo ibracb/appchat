@@ -40,6 +40,7 @@ import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
 import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.ContactoIndividual;
+import umu.tds.apps.dominio.Grupo;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
@@ -73,7 +74,8 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnEnviar;
 	private JTextArea textArea;
 	private JLabel lblImagenUsuario;
-	private ContactoIndividual contacto;
+	private Contacto contacto;
+	//private Grupo grupo;
 
 	protected VentanaPrincipal() {
 		initialize();
@@ -84,7 +86,13 @@ public class VentanaPrincipal extends JFrame {
 		initialize();
 		recuperarMensajes();
 	}
-
+	
+	protected VentanaPrincipal(Grupo grupo) {
+		this.contacto = grupo;
+		initialize();
+		recuperarMensajes();
+	}
+	
 	protected void mostrarVentanaPrincipal(Dimension tam, Point ubi) {
 		setVisible(true);
 		setSize(tam);
@@ -278,10 +286,14 @@ public class VentanaPrincipal extends JFrame {
 	private void enviarEmoji(int emojiIndex) {
 		if (contacto == null)
 			return;
-		Controlador.INSTANCE.registrarMensajeContacto(contacto, "", emojiIndex);
+		else if(Controlador.INSTANCE.isContactoIndividual(contacto)) {
+			Controlador.INSTANCE.registrarMensajeContacto((ContactoIndividual)contacto, "", emojiIndex);
+		}
+		else if(Controlador.INSTANCE.isGrupo(contacto)){
+			Controlador.INSTANCE.registrarMensajeGrupo((Grupo) contacto, "", emojiIndex);
+		}
 		recuperarMensajes();
 		refrescarPanelContactos();
-
 	}
 
 	private void cerrarSesion() {
@@ -300,7 +312,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 	}
 
-	// @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	private void cargarImagenDesdeURL(String urlString) {
 		try {
 			URL url = new URL(urlString);
@@ -351,7 +363,7 @@ public class VentanaPrincipal extends JFrame {
 		lblImagenUsuario.repaint();
 	}
 
-	// @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	private void cargarImagenPerfilUsuario() {
 		String rutaImagen = Controlador.INSTANCE.getImagenUsuarioActual();
 		if (rutaImagen != null && !rutaImagen.isEmpty()) {
@@ -393,8 +405,8 @@ public class VentanaPrincipal extends JFrame {
 
 	private void gestionarPdfChat() {
 		if (Controlador.INSTANCE.isPremiumUsuarioActual()) {
-			if (contacto != null) {
-				if (Controlador.INSTANCE.generarPdfChat(contacto)) {
+			if (contacto != null && Controlador.INSTANCE.isContactoIndividual(contacto)) {
+				if (Controlador.INSTANCE.generarPdfChat((ContactoIndividual)contacto)) {
 					JOptionPane.showMessageDialog(this,
 							"Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo", "Pdf ok",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -501,12 +513,18 @@ public class VentanaPrincipal extends JFrame {
 		if (texto.isEmpty()) {
 			return;
 		}
-		Controlador.INSTANCE.registrarMensajeContacto(contacto, texto, Mensaje.ICONO_NULL);
+		else if(Controlador.INSTANCE.isContactoIndividual(contacto)) {
+			Controlador.INSTANCE.registrarMensajeContacto((ContactoIndividual)contacto, texto, Mensaje.ICONO_NULL);
+		}
+		else if(Controlador.INSTANCE.isGrupo(contacto)) {
+			Controlador.INSTANCE.registrarMensajeGrupo((Grupo) contacto, texto, Mensaje.ICONO_NULL);
+		}
 		textArea.setText("");
 		recuperarMensajes();
 		refrescarPanelContactos();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void crearContenedoresContactos(Contacto contacto) {
 		Boolean isAnadido = true;
 		if (contacto instanceof ContactoIndividual) {
@@ -526,11 +544,14 @@ public class VentanaPrincipal extends JFrame {
 		contenedor.setOpaque(true);
 
 		contenedor.addActionListener(e -> {
-			if (contacto instanceof ContactoIndividual) {
+			this.contacto = contacto;
+		    lblContactoChat.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+		    recuperarMensajes();
+			/*if (contacto instanceof ContactoIndividual) {
 				this.contacto = (ContactoIndividual) contacto;
 				lblContactoChat.setText(Controlador.INSTANCE.getNombreContacto(contacto));
 				recuperarMensajes();
-			}
+			}*/
 		});
 
 		GridBagConstraints gbc_contenedor = new GridBagConstraints();
