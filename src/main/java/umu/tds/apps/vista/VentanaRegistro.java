@@ -342,7 +342,40 @@ public class VentanaRegistro extends JFrame {
 		String contraseña = new String(passwordField.getPassword());
 		String contraseñaOk = new String(passwordFieldOk.getPassword()); 
 		String saludo = textArea.getText();
-		if(contraseña.equals(contraseñaOk) && movil.matches("\\d+") && Controlador.INSTANCE.registrarUsuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo)) {
+		if (nombre.isEmpty() || fechaNacimiento == null || email.isEmpty() || movil.isEmpty() || contraseña.isEmpty()
+				|| contraseñaOk.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos obligatorios. Son: nombre, apellidos, email, móvil, contraseñas y fecha de nacimiento.", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+			return;
+		} else if (fechaNacimiento.isAfter(LocalDate.now())) {
+			JOptionPane.showMessageDialog(this, "La fecha de nacimiento no puede ser futura.", "Fecha naciemiento futura", JOptionPane.WARNING_MESSAGE);
+			// Limpia el campo de fecha de nacimiento
+			dateChooser.setDate(null);
+			return; 
+		} else if (!email.matches("^[\\w-\\.]+@[\\w-]+\\.[a-zA-Z]{2,}$")) {
+			JOptionPane.showMessageDialog(this, "El email introducido no es válido.", "Email no valido", JOptionPane.WARNING_MESSAGE);
+			// Limpia el campo de email
+			textFieldEmail.setText("");
+			return;
+		} 
+		else if (!(movil.length() == 9) && !(movil.matches("\\d+"))) {
+			JOptionPane.showMessageDialog(this, "El número de móvil debe ser de 9 digitos.", "Número de telefono no valido", JOptionPane.WARNING_MESSAGE);
+			// Limpia el campo de móvil
+			textFieldTelefono.setText("");
+			return;
+		}  else if (!contraseña.equals(contraseñaOk)) {
+			JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.", "Las contraseñas no coinciden", JOptionPane.WARNING_MESSAGE);
+			// Limpia los campos de contraseña
+			passwordField.setText("");
+			passwordFieldOk.setText("");
+			return;
+		} 
+		Boolean confirmacionRegistro = false;
+		if (imagen == null || imagen.isEmpty()) {
+			confirmacionRegistro = Controlador.INSTANCE.registrarUsuario(nombre, fechaNacimiento, email, movil, contraseña, saludo);
+		} else {
+			confirmacionRegistro = Controlador.INSTANCE.registrarUsuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo);
+		}
+		if(confirmacionRegistro) {
 			dispose();
 			JOptionPane.showMessageDialog(this, "¡Bienvenido a AppChat, " + nombre + "!");			
 			VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
@@ -370,7 +403,7 @@ public class VentanaRegistro extends JFrame {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	//@SuppressWarnings("deprecation")
 	private void cargarImagenDesdeURL(String urlString) {
 		try {
 			URL url = new URL(urlString);

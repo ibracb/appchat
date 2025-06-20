@@ -173,7 +173,6 @@ public class VentanaPrincipal extends JFrame {
 
 		getContentPane().add(scrollContactos, BorderLayout.WEST);
 
-
 		panelCentral = new JPanel();
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 		panelCentral.setLayout(new BorderLayout(0, 0));
@@ -184,7 +183,7 @@ public class VentanaPrincipal extends JFrame {
 		if (contacto != null) {
 			lblContactoChat = new JLabel(Controlador.INSTANCE.getNombreContacto(contacto));
 		} else {
-			lblContactoChat = new JLabel("Nombre contacto");
+			lblContactoChat = new JLabel("");
 		}
 		panelInfo.add(lblContactoChat);
 
@@ -208,24 +207,22 @@ public class VentanaPrincipal extends JFrame {
 		gbl_panelEnviarMensaje.columnWeights = new double[] { 1.0, 0.0 };
 		gbl_panelEnviarMensaje.rowWeights = new double[] { 0.0 };
 		panelEnviarMensaje.setLayout(gbl_panelEnviarMensaje);
-		
+
 		ImageIcon originalIcon = BubbleText.getEmoji(16);
 		Image imgEmoji = originalIcon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 		ImageIcon iconEmoji = new ImageIcon(imgEmoji);
 
 		JButton btnEmoji = new JButton();
-		btnEmoji.setMargin(new Insets(0,0,0,0));
+		btnEmoji.setMargin(new Insets(0, 0, 0, 0));
 		btnEmoji.setIcon(iconEmoji);
 
-
-		
 		btnEmoji.addActionListener(e -> mostrarPanelEmojis());
 		GridBagConstraints gbc_btnEmoji = new GridBagConstraints();
 		gbc_btnEmoji.insets = new Insets(5, 5, 5, 5);
 		gbc_btnEmoji.gridx = 0;
 		gbc_btnEmoji.gridy = 0;
 		panelEnviarMensaje.add(btnEmoji, gbc_btnEmoji);
-		
+
 		textArea = new JTextArea(2, 20);
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
@@ -245,48 +242,46 @@ public class VentanaPrincipal extends JFrame {
 		gbc_btnEnviar.gridx = 2;
 		gbc_btnEnviar.gridy = 0;
 		panelEnviarMensaje.add(btnEnviar, gbc_btnEnviar);
-		
-		
 
 		refrescarPanelContactos();
 
 	}
 
 	private void mostrarPanelEmojis() {
-	    JDialog emojiDialog = new JDialog(this, "Selecciona un emoji", true);
+		JDialog emojiDialog = new JDialog(this, "Selecciona un emoji", true);
 
-	    // Panel que contendrá todos los botones de emojis
-	    JPanel panelEmojis = new JPanel();
-	    panelEmojis.setLayout(new GridLayout(0, 5, 5, 5)); // 5 columnas, filas automáticas
+		// Panel que contendrá todos los botones de emojis
+		JPanel panelEmojis = new JPanel();
+		panelEmojis.setLayout(new GridLayout(0, 5, 5, 5)); // 5 columnas, filas automáticas
 
-	    for (int i = 0; i <= BubbleText.MAXICONO; i++) {
-	        JButton emojiButton = new JButton(BubbleText.getEmoji(i));
-	        final int emojiIndex = i;
-	        emojiButton.setPreferredSize(new Dimension(50, 50));
-	        emojiButton.addActionListener(e -> {
-	            enviarEmoji(emojiIndex);
-	            emojiDialog.dispose();
-	        });
-	        panelEmojis.add(emojiButton);
-	    }
+		for (int i = 0; i <= BubbleText.MAXICONO; i++) {
+			JButton emojiButton = new JButton(BubbleText.getEmoji(i));
+			final int emojiIndex = i;
+			emojiButton.setPreferredSize(new Dimension(50, 50));
+			emojiButton.addActionListener(e -> {
+				enviarEmoji(emojiIndex);
+				emojiDialog.dispose();
+			});
+			panelEmojis.add(emojiButton);
+		}
 
-	    // ScrollPane que envuelve el panel de emojis
-	    JScrollPane scrollPane = new JScrollPane(panelEmojis);
-	    scrollPane.setPreferredSize(new Dimension(300, 300)); // ajusta el tamaño visible
+		// ScrollPane que envuelve el panel de emojis
+		JScrollPane scrollPane = new JScrollPane(panelEmojis);
+		scrollPane.setPreferredSize(new Dimension(300, 300)); // ajusta el tamaño visible
 
-	    emojiDialog.getContentPane().add(scrollPane);
-	    emojiDialog.pack();
-	    emojiDialog.setLocationRelativeTo(this);
-	    emojiDialog.setVisible(true);
+		emojiDialog.getContentPane().add(scrollPane);
+		emojiDialog.pack();
+		emojiDialog.setLocationRelativeTo(this);
+		emojiDialog.setVisible(true);
 	}
 
-	
 	private void enviarEmoji(int emojiIndex) {
-		if (contacto == null) return;
+		if (contacto == null)
+			return;
 		Controlador.INSTANCE.registrarMensajeContacto(contacto, "", emojiIndex);
 		recuperarMensajes();
 		refrescarPanelContactos();
-		
+
 	}
 
 	private void cerrarSesion() {
@@ -305,7 +300,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	// @SuppressWarnings("deprecation")
 	private void cargarImagenDesdeURL(String urlString) {
 		try {
 			URL url = new URL(urlString);
@@ -356,7 +351,7 @@ public class VentanaPrincipal extends JFrame {
 		lblImagenUsuario.repaint();
 	}
 
-	@SuppressWarnings("deprecation")
+	// @SuppressWarnings("deprecation")
 	private void cargarImagenPerfilUsuario() {
 		String rutaImagen = Controlador.INSTANCE.getImagenUsuarioActual();
 		if (rutaImagen != null && !rutaImagen.isEmpty()) {
@@ -397,17 +392,21 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private void gestionarPdfChat() {
-		if (Controlador.INSTANCE.isPremiumUsuarioActual() && contacto != null) {
-			if (Controlador.INSTANCE.generarPdfChat(contacto)) {
-				JOptionPane.showMessageDialog(this,
-						"Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo", "Pdf ok",
-						JOptionPane.INFORMATION_MESSAGE);
+		if (Controlador.INSTANCE.isPremiumUsuarioActual()) {
+			if (contacto != null) {
+				if (Controlador.INSTANCE.generarPdfChat(contacto)) {
+					JOptionPane.showMessageDialog(this,
+							"Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo", "Pdf ok",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(this, "Error al generar el pdf. Prueba de nuevo", "Pdf mal",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
 			} else {
-				JOptionPane.showMessageDialog(this, "Error al generar el pdf. Prueba de nuevo", "Pdf mal",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "No hay ningún contacto seleccionado para generar el PDF", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "O No eres premium, o nas asignado contacto. ESPABILA", "Espabila",
+			JOptionPane.showMessageDialog(this, "No eres Premium, si quieres estos beneficios hazte Usuario Premium", "Espabila",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -455,47 +454,45 @@ public class VentanaPrincipal extends JFrame {
 
 	// Método corregido que recibe el emoji como parámetro
 	private void crearMensaje(String mensaje, String usuarioConFecha, int tipo, int emojiIndex) {
-	    Color color = (tipo == BubbleText.RECEIVED) ? Color.PINK : Color.CYAN;
+		Color color = (tipo == BubbleText.RECEIVED) ? Color.PINK : Color.CYAN;
 
-	    if (mensaje.isEmpty() && emojiIndex != Mensaje.ICONO_NULL) {
-	        // Usar el emoji que se pasa como parámetro, no el último mensaje
-	        BubbleText burbuja = new BubbleText(chat, emojiIndex, color, usuarioConFecha, tipo, 12);
-	        chat.add(burbuja);
-	    } else {
-	        BubbleText burbuja = new BubbleText(chat, mensaje, color, usuarioConFecha, tipo);
-	        chat.add(burbuja);
-	    }
+		if (mensaje.isEmpty() && emojiIndex != Mensaje.ICONO_NULL) {
+			// Usar el emoji que se pasa como parámetro, no el último mensaje
+			BubbleText burbuja = new BubbleText(chat, emojiIndex, color, usuarioConFecha, tipo, 12);
+			chat.add(burbuja);
+		} else {
+			BubbleText burbuja = new BubbleText(chat, mensaje, color, usuarioConFecha, tipo);
+			chat.add(burbuja);
+		}
 
-	    chat.revalidate();
-	    chat.repaint();
-	    scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+		chat.revalidate();
+		chat.repaint();
+		scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
 	}
-
-
 
 	private void recuperarMensajes() {
 		chat.removeAll();
-	    chat.revalidate();
-	    chat.repaint();
-	    
-	    Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
-	        String textoMensaje = Controlador.INSTANCE.getTextoMensaje(mensaje);
-	        int emojiMensaje = mensaje.getEmoticono(); // Obtener el emoji de ESTE mensaje específico
-	        
-	        if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.ENVIADO)) {
-	            crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT, emojiMensaje);
-	        } else if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.RECIBIDO)) {
-	            crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreContacto(contacto), BubbleText.RECEIVED, emojiMensaje);
-	        }
-	    });
-	    
-	    
-	    
-	    SwingUtilities.invokeLater(() -> {
-	        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
-	    });
-	    
-	    refrescarPanelContactos();
+		chat.revalidate();
+		chat.repaint();
+
+		Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
+			String textoMensaje = Controlador.INSTANCE.getTextoMensaje(mensaje);
+			int emojiMensaje = mensaje.getEmoticono(); // Obtener el emoji de ESTE mensaje específico
+
+			if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.ENVIADO)) {
+				crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT,
+						emojiMensaje);
+			} else if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.RECIBIDO)) {
+				crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreContacto(contacto), BubbleText.RECEIVED,
+						emojiMensaje);
+			}
+		});
+
+		SwingUtilities.invokeLater(() -> {
+			scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+		});
+
+		refrescarPanelContactos();
 
 	}
 
@@ -517,7 +514,6 @@ public class VentanaPrincipal extends JFrame {
 		}
 		Mensaje msg = Controlador.INSTANCE.getUltimoMensaje(contacto);
 		boolean tieneMensaje = msg != null;
-
 
 		JButton contenedor = new JButton();
 		contenedor.setLayout(new GridBagLayout());
@@ -545,21 +541,21 @@ public class VentanaPrincipal extends JFrame {
 		JLabel lblFotoContacto = new JLabel("");
 		String urlImagen = Controlador.INSTANCE.getImagenContacto(contacto);
 		if (urlImagen != null && !urlImagen.isEmpty()) {
-		    try {
-		        BufferedImage imagen = ImageIO.read(new URL(urlImagen));
-		        if (imagen != null) {
-		        	int ancho = 20;
-		        	int alto = 20;
-		        	Image imagenEscalada = imagen.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
-		        	lblFotoContacto.setIcon(new ImageIcon(imagenEscalada));
-		        	lblFotoContacto.setPreferredSize(new Dimension(ancho, alto));
-		        	lblFotoContacto.setMaximumSize(new Dimension(ancho, alto));
-		        	lblFotoContacto.setMinimumSize(new Dimension(ancho, alto));
+			try {
+				BufferedImage imagen = ImageIO.read(new URL(urlImagen));
+				if (imagen != null) {
+					int ancho = 20;
+					int alto = 20;
+					Image imagenEscalada = imagen.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+					lblFotoContacto.setIcon(new ImageIcon(imagenEscalada));
+					lblFotoContacto.setPreferredSize(new Dimension(ancho, alto));
+					lblFotoContacto.setMaximumSize(new Dimension(ancho, alto));
+					lblFotoContacto.setMinimumSize(new Dimension(ancho, alto));
 
-		        }
-		    } catch (Exception e) {
-		        // Podrías poner una imagen por defecto aquí si quieres
-		    }
+				}
+			} catch (Exception e) {
+				// Podrías poner una imagen por defecto aquí si quieres
+			}
 		}
 
 		contenedor.add(lblFotoContacto, gbc_contenedor);
@@ -572,10 +568,9 @@ public class VentanaPrincipal extends JFrame {
 		gbc_contenedor.anchor = GridBagConstraints.EAST;
 		JLabel lblFecha = new JLabel();
 		if (tieneMensaje && msg.getMomentoEnvio() != null) {
-		    lblFecha.setText(Controlador.INSTANCE.getMomentoEnvioMensaje(msg));
+			lblFecha.setText(Controlador.INSTANCE.getMomentoEnvioMensaje(msg));
 		}
 		contenedor.add(lblFecha, gbc_contenedor);
-
 
 		gbc_contenedor.gridx = 0;
 		gbc_contenedor.gridy = 1;
@@ -589,35 +584,32 @@ public class VentanaPrincipal extends JFrame {
 		panelTextoBoton.setOpaque(false); // para heredar el fondo del contenedor
 
 		if (tieneMensaje) {
-		    if (msg.getEmoticono() != Mensaje.ICONO_NULL) {
-		    	ImageIcon original = BubbleText.getEmoji(msg.getEmoticono());
-		    	if (original != null) {
-		    	    Image scaledImage = original.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-		    	    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+			if (msg.getEmoticono() != Mensaje.ICONO_NULL) {
+				ImageIcon original = BubbleText.getEmoji(msg.getEmoticono());
+				if (original != null) {
+					Image scaledImage = original.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+					ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-		    	    JLabel lblEmoji = new JLabel(scaledIcon);
-		    	    lblEmoji.setOpaque(true);
-		    	    lblEmoji.setBackground(new Color(180, 159, 185));
-		    	    lblEmoji.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		    	    lblEmoji.setAlignmentX(Component.LEFT_ALIGNMENT);
+					JLabel lblEmoji = new JLabel(scaledIcon);
+					lblEmoji.setOpaque(true);
+					lblEmoji.setBackground(new Color(180, 159, 185));
+					lblEmoji.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+					lblEmoji.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-		    	    // Hacer que llene el ancho restante
-		    	    lblEmoji.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
-		    	    panelTextoBoton.add(lblEmoji);
-		    	}
-		    } else {
-		        JTextArea texto = new JTextArea(Controlador.INSTANCE.getTextoMensaje(msg));
-		        texto.setLineWrap(true);
-		        texto.setWrapStyleWord(true);
-		        texto.setEditable(false);
-		        texto.setBackground(new Color(180, 159, 185));
-		        texto.setMargin(new Insets(5, 5, 5, 5));
-		        panelTextoBoton.add(texto);
-		    }
+					// Hacer que llene el ancho restante
+					lblEmoji.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
+					panelTextoBoton.add(lblEmoji);
+				}
+			} else {
+				JTextArea texto = new JTextArea(Controlador.INSTANCE.getTextoMensaje(msg));
+				texto.setLineWrap(true);
+				texto.setWrapStyleWord(true);
+				texto.setEditable(false);
+				texto.setBackground(new Color(180, 159, 185));
+				texto.setMargin(new Insets(5, 5, 5, 5));
+				panelTextoBoton.add(texto);
+			}
 		}
-
-
-
 
 		// Si no está añadido, añado el botón
 		if (!isAnadido) {
@@ -644,46 +636,46 @@ public class VentanaPrincipal extends JFrame {
 		contactos.revalidate();
 		contactos.repaint();
 	}
+
 	private void refrescarPanelContactos() {
-	    contactos.removeAll();
+		contactos.removeAll();
 
-	    Usuario u = Controlador.INSTANCE.getUsuarioActual();
+		Usuario u = Controlador.INSTANCE.getUsuarioActual();
 
-	    // Obtener todos los contactos del usuario (grupos + individuales)
-	    List<Contacto> listaContactos = new ArrayList<>(u.getContactos());
+		// Obtener todos los contactos del usuario (grupos + individuales)
+		List<Contacto> listaContactos = new ArrayList<>(u.getContactos());
 
-	    // Separar contactos con y sin mensajes
-	    List<Contacto> conMensajes = new ArrayList<>();
-	    List<Contacto> sinMensajes = new ArrayList<>();
+		// Separar contactos con y sin mensajes
+		List<Contacto> conMensajes = new ArrayList<>();
+		List<Contacto> sinMensajes = new ArrayList<>();
 
-	    for (Contacto c : listaContactos) {
-	        Mensaje m = Controlador.INSTANCE.getUltimoMensaje(c);
-	        if (m != null && m.getMomentoEnvio() != null) {
-	            conMensajes.add(c);
-	        } else {
-	            sinMensajes.add(c);
-	        }
-	    }
+		for (Contacto c : listaContactos) {
+			Mensaje m = Controlador.INSTANCE.getUltimoMensaje(c);
+			if (m != null && m.getMomentoEnvio() != null) {
+				conMensajes.add(c);
+			} else {
+				sinMensajes.add(c);
+			}
+		}
 
-	    // Ordenar los contactos con mensajes por fecha (más recientes primero)
-	    conMensajes.sort((c1, c2) -> {
-	        LocalDateTime tiempo1 = Controlador.INSTANCE.getUltimoMensaje(c1).getMomentoEnvio();
-	        LocalDateTime tiempo2 = Controlador.INSTANCE.getUltimoMensaje(c2).getMomentoEnvio();
-	        return tiempo2.compareTo(tiempo1); // Más reciente primero
-	    });
+		// Ordenar los contactos con mensajes por fecha (más recientes primero)
+		conMensajes.sort((c1, c2) -> {
+			LocalDateTime tiempo1 = Controlador.INSTANCE.getUltimoMensaje(c1).getMomentoEnvio();
+			LocalDateTime tiempo2 = Controlador.INSTANCE.getUltimoMensaje(c2).getMomentoEnvio();
+			return tiempo2.compareTo(tiempo1); // Más reciente primero
+		});
 
-	    // Crear los contenedores en orden
-	    for (Contacto c : conMensajes) {
-	        crearContenedoresContactos(c);
-	    }
-	    for (Contacto c : sinMensajes) {
-	        crearContenedoresContactos(c);
-	    }
+		// Crear los contenedores en orden
+		for (Contacto c : conMensajes) {
+			crearContenedoresContactos(c);
+		}
+		for (Contacto c : sinMensajes) {
+			crearContenedoresContactos(c);
+		}
 
-	    contactos.revalidate();
-	    contactos.repaint();
+		contactos.revalidate();
+		contactos.repaint();
 	}
-
 
 	private void anadirContacto(ContactoIndividual contacto) {
 		JTextField campoNombre = new JTextField();

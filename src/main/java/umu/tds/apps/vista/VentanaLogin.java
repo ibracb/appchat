@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -171,14 +170,16 @@ public class VentanaLogin extends JFrame {
 	        JOptionPane.showMessageDialog(this, "Falta algún campo por completar: teléfono y contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
 	        return;
 	    }
-		if(Controlador.INSTANCE.loginUsuario(movil, contrasena)) {
+		int loginExitoso = Controlador.INSTANCE.loginUsuario(movil, contrasena);
+		if (loginExitoso == 0) {
 			JOptionPane.showMessageDialog(this, "¡Hola de nuevo, " + Controlador.INSTANCE.getNombreUsuarioActual() + "!");
 			VentanaPrincipal vPrincipal = new VentanaPrincipal();
 			dispose();
-			vPrincipal.mostrarVentanaPrincipal(this.getSize(), this.getLocation());;
-		}
-		else {
-			JOptionPane.showMessageDialog(this, "Login fallido. Inténtelo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
+			vPrincipal.mostrarVentanaPrincipal(this.getSize(), this.getLocation());
+		} else if (loginExitoso == -1) {
+			JOptionPane.showMessageDialog(this, "La contraseña no es correcta", "Error", JOptionPane.ERROR_MESSAGE);
+		} else if (loginExitoso == -2) {
+			JOptionPane.showMessageDialog(this, "El usuario no existe. Regístrese primero.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	

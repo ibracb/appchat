@@ -275,7 +275,7 @@ public enum ExportPDF {
 		return "00:00";
 	}
 
-	@SuppressWarnings("deprecation")
+	//@SuppressWarnings("deprecation")
 	private String getEtiquetaFecha(LocalDate fecha) {
 		LocalDate hoy = LocalDate.now();
 		if (fecha.equals(hoy)) return "Hoy";

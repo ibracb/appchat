@@ -35,52 +35,52 @@ public class DataLoader {
                 // Crear usuarios
             	/*
                  * CREDENCIALES PARA INICIAR SESIÓN EN LA CUENTA
-                 * TELEFONO: 21
+                 * TELEFONO: 212121212
                  * CONTRASEÑA: m
                 */
-            	Usuario maria = new Usuario("maria bm", LocalDate.of(2004, Month.JULY, 15), "m@um.es", "", "21", "m", "");
+            	Usuario maria = new Usuario("maria bm", LocalDate.of(2004, Month.JULY, 15), "m@um.es", "212121212", "m", "");
             	/*
                  * CREDENCIALES PARA INICIAR SESIÓN EN LA CUENTA
-                 * TELEFONO: 31
+                 * TELEFONO: 313131313
                  * CONTRASEÑA: i
                 */
-                Usuario ibra = new Usuario("ibra cb", LocalDate.of(2003, Month.MAY, 20), "i@um.es", "", "31", "i", "");
+                Usuario ibra = new Usuario("ibra cb", LocalDate.of(2003, Month.MAY, 20), "i@um.es", "313131313", "i", "");
                 /*
                  * CREDENCIALES PARA INICIAR SESIÓN EN LA CUENTA
-                 * TELEFONO: 12
+                 * TELEFONO: 121212121
                  * CONTRASEÑA: m
                 */
-                Usuario maria2 = new Usuario("maria bm2", LocalDate.of(2005, Month.JULY, 15), "m@um.es", "", "12", "m", "");
+                Usuario maria2 = new Usuario("maria bm2", LocalDate.of(2005, Month.JULY, 15), "m@um.es", "121212121", "m", "");
                 /*
                  * CREDENCIALES PARA INICIAR SESIÓN EN LA CUENTA
-                 * TELEFONO: 13
+                 * TELEFONO: 131313131
                  * CONTRASEÑA: i
                 */
-                Usuario ibra2 = new Usuario("ibra cb2", LocalDate.of(2003, Month.MAY, 10), "i@um.es", "", "13", "i", "");
+                Usuario ibra2 = new Usuario("ibra cb2", LocalDate.of(2003, Month.MAY, 10), "i@um.es", "131313131", "i", "");
                 /*
                  * CREDENCIALES PARA INICIAR SESIÓN EN LA CUENTA
-                 * TELEFONO: 17
+                 * TELEFONO: 171717171
                  * CONTRASEÑA: l
                 */
-                Usuario laura = new Usuario("laura cc", LocalDate.of(2004, Month.JANUARY, 28), "l@um.es", "", "17", "l", "");
+                Usuario laura = new Usuario("laura cc", LocalDate.of(2004, Month.JANUARY, 28), "l@um.es", "171717171", "l", "");
                 /*
                  * CREDENCIALES PARA INICIAR SESIÓN EN LA CUENTA
-                 * TELEFONO: 99
+                 * TELEFONO: 999999999
                  * CONTRASEÑA: mj
                 */
-                Usuario mariajose = new Usuario("maria jose tr", LocalDate.of(2004, Month.JULY, 15), "mj@um.es", "", "99", "mj", "");
+                Usuario mariajose = new Usuario("maria jose tr", LocalDate.of(2004, Month.JULY, 15), "mj@um.es", "999999999", "mj", "");
                 /*
                  * CREDENCIALES PARA INICIAR SESIÓN EN LA CUENTA
-                 * TELEFONO: 77
+                 * TELEFONO: 777777777
                  * CONTRASEÑA: a
                 */
-                Usuario alex = new Usuario("alex ll", LocalDate.of(2004, Month.JULY, 6), "a@um.es", "", "77", "a", "");
+                Usuario alex = new Usuario("alex ll", LocalDate.of(2004, Month.JULY, 6), "a@um.es", "777777777", "a", "");
                 /*
                  * CREDENCIALES PARA INICIAR SESIÓN EN LA CUENTA
-                 * TELEFONO: 66
+                 * TELEFONO: 666666666
                  * CONTRASEÑA: j
                 */
-                Usuario jorge = new Usuario("jorge s", LocalDate.of(2004, Month.JUNE, 20), "j@um.es", "", "66", "j", "");
+                Usuario jorge = new Usuario("jorge s", LocalDate.of(2004, Month.JUNE, 20), "j@um.es", "666666666", "j", "");
 
                 // Insertar usuarios en la base de datos
                 Usuario[] lista = { maria, ibra, maria2, ibra2, laura, mariajose, alex, jorge };

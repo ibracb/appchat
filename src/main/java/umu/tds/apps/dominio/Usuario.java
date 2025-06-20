@@ -24,7 +24,7 @@ public class Usuario {
 	
 	public static final double PRECIO_INICIAL = 40.0;
 	
-	public static final String IMAGEN_DEFAULT = "https://imagenes.eltiempo.com/files/image_600_455/files/fp/uploads/2025/04/01/67ec4ef31f2ce.r_d.866-866-3464.jpeg";
+	public static final String IMAGEN_DEFAULT = "https://static.vecteezy.com/system/resources/thumbnails/019/879/198/small/user-icon-on-transparent-background-free-png.png";
 	
 	/**
 	 * Identificador asociado a un usuario.

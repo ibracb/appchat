@@ -120,7 +120,6 @@ public abstract class Contacto implements Comparable<Contacto> {
 	 */
 	public Mensaje nuevoMensaje(String texto, int emoticono, TipoMensaje tipo) {
 		Mensaje mensaje = new Mensaje(texto, emoticono, tipo);
-		mensaje.setMomentoEnvio(Utils.FECHA_ACTUAL);
 		addMensaje(mensaje);
 		return mensaje;
 	}
@@ -130,6 +129,12 @@ public abstract class Contacto implements Comparable<Contacto> {
 				.filter(mensaje -> mensaje.getMomentoEnvio().getMonth().equals(Utils.FECHA_ACTUAL.getMonth())
 						&& mensaje.getMomentoEnvio().getYear()==Utils.FECHA_ACTUAL.getYear() && mensaje.getTipo().equals(TipoMensaje.ENVIADO))
 				.count();
+	}
+	
+	public Mensaje getUltimoMensaje() {
+	    if (mensajes.isEmpty()) return null;
+	    TreeSet<Mensaje> ordenados = new TreeSet<>(mensajes);
+	    return ordenados.first();
 	}
 	
 	
@@ -145,11 +150,6 @@ public abstract class Contacto implements Comparable<Contacto> {
 	public String toString() {
 		return nombre;
 	}
-
-	public Mensaje getUltimoMensaje() {
-	    if (mensajes.isEmpty()) return null;
-	    TreeSet<Mensaje> ordenados = new TreeSet<>(mensajes);
-	    return ordenados.last();
-	}
+	
 	
 }
