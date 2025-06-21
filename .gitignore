@@ -81,7 +81,6 @@ local.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -113,7 +112,3 @@ buildNumber.properties
 .classpath
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,eclipse
-
-# Permitir los .jar dentro de lib/
-!lib/
-!lib/*.jar

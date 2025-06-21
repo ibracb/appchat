@@ -382,7 +382,7 @@ public enum Controlador {
 	}
 
 	public double getDescuentoCalculadoUsuarioActual() {
-		return usuarioActual.getDescuento().getDescuento(Usuario.PRECIO_INICIAL, usuarioActual);
+		return usuarioActual.getDescuentoCalculado();
 	}
 
 	public ContactoIndividual recuperarContacto(String movil) {
