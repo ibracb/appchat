@@ -15,8 +15,17 @@ import umu.tds.apps.persistencia.FactoriaDAO;
 import umu.tds.apps.persistencia.GrupoDAO;
 import umu.tds.apps.persistencia.UsuarioDAO;
 
+/**
+ * Clase encargada de cargar los datos iniciales en la aplicación.
+ * Crea usuarios, contactos individuales, grupos y envía mensajes entre ellos.
+ */
 public class DataLoader {
 
+	/**
+	 * Método que carga los datos iniciales en la aplicación.
+	 * Crea usuarios, contactos individuales, grupos y envía mensajes entre ellos.
+	 * Si ya existen usuarios, no realiza ninguna acción.
+	 */
 	public static void cargarDatosIniciales() {
 		// Inicializar los adaptadores de acceso a datos
 		UsuarioDAO usuarioDAO = null;

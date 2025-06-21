@@ -9,13 +9,28 @@ import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
 
+/**
+ * Filtro que permite filtrar mensajes por una fecha específica.
+ * 
+ * Este filtro devuelve un mapa de mensajes enviados en una fecha concreta,
+ * asociándolos a sus respectivos contactos.
+ */
 public class FiltroPorFecha implements Filtro {
 	
+	/**
+	 * Fecha específica para filtrar los mensajes.
+	 */
 	private LocalDate fecha;
 	
+	/**
+	 * Constructor que inicializa el filtro con una fecha específica.
+	 * 
+	 * @param fecha Fecha para filtrar los mensajes.
+	 */
 	public FiltroPorFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
+	
 	
 	@Override
 	public Map<Mensaje, Contacto> filtrar(Usuario usuario) {

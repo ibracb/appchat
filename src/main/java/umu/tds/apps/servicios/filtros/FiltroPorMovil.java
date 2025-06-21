@@ -8,10 +8,23 @@ import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
 
+/**
+ * Filtro que permite filtrar mensajes por el número de móvil del contacto.
+ * 
+ * 
+ */
 public class FiltroPorMovil implements Filtro {
 	
+	/**
+	 * Número de móvil del contacto por el que se filtran los mensajes.
+	 */
 	private String movil;
 	
+	/**
+	 * Constructor del filtro que recibe el número de móvil.
+	 * 
+	 * @param movil Número de móvil del contacto por el que se filtran los mensajes.
+	 */
 	public FiltroPorMovil(String movil) {
 		this.movil = movil;
 	}

@@ -191,7 +191,9 @@ public class VentanaContactos extends JFrame {
     private void mostrarInformacionContacto() {
     	ContactoIndividual seleccionado = listaContactos.getSelectedValue();
     	if (seleccionado != null) {
-    		String mensaje = "Nombre:\t" + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\nMóvil:\t" + Controlador.INSTANCE.getMovilContactoIndividual(seleccionado);
+    		String mensaje = "Nombre: \t" + Controlador.INSTANCE.getNombreContacto(seleccionado) +
+    				"\nMóvil: \t" + Controlador.INSTANCE.getMovilContactoIndividual(seleccionado) +
+    				"\nSaludo: \t" + Controlador.INSTANCE.getSaludoContacto(seleccionado);
 
     		Object[] opciones = {"Aceptar", "Chatear", "Cambiar Nombre"};
     		int resultado = JOptionPane.showOptionDialog(
@@ -245,6 +247,7 @@ public class VentanaContactos extends JFrame {
     	VentanaPrincipal v = new VentanaPrincipal(contacto);
     	dispose();
     	v.mostrarVentanaPrincipal(getSize(), getLocation());
+    	SwingUtilities.invokeLater(() -> v.recuperarMensajes());
     }
     
     /**

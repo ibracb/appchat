@@ -74,14 +74,6 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO {
 	        }
 	    }
 	    
-	    // Crear los mensajes primero
-	    TDSMensajeDAO adaptadorMensaje = TDSMensajeDAO.getInstance();
-	    contacto.getMensajes().forEach(mensaje -> {
-	        if (mensaje.getId() <= 0) { // Solo crear mensajes nuevos
-	            adaptadorMensaje.create(mensaje);
-	        }
-	    });
-	    
 	    // Crear la entidad del contacto
 	    Entidad eContacto = new Entidad();
 	    eContacto.setNombre(ENTIDAD_CONTACTO);

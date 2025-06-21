@@ -4,11 +4,31 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * ProveedorRutaDescargasLinux es una implementación de ProveedorRutaDescargas
+ * que obtiene la ruta de descargas en sistemas operativos Linux utilizando
+ * el comando xdg-user-dir.
+ */
 public class ProveedorRutaDescargasLinux implements ProveedorRutaDescargas {
 	
+	/**
+	 * Comando para obtener la ruta de descargas en Linux.
+	 */
 	private static final String XDG_USER_DIR = "xdg-user-dir";
+	
+	/**
+	 * Argumento para el comando xdg-user-dir que especifica la carpeta de descargas.
+	 */
 	private static final String DOWNLOAD = "DOWNLOAD";
+	
+	/**
+	 * Identificador de sistemas operativos basados en Unix/Linux.
+	 */
 	private static final String NIX = "nix";
+	
+	/**
+	 * Identificador de sistemas operativos basados en Unix/Linux (otra variante).
+	 */
 	private static final String NUX = "nux";
 	
 	@Override

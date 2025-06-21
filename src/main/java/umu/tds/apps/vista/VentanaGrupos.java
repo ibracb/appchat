@@ -222,7 +222,7 @@ public class VentanaGrupos extends JFrame {
 	 */
 	private void cambiarNombreGrupo(Grupo seleccionado) {
 		JTextField campoNuevoNombre = new JTextField();
-		campoNuevoNombre.setText(seleccionado.getNombre());
+		Controlador.INSTANCE.getNombreContacto(seleccionado);
 		Object[] campos = { "Nuevo Nombre:", campoNuevoNombre };
 
 		int resultado = JOptionPane.showConfirmDialog(this, campos, "Cambiar Nombre", JOptionPane.OK_CANCEL_OPTION);
@@ -264,6 +264,7 @@ public class VentanaGrupos extends JFrame {
 		VentanaPrincipal v = new VentanaPrincipal(grupo);
 		dispose();
 		v.mostrarVentanaPrincipal(getSize(), getLocation());
+		SwingUtilities.invokeLater(() -> v.recuperarMensajes());
 	}
 
 	/**

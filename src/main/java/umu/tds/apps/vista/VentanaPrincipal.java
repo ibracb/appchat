@@ -106,6 +106,7 @@ public class VentanaPrincipal extends JFrame {
 	 * individual o un grupo.
 	 */
 	private Contacto contacto;
+	private JMenuItem MCambiarSaludo;
 
 	/**
 	 * Constructor por defecto de la ventana principal. Inicializa los componentes y
@@ -188,6 +189,11 @@ public class VentanaPrincipal extends JFrame {
 		MCerrarSesion = new JMenuItem("Cerrar sesión");
 		MCerrarSesion.setFont(new Font("Georgia", Font.PLAIN, 12));
 		MCerrarSesion.addActionListener(e -> cerrarSesion());
+		
+		MCambiarSaludo = new JMenuItem("Cambiar saludo");
+		MCambiarSaludo.setFont(new Font("Georgia", Font.PLAIN, 12));
+		MCambiarSaludo.addActionListener(e -> cambiarSaludo());
+		MTuContacto.add(MCambiarSaludo);
 		MTuContacto.add(MCerrarSesion);
 
 		mnContactos = new JMenu("Gestión de Contactos");
@@ -309,6 +315,16 @@ public class VentanaPrincipal extends JFrame {
 
 		refrescarPanelContactos();
 
+	}
+
+	private void cambiarSaludo() {
+		String saludo = JOptionPane.showInputDialog(this, "Introduce el nuevo saludo:",
+				"Nuevo saludo", JOptionPane.PLAIN_MESSAGE);
+
+		if (saludo != null && !saludo.trim().isEmpty()) {
+			Controlador.INSTANCE.modificarSaludo(saludo);
+			JOptionPane.showMessageDialog(null, "Saludo modificado correctamente");
+		}
 	}
 
 	/**
@@ -604,7 +620,7 @@ public class VentanaPrincipal extends JFrame {
 	 * Recupera los mensajes del contacto seleccionado y los muestra en el panel de
 	 * chat.
 	 */
-	private void recuperarMensajes() {
+	void recuperarMensajes() {
 		chat.removeAll();
 		chat.revalidate();
 		chat.repaint();

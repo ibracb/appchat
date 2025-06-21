@@ -8,10 +8,24 @@ import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
 
+/**
+ * Filtro que permite filtrar mensajes por un texto específico.
+ * 
+ * Este filtro busca en los mensajes de los contactos del usuario aquellos que contienen
+ * el texto especificado, ignorando mayúsculas y minúsculas.
+ */
 public class FiltroPorTexto implements Filtro {
 	
+	/**
+	 * Texto a buscar en los mensajes.
+	 */
 	private String texto;
 	
+	/**
+	 * Constructor del filtro que recibe el texto a buscar.
+	 * 
+	 * @param texto Texto que se utilizará para filtrar los mensajes.
+	 */
 	public FiltroPorTexto(String texto) {
 		this.texto = texto;
 	}

@@ -3,7 +3,6 @@ package umu.tds.apps.dominio;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ public class Usuario {
 	/**
 	 * Nombre del usuario.
 	 */
-	private final String nombre;
+	private String nombre;
 
 	/**
 	 * Fecha en la que el usuario nació.
@@ -73,7 +72,7 @@ public class Usuario {
 	/**
 	 * Mensaje de saludo opcional del usuario.
 	 */
-	private Optional<String> saludo;
+	private String saludo;
 
 	/**
 	 * Condición de usuario Premium.
@@ -113,7 +112,12 @@ public class Usuario {
 		setImagen(imagen);
 		this.movil = movil;
 		this.contraseña = contraseña;
-		setSaludo(saludo);
+		if(saludo == null || saludo.isEmpty()) {
+			this.saludo = SALUDO_DEFAULT;
+		}
+		else {
+			this.saludo = saludo;
+		}
 		this.premium = false;
 		this.contactos = new TreeSet<Contacto>();
 		updateDescuento();
@@ -132,18 +136,7 @@ public class Usuario {
 	 */
 	public Usuario(String nombre, LocalDate fechaNacimiento, String email, String movil, String contraseña,
 			String saludo) {
-		this.id = Utils.ID_DEFAULT;
-		this.nombre = nombre;
-		this.fechaNacimiento = fechaNacimiento;
-		this.fechaRegistro = Utils.FECHA_ACTUAL.toLocalDate();
-		this.email = email;
-		setImagen(IMAGEN_DEFAULT);
-		this.movil = movil;
-		this.contraseña = contraseña;
-		setSaludo(saludo);
-		this.premium = false;
-		this.contactos = new TreeSet<Contacto>();
-		updateDescuento();
+		this(nombre, fechaNacimiento, email, IMAGEN_DEFAULT, movil, contraseña, saludo);
 	}
 
 	/**
@@ -260,7 +253,7 @@ public class Usuario {
 	 * @return el saludo correspondiente, o el por defecto si no tiene.
 	 */
 	public String getSaludo() {
-		return saludo.orElse(SALUDO_DEFAULT);
+		return saludo != null ? saludo : SALUDO_DEFAULT;
 	}
 
 	/**
@@ -269,7 +262,7 @@ public class Usuario {
 	 * @param saludo - El mensaje de saludo a establecer.
 	 */
 	public void setSaludo(String saludo) {
-		this.saludo = Optional.ofNullable(saludo);
+		this.saludo = saludo;
 	}
 
 	/**
@@ -333,7 +326,11 @@ public class Usuario {
 	public String getNombre() {
 		return nombre;
 	}
-
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
 	/**
 	 * Devuelve la fecha de nacimiento del usuario.
 	 * 

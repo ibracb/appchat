@@ -8,10 +8,23 @@ import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
 
+/**
+ * Filtro que permite filtrar mensajes por el nombre de un contacto específico.
+ * 
+ * 
+ */
 public class FiltroPorNombreContacto implements Filtro {
 	
+	/**
+	 * Nombre del contacto por el cual se filtrarán los mensajes.
+	 */
 	private String nombreContacto;
 	
+	/**
+	 * Constructor que inicializa el filtro con el nombre del contacto.
+	 * 
+	 * @param nombreContacto Nombre del contacto por el cual se filtrarán los mensajes.
+	 */
 	public FiltroPorNombreContacto(String nombreContacto) {
 		this.nombreContacto = nombreContacto;
 	}

@@ -25,12 +25,12 @@ public enum RepositorioUsuarios {
 	INSTANCE;
 	
 	/**
-	 * Tabla de dispersión que asocia un usuario a un ID.
+	 * Mapa que asocia un usuario a un ID.
 	 */
 	private Map<Integer, Usuario> usuariosPorID;
 	
 	/**
-	 * Tabla de dispersión que asocia un usuario a un número móvil.
+	 * Mapa que asocia un usuario a un número móvil.
 	 */
 	private Map<String, Usuario> usuariosPorMovil;
 	
@@ -86,6 +86,12 @@ public enum RepositorioUsuarios {
 		return usuariosPorMovil.get(movil);
 	}
 	
+	/**
+	 * Busca un contacto individual dado un número de teléfono móvil del usuario y del contacto.
+	 * @param movilUsuario - Móvil del usuario que busca el contacto.
+	 * @param movilContacto - Móvil del contacto a encontrar.
+	 * @return el contacto individual encontrado o null si no existe.
+	 */
 	public ContactoIndividual findContactoIndividual(String movilUsuario, String movilContacto) {
 		Usuario usuario = findUsuario(movilUsuario);
 		if (usuario == null) return null;
@@ -136,6 +142,12 @@ public enum RepositorioUsuarios {
 		return usuario.getContactos();
 	}
 	
+	/**
+	 * Encuentra un contacto individual dado un usuario y un mensaje.
+	 * @param usuario - Usuario del que buscar el contacto.
+	 * @param mensaje - Mensaje asociado al contacto.
+	 * @return el contacto individual encontrado.
+	 */
 	public ContactoIndividual findContacto(Usuario usuario, Mensaje mensaje) {
 		return (ContactoIndividual) usuario.getContactos().stream()
 				.filter(contacto -> contacto instanceof ContactoIndividual && contacto.getMensajes().contains(mensaje))

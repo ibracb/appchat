@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -235,7 +234,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		String imagen;
 		String movil;
 		String contraseña;
-		Optional<String> saludo;
+		String saludo;
 		boolean premium;
 		Set<ContactoIndividual> contactos;
 		Set<Grupo> grupos;
@@ -254,7 +253,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {
 		imagen = servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_IMAGEN);
 		movil = servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_MOVIL);
 		contraseña = servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_CONTRASEÑA);
-		saludo = Optional.ofNullable(servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_SALUDO));
+		saludo = servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_SALUDO);
 		premium = Boolean.parseBoolean(servPersistencia.recuperarPropiedadEntidad(eUsuario, PROPIEDAD_PREMIUM));
 		Usuario usuario = new Usuario(nombre, fechaNacimiento, email, imagen, movil, contraseña, saludo.toString());
 		usuario.setId(id);

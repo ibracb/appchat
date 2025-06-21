@@ -757,7 +757,7 @@ public enum Controlador {
 	public void cambiarNombreContactoIndividual(ContactoIndividual contacto, String nuevoNombre) {
 		contacto.setNombre(nuevoNombre);
         adaptadorContactoIndividual.update(contacto);
-        adaptadorUsuario.update(usuarioActual);
+        modificarUsuario();
     }
 	
 	/**
@@ -768,7 +768,27 @@ public enum Controlador {
 	public void cambiarNombreGrupo(Grupo grupo, String nuevoNombre) {
 		grupo.setNombre(nuevoNombre);
         adaptadorGrupo.update(grupo);
-        adaptadorUsuario.update(usuarioActual);
+        modificarUsuario();
+	}
+	
+	/**
+	 * Modifica el saludo del usuario actual y lo actualiza en la base de datos.
+	 * 
+	 * @param saludo - El nuevo saludo del usuario.
+	 */
+	public void modificarSaludo(String saludo) {
+		usuarioActual.setSaludo(saludo);
+		modificarUsuario();
+	}
+	
+	/**
+	 * Obtiene el saludo de un contacto individual.
+	 * 
+	 * @param contacto - El contacto individual del que se desea obtener el saludo.
+	 * @return el saludo del contacto individual.
+	 */
+	public String getSaludoContacto(ContactoIndividual contacto) {
+		return contacto.getSaludo();
 	}
 	
 }

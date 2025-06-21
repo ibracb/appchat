@@ -5,12 +5,19 @@ import java.awt.EventQueue;
 import umu.tds.apps.vista.VentanaLogin;
 
 /**
- * Clase a la que se le delega la responsabilidad de iniciar la aplicación.
+ * Aplicación de chat.
+ * 
+ * Esta aplicación permite a los usuarios iniciar sesión y participar en un chat.
+ * Utiliza una interfaz gráfica para la interacción del usuario.
+ * 
  */
 public class AppChat {
 	
 	/**
-	 * Método que arranca AppChat.
+	 * Método principal que inicia la aplicación.
+	 * Carga los datos iniciales y muestra la ventana de inicio de sesión.
+	 * 
+	 * @param args Argumentos de línea de comandos (no se utilizan en esta aplicación).
 	 */
 	public static void main(final String[] args){
 		EventQueue.invokeLater(new Runnable() {

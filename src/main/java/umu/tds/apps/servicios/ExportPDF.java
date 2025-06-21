@@ -38,20 +38,59 @@ import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
 import umu.tds.apps.servicios.descargas.FactoriaProveedorRutaDescargas;
 
+/**
+ * Clase encargada de exportar los datos de un usuario a un archivo PDF.
+ * Incluye listados de contactos individuales y grupos, así como el historial de chat con un contacto específico.
+ */
 public enum ExportPDF {
 
+	/**
+	 * Instancia única de la clase ExportPDF (Singleton).
+	 */
 	INSTANCE;
 
+	/**
+	 * Tamaño del título en el PDF.
+	 */
 	private static final int TITULO_TAMAÑO = 32;
+	
+	/**
+	 * Prefijo para los nombres de los archivos PDF generados.
+	 */
 	private static final String INICIO_NOMBRE_PDF = "AppChat_";
+	
+	/**
+	 * Extensión de los archivos PDF generados.
+	 */
 	private static final String PDF_EXTENSION = ".pdf";
+	
+	/**
+	 * Título del PDF que se generará.
+	 */
 	private static final String TITULO_PDF = "Contactos añadidos en AppChat de ";
+	
+	/**
+	 * Mensajes inicial que se incluirá en el PDF.
+	 */
 	private static final String MENSAJE_INICIAL = "¡Hola! Antes de nada, le agradecemos su máxima confianza depositada en AppChat. "
 			+ "En primer lugar, he aquí un listado de sus contactos individuales, con sus respectivos números de teléfono móvil.";
+	
+	/**
+	 * Mensaje que se mostrará después del listado de contactos.
+	 */
 	private static final String MENSAJE_SEGUNDO = "En segundo lugar, le mostramos un listado de sus grupos, con cada uno de los integrantes que añadió.";
 
+	/**
+	 * Constructor privado para evitar instanciación externa.
+	 */
 	private ExportPDF() {}
 
+	/**
+	 * Crea un archivo PDF con el listado de contactos y grupos del usuario.
+	 *
+	 * @param usuario El usuario cuyos datos se exportarán al PDF.
+	 * @return true si el PDF se creó correctamente, false en caso contrario.
+	 */
 	public boolean createPdfListado(Usuario usuario) {
 		File fichero = new File(FactoriaProveedorRutaDescargas.INSTANCE.getRutaDescargas(),
 				INICIO_NOMBRE_PDF + usuario.getNombre() + PDF_EXTENSION);
@@ -71,6 +110,13 @@ public enum ExportPDF {
 		}
 	}
 
+	/**
+	 * Agrega el título al documento PDF.
+	 *
+	 * @param document El documento PDF al que se añadirá el título.
+	 * @param nombreUsuario El nombre del usuario que se mostrará en el título.
+	 * @throws IOException Si ocurre un error al crear la fuente del título.
+	 */
 	private void agregarTitulo(Document document, String nombreUsuario) throws IOException {
 		PdfFont fuenteTitulo = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
 		Paragraph titulo = new Paragraph(TITULO_PDF + nombreUsuario)
@@ -81,6 +127,12 @@ public enum ExportPDF {
 		document.add(new Paragraph(MENSAJE_INICIAL));
 	}
 
+	/**
+	 * Agrega un listado de contactos individuales al documento PDF.
+	 *
+	 * @param document El documento PDF al que se añadirá el listado.
+	 * @param contactos El conjunto de contactos individuales a incluir en el listado.
+	 */
 	private void agregarListadoContactos(Document document, Set<ContactoIndividual> contactos) {
 		AtomicInteger contador = new AtomicInteger(1);
 		contactos.forEach(contacto -> {
@@ -89,6 +141,12 @@ public enum ExportPDF {
 		});
 	}
 
+	/**
+	 * Agrega un listado de grupos al documento PDF.
+	 *
+	 * @param document El documento PDF al que se añadirá el listado de grupos.
+	 * @param usuario El usuario cuyos grupos se incluirán en el listado.
+	 */
 	private void agregarListadoGrupos(Document document, Usuario usuario) {
 		document.add(new Paragraph(MENSAJE_SEGUNDO));
 		AtomicInteger contador = new AtomicInteger(1);
@@ -101,6 +159,12 @@ public enum ExportPDF {
 		});
 	}
 
+	/**
+	 * Crea un archivo PDF con el historial de chat de un contacto individual.
+	 *
+	 * @param contacto El contacto individual cuyo historial de chat se exportará al PDF.
+	 * @return true si el PDF se creó correctamente, false en caso contrario.
+	 */
 	public boolean createPdfChat(ContactoIndividual contacto) {
 		File fichero = new File(FactoriaProveedorRutaDescargas.INSTANCE.getRutaDescargas(),
 				"Historial_" + contacto.getNombre() + ".pdf");
@@ -144,12 +208,27 @@ public enum ExportPDF {
 		}
 	}
 
+	/**
+	 * Dibuja el fondo de la página del PDF.
+	 *
+	 * @param pdfDoc El documento PDF donde se dibujará el fondo.
+	 * @param fondo El color de fondo a aplicar.
+	 */
 	private void dibujarFondoPagina(PdfDocument pdfDoc, Color fondo) {
 		Rectangle pageSize = pdfDoc.getDefaultPageSize();
 		PdfCanvas canvas = new PdfCanvas(pdfDoc.addNewPage().newContentStreamBefore(), pdfDoc.getFirstPage().getResources(), pdfDoc);
 		canvas.setFillColor(fondo).rectangle(0, 0, pageSize.getWidth(), pageSize.getHeight()).fill();
 	}
 
+	/**
+	 * Agrega el encabezado del chat al documento PDF.
+	 *
+	 * @param document El documento PDF al que se añadirá el encabezado.
+	 * @param contacto El contacto individual cuyo historial de chat se exportará.
+	 * @param fontBold Fuente para el texto en negrita.
+	 * @param fontRegular Fuente para el texto normal.
+	 * @param fondoHeader Color de fondo del encabezado.
+	 */
 	private void agregarEncabezadoChat(Document document, ContactoIndividual contacto, PdfFont fontBold, PdfFont fontRegular, Color fondoHeader) {
 		Div header = new Div()
 				.setBackgroundColor(fondoHeader)
@@ -172,6 +251,13 @@ public enum ExportPDF {
 		document.add(header);
 	}
 
+	/**
+	 * Agrega una introducción al documento PDF.
+	 *
+	 * @param document El documento PDF al que se añadirá la introducción.
+	 * @param fontRegular Fuente para el texto normal.
+	 * @param colorTextoSecundario Color del texto secundario.
+	 */
 	private void agregarIntro(Document document, PdfFont fontRegular, Color colorTextoSecundario) {
 		document.add(new Paragraph("💬 Exportado desde AppChat Premium")
 				.setFont(fontRegular)
@@ -181,6 +267,17 @@ public enum ExportPDF {
 				.setMarginBottom(20));
 	}
 
+	/**
+	 * Procesa y agrega los mensajes al documento PDF.
+	 *
+	 * @param document El documento PDF al que se añadirán los mensajes.
+	 * @param mensajes La lista de mensajes a procesar.
+	 * @param fontRegular Fuente para el texto normal.
+	 * @param colorGris Color de fondo para los mensajes recibidos.
+	 * @param colorVerde Color de fondo para los mensajes enviados.
+	 * @param colorTextoSecundario Color del texto secundario (hora).
+	 * @param colorBorde Color del borde del separador de fecha.
+	 */
 	private void procesarMensajes(Document document, List<Mensaje> mensajes, PdfFont fontRegular,
 								   Color colorGris, Color colorVerde, Color colorTextoSecundario, Color colorBorde) {
 		LocalDate ultimaFecha = null;
@@ -196,6 +293,14 @@ public enum ExportPDF {
 		}
 	}
 
+	/**
+	 * Agrega un separador de fecha al documento PDF.
+	 *
+	 * @param document El documento PDF al que se añadirá el separador.
+	 * @param textoFecha El texto que se mostrará en el separador (fecha).
+	 * @param font Fuente para el texto del separador.
+	 * @param borde Color del borde del separador.
+	 */
 	private void agregarSeparadorFecha(Document document, String textoFecha, PdfFont font, Color borde) {
 		Div fechaContainer = new Div().setTextAlignment(TextAlignment.CENTER)
 				.setMarginTop(15).setMarginBottom(15);
@@ -215,6 +320,17 @@ public enum ExportPDF {
 		document.add(fechaContainer);
 	}
 
+	/**
+	 * Agrega una burbuja de mensaje al documento PDF.
+	 *
+	 * @param document El documento PDF al que se añadirá la burbuja de mensaje.
+	 * @param mensaje El mensaje a mostrar en la burbuja.
+	 * @param font Fuente para el texto del mensaje.
+	 * @param colorGris Color de fondo para los mensajes recibidos.
+	 * @param colorVerde Color de fondo para los mensajes enviados.
+	 * @param colorTextoSecundario Color del texto secundario (hora).
+	 * @param horaFormat Formato para la hora del mensaje.
+	 */
 	private void agregarBurbujaMensaje(Document document, Mensaje mensaje, PdfFont font, Color colorGris, Color colorVerde,
 									   Color colorTextoSecundario, DateTimeFormatter horaFormat) {
 		boolean esEnviado = mensaje.getTipo() == TipoMensaje.ENVIADO;
@@ -258,6 +374,13 @@ public enum ExportPDF {
 		document.add(contenedor);
 	}
 
+	/**
+	 * Obtiene la hora del mensaje en formato "HH:mm".
+	 *
+	 * @param mensaje El mensaje del cual se extraerá la hora.
+	 * @param formato El formato de fecha y hora a utilizar.
+	 * @return La hora del mensaje formateada como "HH:mm".
+	 */
 	private String obtenerHoraMensaje(Mensaje mensaje, DateTimeFormatter formato) {
 		try {
 			Object m = mensaje.getMomentoEnvio();
@@ -275,6 +398,13 @@ public enum ExportPDF {
 		return "00:00";
 	}
 
+	/**
+	 * Obtiene una etiqueta de fecha para mostrar en el PDF.
+	 * Dependiendo de la fecha, puede devolver "Hoy", "Ayer", el nombre del día de la semana o la fecha en formato "dd/MM/yyyy".
+	 *
+	 * @param fecha La fecha a formatear.
+	 * @return Una cadena representando la etiqueta de fecha.
+	 */
 	@SuppressWarnings("deprecation")
 	private String getEtiquetaFecha(LocalDate fecha) {
 		LocalDate hoy = LocalDate.now();

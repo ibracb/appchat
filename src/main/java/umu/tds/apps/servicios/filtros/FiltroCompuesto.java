@@ -8,10 +8,24 @@ import umu.tds.apps.dominio.Contacto;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.Usuario;
 
+/**
+ * Clase que representa un filtro compuesto que combina múltiples filtros.
+ * Este filtro solo devuelve los mensajes que cumplen con todos los filtros
+ * individuales aplicados.
+ */
 public class FiltroCompuesto implements Filtro {
 	
+	/**
+	 * Conjunto de filtros que componen este filtro compuesto.
+	 * Se filtran los filtros que no se aplican (seFiltra() devuelve false).
+	 */
 	private final Set<Filtro> filtros;
 
+	/**
+	 * Constructor que inicializa el filtro compuesto con un conjunto de filtros.
+	 * 
+	 * @param filtros Conjunto de filtros a aplicar.
+	 */
 	public FiltroCompuesto(Set<Filtro> filtros) {
 		this.filtros = filtros.stream()
 							.filter(Filtro::seFiltra)

@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.persistencia.MensajeDAO;
 
+/**
+ * Clase de utilidades para el manejo de contactos con el servicio de persistencia de TDS.
+ */
 public final class TDSContactosUtilsDAO {
 	
 	/**
