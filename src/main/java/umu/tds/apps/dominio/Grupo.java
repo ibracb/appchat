@@ -37,15 +37,15 @@ public class Grupo extends Contacto {
 		this.miembros = new TreeSet<ContactoIndividual>();
 	}
 	
+	/**
+	 * Método sobrecargado que otorga un determinado estado inicial a un grupo.
+	 * 
+	 * @param nombre - Nombre del grupo
+	 */
 	public Grupo(String nombre) {
 		super(nombre);
 		setImagen(IMAGEN_DEFAULT);
 		this.miembros = new TreeSet<ContactoIndividual>();
-	}
-	
-	public Grupo(String nombre, String imagen, Set<ContactoIndividual> miembros) {
-		this(nombre, imagen);
-		this.miembros = miembros;
 	}
 	
 	/**

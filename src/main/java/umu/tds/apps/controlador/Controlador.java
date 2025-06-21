@@ -208,11 +208,11 @@ public enum Controlador {
 	 * @param imagen       - Foto de perfil del grupo.
 	 * @param miembros     - Miembros añadidos al crear el grupo.
 	 */
-	public boolean registrarGrupo(String nombre, String imagen) {
+	public boolean registrarGrupo(String nombre) {
 		if (recuperarGrupo(nombre) != null) {
 			return false;
 		}
-		Grupo grupo = usuarioActual.crearGrupo(nombre, imagen);
+		Grupo grupo = usuarioActual.crearGrupo(nombre);
 		adaptadorGrupo.create(grupo);
 		adaptadorUsuario.update(usuarioActual);
 		return true;
@@ -510,6 +510,11 @@ public enum Controlador {
 	
 	public Contacto encontrarContacto(Map<Mensaje, Contacto> mensajes, Mensaje mensaje) {
 		return mensajes.get(mensaje);
+	}
+	
+	public void cambiarImagenGrupo(Grupo seleccionado, String url) {
+		seleccionado.setImagen(url);
+		adaptadorGrupo.update(seleccionado);
 	}
 	
 }

@@ -321,8 +321,8 @@ public class Usuario {
 		this.fechaRegistro = fechaRegistro;
 	}
 	
-	public Grupo crearGrupo(String nombre, String imagen) {
-		Grupo grupo = new Grupo(nombre, imagen);
+	public Grupo crearGrupo(String nombre) {
+		Grupo grupo = new Grupo(nombre);
 		addContacto(grupo);
 		return grupo;
 	}
