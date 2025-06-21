@@ -37,24 +37,6 @@ public abstract class Contacto implements Comparable<Contacto> {
 		this.mensajes = new TreeSet<Mensaje>();
 	}
 	
-	@Override
-
-	public int hashCode() {
-		return Objects.hash(nombre+id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Contacto other = (Contacto) obj;
-		return Objects.equals(nombre, other.nombre);
-	}
-	
 	/**
 	 * Añade un mensaje a la lista de mensajes intercambiados entre usuario y contacto.
 	 * @param mensaje - El mensaje a añadir
@@ -124,6 +106,10 @@ public abstract class Contacto implements Comparable<Contacto> {
 		return mensaje;
 	}
 	
+	/**
+	 * Devuelve el número de mensajes enviados por el usuario al contacto en el último mes.
+	 * @return un numero entero con la cuenta de mensajes
+	 */
 	public int getSubTotalMensajesEnviadosUltimoMes() {
 		return (int) getMensajes().stream()
 				.filter(mensaje -> mensaje.getMomentoEnvio().getMonth().equals(Utils.FECHA_ACTUAL.getMonth())
@@ -131,12 +117,33 @@ public abstract class Contacto implements Comparable<Contacto> {
 				.count();
 	}
 	
+	/**
+	 * Devuelve el último mensaje enviado por el usuario al contacto.
+	 * 
+	 * @return el último mensaje enviado.
+	 */
 	public Mensaje getUltimoMensaje() {
 	    if (mensajes.isEmpty()) return null;
 	    TreeSet<Mensaje> ordenados = new TreeSet<>(mensajes);
 	    return ordenados.first();
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(nombre+id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Contacto other = (Contacto) obj;
+		return Objects.equals(nombre, other.nombre);
+	}
 	
 	@Override
 	public int compareTo(Contacto o) {

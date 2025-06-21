@@ -27,6 +27,49 @@ public class ContactoIndividual extends Contacto {
 		this.usuario = usuario;
 	}
 	
+	/**
+	 * Devuelve el usuario del contacto individual.
+	 * 
+	 * @return el usuario del contacto individual.
+	 */
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	
+	/**
+	 * Establece el usuario del contacto individual.
+	 * 
+	 * @param usuario - Usuario que se asigna al contacto individual.
+	 */
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
+	/**
+	 * Devuelve el número de teléfono móvil del contacto individual. 
+	 * @return el movil del contacto individual.
+	 */
+	public String getMovil() {
+		return usuario.getMovil();
+	}
+	
+	/**
+	 * Devuelve el saludo del contacto individual.
+	 * @return un string que representa el saludo del contacto individual.
+	 */
+	public String getSaludo() {
+		return usuario.getSaludo();
+	}
+	
+	/**
+	 * Comprueba si el nombre no coincide con un numero.
+	 * 
+	 * @return true si el nombre no es un numero de telefono y false si su nombre es un numero de telefono.
+	 */
+	public boolean isAñadido() {
+		return !getNombre().matches("\\d+");
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(usuario);
@@ -42,30 +85,6 @@ public class ContactoIndividual extends Contacto {
 			return false;
 		ContactoIndividual other = (ContactoIndividual) obj;
 		return Objects.equals(usuario, other.usuario);
-	}
-	
-	public Usuario getUsuario() {
-		return usuario;
-	}
-	
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-	
-	/**
-	 * Devuelve el número de teléfono móvil del contacto individual. 
-	 * @return el movil del contacto individual.
-	 */
-	public String getMovil() {
-		return usuario.getMovil();
-	}
-	
-	public String getSaludo() {
-		return usuario.getSaludo();
-	}
-	
-	public boolean isAñadido() {
-		return !getNombre().matches("\\d+");
 	}
 	
 	

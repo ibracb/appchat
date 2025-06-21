@@ -27,26 +27,58 @@ import umu.tds.apps.controlador.Controlador;
 import umu.tds.apps.dominio.ContactoIndividual;
 import umu.tds.apps.dominio.Grupo;
 
-
-
 public class VentanaGestionarMiembros extends JFrame {
-	
+	/**
+	 * Serial version UID para la serialización de la clase.
+	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Constante para el modo de la ventana "AÑADIR MIEMBROS".
+	 */
 	public static final String MODO_ANADIR_MIEMBROS = "Añadir Miembros";
+	/**
+	 * Constante para el modo de la ventana "ELIMINAR MIEMBROS".
+	 */
 	public static final String MODO_ELIMINAR_MIEMBROS = "Eliminar Miembros";
-	
+	/**
+	 * Panel que contendrá los botones de los contactos.
+	 */
 	private JPanel contenedorContactos;
+	/**
+	 * Scroll que contendrá el panel de contactos.
+	 */
 	private JScrollPane scrollContactos;
-	private JButton btnCancelar;
+	/**
+	 * Botones de la ventana.
+	 */
+	private JButton btnCancelar, btnPrincipal;
+	/**
+	 * Grupo al que se le quieren añadir o eliminar miembros.
+	 */
 	private Grupo grupo;
+	/**
+	 * Mapa que relaciona los botones de contacto con los contactos individuales.
+	 */
 	private Map<JRadioButton, ContactoIndividual> botonesContacto = new HashMap<>();
-	private JButton btnPrincipal;
+	/**
+	 * Layout y restricciones para el diseño de la ventana.
+	 */
 	private GridBagLayout gridBagLayout;
-	private GridBagConstraints gbc_scroll;
-	private GridBagConstraints gbc_btnCancelar;
-	private GridBagConstraints gbc_btnAnadir;
+	private GridBagConstraints gbc_scroll, gbc_btnCancelar, gbc_btnAnadir;
+	/**
+	 * Modo de la ventana, puede ser "Añadir Miembros" o "Eliminar Miembros".
+	 */
 	private String modo;
-	
+
+	/**
+	 * Método que muestra la ventana de gestionar miembros del grupo.
+	 * 
+	 * @param tam   - Tamaño de la ventana.
+	 * @param ubi   - Ubicación de la ventana.
+	 * @param grupo - Grupo al que se le quieren añadir o eliminar miembros.
+	 * @param modo  - Modo de la ventana, puede ser "Añadir Miembros" o "Eliminar
+	 *              Miembros".
+	 */
 	protected void mostrarVentanaGestionarMiembros(Dimension tam, Point ubi, Grupo grupo, String modo) {
 		contenedorContactos.removeAll();
 		this.grupo = grupo;
@@ -56,15 +88,16 @@ public class VentanaGestionarMiembros extends JFrame {
 		setSize(tam);
 		setLocation(ubi);
 	}
+
 	/**
-	 * Create the application.
+	 * Crea la ventana.
 	 */
 	protected VentanaGestionarMiembros() {
 		initialize();
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Inicializa el frame.
 	 */
 	private void initialize() {
 		setBounds(100, 100, 798, 529);
@@ -72,20 +105,19 @@ public class VentanaGestionarMiembros extends JFrame {
 		setTitle("Gestionar Miembros del Grupo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setBackground(new Color(242, 216, 245));
-		
+
 		gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.columnWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+		gridBagLayout.rowWeights = new double[] { 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
-		
+
 		// Panel que contendrá los botones
 		contenedorContactos = new JPanel();
 		contenedorContactos.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		contenedorContactos.setBackground(new Color(242, 216, 245));
 		contenedorContactos.setBorder(new EmptyBorder(0, 30, 0, 30));
-		
 
 		// Scroll que contiene el panel de contactos
 		scrollContactos = new JScrollPane(contenedorContactos);
@@ -93,16 +125,16 @@ public class VentanaGestionarMiembros extends JFrame {
 		scrollContactos.getViewport().setBackground(new Color(242, 216, 245));
 
 		gbc_scroll = new GridBagConstraints();
-		gbc_scroll.gridx = 1;               // Comienza en columna 1
-		gbc_scroll.gridy = 1;               // Comienza en fila 1
-		gbc_scroll.gridwidth = 4;           // Ocupa 4 columnas
-		gbc_scroll.gridheight = 3;          // Ocupa 3 filas
+		gbc_scroll.gridx = 1; // Comienza en columna 1
+		gbc_scroll.gridy = 1; // Comienza en fila 1
+		gbc_scroll.gridwidth = 4; // Ocupa 4 columnas
+		gbc_scroll.gridheight = 3; // Ocupa 3 filas
 		gbc_scroll.insets = new Insets(10, 10, 10, 10);
 		gbc_scroll.fill = GridBagConstraints.BOTH;
 		gbc_scroll.weightx = 1.0;
 		gbc_scroll.weighty = 1.0;
 		getContentPane().add(scrollContactos, gbc_scroll);
-		
+
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setPreferredSize(new Dimension(100, 30));
 		btnCancelar.setFont(new Font("Georgia", Font.BOLD, 12));
@@ -112,7 +144,7 @@ public class VentanaGestionarMiembros extends JFrame {
 		gbc_btnCancelar.gridy = 4;
 		getContentPane().add(btnCancelar, gbc_btnCancelar);
 		btnCancelar.addActionListener(e -> accionCancelar());
-		
+
 		btnPrincipal = new JButton("Añadir");
 		btnPrincipal.setPreferredSize(new Dimension(100, 30));
 		btnPrincipal.setFont(new Font("Georgia", Font.BOLD, 12));
@@ -122,32 +154,38 @@ public class VentanaGestionarMiembros extends JFrame {
 		gbc_btnAnadir.gridy = 4;
 		getContentPane().add(btnPrincipal, gbc_btnAnadir);
 		btnPrincipal.addActionListener(e -> accionBtnPrincipal());
-		
+
 	}
-	
+
 	/**
-	 * Método que devuelve el panel de contactos.
-	 * @return JPanel contenedorContactos
+	 * Método que crea un botón de contacto individual y lo añade al contenedor de
+	 * contactos.
+	 * 
+	 * @param contacto - ContactoIndividual que se quiere añadir como botón.
 	 */
 	private void crearBotonContacto(ContactoIndividual contacto) {
-        JRadioButton botonContacto = new JRadioButton();
-        botonContacto.setPreferredSize(new Dimension(100, 30));
-        botonContacto.setFont(new Font("Georgia", Font.BOLD, 12));
-        botonContacto.setBackground(new Color(209, 188, 214));
-        botonContacto.setText(Controlador.INSTANCE.getNombreContacto(contacto));
-        botonesContacto.put(botonContacto, contacto);
-        contenedorContactos.add(botonContacto);
-        contenedorContactos.revalidate();
-        contenedorContactos.repaint();
-    }
-	
+		JRadioButton botonContacto = new JRadioButton();
+		botonContacto.setPreferredSize(new Dimension(100, 30));
+		botonContacto.setFont(new Font("Georgia", Font.BOLD, 12));
+		botonContacto.setBackground(new Color(209, 188, 214));
+		botonContacto.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+		botonesContacto.put(botonContacto, contacto);
+		contenedorContactos.add(botonContacto);
+		contenedorContactos.revalidate();
+		contenedorContactos.repaint();
+	}
+
+	/**
+	 * Método que gestiona la acción del botón principal (Añadir o Eliminar
+	 * miembros) dependiendo del modo en el que hayan creado la ventana.
+	 */
 	private void accionBtnPrincipal() {
 		List<JRadioButton> seleccionados = new ArrayList<>();
-	    for (JRadioButton b : botonesContacto.keySet()) {
-	        if (b.isSelected()) {
-	            seleccionados.add(b);
-	        }
-	    }
+		for (JRadioButton b : botonesContacto.keySet()) {
+			if (b.isSelected()) {
+				seleccionados.add(b);
+			}
+		}
 		if (seleccionados.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Selecciona algún contacto.", "Aviso", JOptionPane.WARNING_MESSAGE);
 		} else if (this.modo.equals(MODO_ANADIR_MIEMBROS)) {
@@ -163,21 +201,22 @@ public class VentanaGestionarMiembros extends JFrame {
 				if (grupo.removeMiembro(contacto)) {
 					Controlador.INSTANCE.eliminarContacto(contacto, grupo);
 				}
-			}   
-			
+			}
+
 		}
 		Controlador.INSTANCE.actualizarGrupo(grupo);
 		VentanaGrupos ventanaGrupos = new VentanaGrupos();
 		dispose();
 		ventanaGrupos.mostrarVentanaGrupos(getSize(), getLocation());
 	}
-	
+
 	/**
-	 * Método que completa la ventana con los contactos que no pertenecen al grupo.
-	 * @param grupo - Grupo al que se le quieren añadir miembros.
+	 * Método que completa la ventana dependiendo del modo en el que se ha creado.
+	 * Si es "Añadir Miembros", muestra los contactos que no pertenecen al grupo. Si
+	 * es "Eliminar Miembros", muestra los miembros del grupo.
 	 */
 	private void completarVentana() {
-		
+
 		if (modo.equals(MODO_ANADIR_MIEMBROS)) {
 			Set<ContactoIndividual> contactos = Controlador.INSTANCE.getUsuariosNoPertenecientesAlGrupo(grupo);
 			for (ContactoIndividual contacto : contactos) {
@@ -186,18 +225,20 @@ public class VentanaGestionarMiembros extends JFrame {
 		} else if (modo.equals(MODO_ELIMINAR_MIEMBROS)) {
 			btnPrincipal.setText("Eliminar");
 			for (ContactoIndividual cI : Controlador.INSTANCE.getMiembros(grupo)) {
-                crearBotonContacto(cI);
-            }
+				crearBotonContacto(cI);
+			}
 		}
-		
+
 	}
-	
+
+	/**
+	 * Método que gestiona la acción del botón "Cancelar", que cierra la ventana y
+	 * vuelve a la ventana de grupos.
+	 */
 	private void accionCancelar() {
 		VentanaGrupos ventanaGrupos = new VentanaGrupos();
-		dispose(); 
+		dispose();
 		ventanaGrupos.mostrarVentanaGrupos(getSize(), getLocation());
 	}
-	
-	
 
 }

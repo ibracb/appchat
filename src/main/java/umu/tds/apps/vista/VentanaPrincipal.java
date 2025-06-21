@@ -45,60 +45,116 @@ import umu.tds.apps.dominio.Mensaje;
 import umu.tds.apps.dominio.TipoMensaje;
 import umu.tds.apps.dominio.Usuario;
 
+/**
+ * Ventana principal de la aplicación que muestra el chat y los contactos.
+ * Permite enviar mensajes, cambiar imagen de perfil, gestionar contactos,
+ * buscar usuarios y generar PDFs.
+ */
 public class VentanaPrincipal extends JFrame {
-
+	/**
+	 * Serial version UID para la serialización de la clase.
+	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel chat = new JPanel();
-	private JPanel contactos = new JPanel();
-	private Component horizontalGlue;
-	private Component horizontalGlue_1;
+	/**
+	 * Paneles que contienen el chat y los contactos.
+	 */
+	private JPanel chat, contactos = new JPanel();
+	/**
+	 * Componentes para el espaciado horizontal en la barra de menú.
+	 */
+	private Component horizontalGlue, horizontalGlue_1;
+	/**
+	 * Barra de menú que contiene opciones como cerrar sesión, cambiar imagen de
+	 * perfil y gestionar contactos.
+	 */
 	private JMenuBar menuBar;
-	private JMenu MTuContacto;
-	private JMenuItem MCerrarSesion;
-	private JMenuItem MCambiarImagenPerfil;
-	private JMenuItem MBuscar;
-	private ImageIcon imagenBuscar;
-	private ImageIcon imagenPremium;
-	private JPanel panel;
-	private JButton btnPremium;
-	private JButton btnPdfListado;
-	private JMenu mnContactos;
-	private JMenuItem mntmIndividuales;
-	private JMenuItem mntmGrupos;
-	private JPanel panelCentral;
-	private JPanel panelInfo;
+	/**
+	 * Menú que contiene el nombre del usuario actual y opciones como cerrar sesión
+	 */
+	private JMenu MTuContacto, mnContactos;
+	/*
+	 * Menu items para cerrar sesión, cambiar imagen de perfil y gestionar contactos.
+     */
+	private JMenuItem MCerrarSesion, MCambiarImagenPerfil, mntmIndividuales, mntmGrupos, MBuscar;
+	/**
+	 * Imagenes para los botones de búsqueda y premium.
+	 */
+	private ImageIcon imagenBuscar, imagenPremium;
+	/**
+	 * Panel que contiene los componentes de la ventana principal.
+	 */
+	private JPanel panel, panelCentral, panelInfo, panelEnviarMensaje;
+	/**
+	 * Botones para funcionalidades adicionales como Premium, PDF de listado y PDF
+	 * del chat.
+	 */
+	private JButton btnPremium, btnPdfListado, btnPdfChat, btnEnviar;
+	/**
+	 * Panel de desplazamiento que contiene el chat.
+	 */
 	private JScrollPane scrollPane;
-	private JLabel lblContactoChat;
-	private JButton btnPdfChat;
-	private JPanel panelEnviarMensaje;
-	private JButton btnEnviar;
+	/**
+	 * Etiqueta que muestra el contacto actual en el chat.
+	 */
+	private JLabel lblContactoChat, lblImagenUsuario;
+	/**
+	 * Área de texto para ingresar mensajes.
+	 */
 	private JTextArea textArea;
-	private JLabel lblImagenUsuario;
+	/**
+	 * Contacto actual con el que se está chateando. Puede ser un contacto
+	 * individual o un grupo.
+	 */
 	private Contacto contacto;
-	//private Grupo grupo;
 
+	/**
+	 * Constructor por defecto de la ventana principal. Inicializa los componentes y
+	 * configura la ventana.
+	 */
 	protected VentanaPrincipal() {
 		initialize();
 	}
 
-	protected VentanaPrincipal(ContactoIndividual contacto) {
+	/**
+	 * Constructor que recibe un contacto individual o grupo para iniciar la ventana
+	 * principal con ese contacto seleccionado.
+	 * 
+	 * @param contacto Contacto individual o grupo con el que se inicia la ventana.
+	 */
+	protected VentanaPrincipal(Contacto contacto) {
 		this.contacto = contacto;
 		initialize();
 		recuperarMensajes();
 	}
-	
+
+	/**
+	 * Constructor que recibe un grupo para iniciar la ventana principal con ese
+	 * grupo seleccionado.
+	 * 
+	 * @param grupo Grupo con el que se inicia la ventana.
+	 */
 	protected VentanaPrincipal(Grupo grupo) {
 		this.contacto = grupo;
 		initialize();
 		recuperarMensajes();
 	}
-	
+
+	/**
+	 * Método para mostrar la ventana principal con un tamaño y ubicación
+	 * específicos.
+	 * 
+	 * @param tam Tamaño de la ventana.
+	 * @param ubi Ubicación de la ventana.
+	 */
 	protected void mostrarVentanaPrincipal(Dimension tam, Point ubi) {
 		setVisible(true);
 		setSize(tam);
 		setLocation(ubi);
 	}
 
+	/**
+	 * Método que inicializa los componentes de la ventana principal.
+	 */
 	private void initialize() {
 		setBounds(100, 100, 601, 449);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -255,6 +311,10 @@ public class VentanaPrincipal extends JFrame {
 
 	}
 
+	/**
+	 * Muestra un panel con botones de emojis para seleccionar y enviar. Al
+	 * seleccionar un emoji, se envía al contacto actual.
+	 */
 	private void mostrarPanelEmojis() {
 		JDialog emojiDialog = new JDialog(this, "Selecciona un emoji", true);
 
@@ -283,19 +343,26 @@ public class VentanaPrincipal extends JFrame {
 		emojiDialog.setVisible(true);
 	}
 
+	/**
+	 * Envía el emoji seleccionado al contacto actual y actualiza la vista del chat.
+	 * 
+	 * @param emojiIndex Índice del emoji seleccionado.
+	 */
 	private void enviarEmoji(int emojiIndex) {
 		if (contacto == null)
 			return;
-		else if(Controlador.INSTANCE.isContactoIndividual(contacto)) {
-			Controlador.INSTANCE.registrarMensajeContacto((ContactoIndividual)contacto, "", emojiIndex);
-		}
-		else if(Controlador.INSTANCE.isGrupo(contacto)){
+		else if (Controlador.INSTANCE.isContactoIndividual(contacto)) {
+			Controlador.INSTANCE.registrarMensajeContacto((ContactoIndividual) contacto, "", emojiIndex);
+		} else if (Controlador.INSTANCE.isGrupo(contacto)) {
 			Controlador.INSTANCE.registrarMensajeGrupo((Grupo) contacto, "", emojiIndex);
 		}
 		recuperarMensajes();
 		refrescarPanelContactos();
 	}
 
+	/**
+	 * Cierra la sesión del usuario actual y muestra la ventana de inicio de sesión.
+	 */
 	private void cerrarSesion() {
 		Controlador.INSTANCE.cerrarSesion();
 		VentanaLogin ventanaLogin = new VentanaLogin();
@@ -303,6 +370,9 @@ public class VentanaPrincipal extends JFrame {
 		ventanaLogin.mostrarLogin(this.getSize(), this.getLocation());
 	}
 
+	/**
+	 * Cambia la imagen del usuario actual solicitando una URL al usuario.
+	 */
 	private void cambiarImagen() {
 		String url = JOptionPane.showInputDialog(this, "Introduce la URL de la imagen:",
 				"Seleccionar imagen desde internet", JOptionPane.PLAIN_MESSAGE);
@@ -312,6 +382,13 @@ public class VentanaPrincipal extends JFrame {
 		}
 	}
 
+	/**
+	 * Carga una imagen desde una URL proporcionada por el usuario. Si la imagen es
+	 * válida, actualiza la imagen del usuario actual y la muestra en la interfaz.
+	 * Si hay un error, muestra un mensaje de error y permite volver a intentar.
+	 * 
+	 * @param urlString URL de la imagen a cargar.
+	 */
 	@SuppressWarnings("deprecation")
 	private void cargarImagenDesdeURL(String urlString) {
 		try {
@@ -346,6 +423,12 @@ public class VentanaPrincipal extends JFrame {
 		}
 	}
 
+	/**
+	 * Actualiza la imagen del usuario en la interfaz gráfica. Escala la imagen a un
+	 * tamaño fijo (16x16) y la establece en el JLabel correspondiente.
+	 * 
+	 * @param image Imagen a mostrar.
+	 */
 	private void actualizarImagenEnInterfaz(BufferedImage image) {
 		int anchoDeseado = 16; // altura/ancho fija que quieres para la barra
 		int altoDeseado = 16;
@@ -363,6 +446,10 @@ public class VentanaPrincipal extends JFrame {
 		lblImagenUsuario.repaint();
 	}
 
+	/**
+	 * Carga la imagen del perfil del usuario actual desde la URL almacenada en el
+	 * controlador. Si no hay imagen, muestra un mensaje de error.
+	 */
 	@SuppressWarnings("deprecation")
 	private void cargarImagenPerfilUsuario() {
 		String rutaImagen = Controlador.INSTANCE.getImagenUsuarioActual();
@@ -379,6 +466,10 @@ public class VentanaPrincipal extends JFrame {
 		}
 	}
 
+	/**
+	 * Refresca la imagen del usuario actual en la barra de menú. Se llama al
+	 * iniciar la ventana y después de cambiar la imagen.
+	 */
 	private void refrescarImagen() {
 		String rutaImagen = Controlador.INSTANCE.getImagenUsuarioActual();
 		ImageIcon iconoOriginal = new ImageIcon(rutaImagen);
@@ -387,6 +478,9 @@ public class VentanaPrincipal extends JFrame {
 		MTuContacto.setIcon(iconoEscalado);
 	}
 
+	/**
+	 * Genera un PDF con el listado de contactos del usuario actual.
+	 */
 	private void gestionarPdfListado() {
 		if (Controlador.INSTANCE.isPremiumUsuarioActual()) {
 			if (Controlador.INSTANCE.generarPdfListado()) {
@@ -402,10 +496,13 @@ public class VentanaPrincipal extends JFrame {
 		}
 	}
 
+	/**
+	 * Genera un PDF del chat actual con el contacto seleccionado.
+	 */
 	private void gestionarPdfChat() {
 		if (Controlador.INSTANCE.isPremiumUsuarioActual()) {
 			if (contacto != null && Controlador.INSTANCE.isContactoIndividual(contacto)) {
-				if (Controlador.INSTANCE.generarPdfChat((ContactoIndividual)contacto)) {
+				if (Controlador.INSTANCE.generarPdfChat((ContactoIndividual) contacto)) {
 					JOptionPane.showMessageDialog(this,
 							"Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo", "Pdf ok",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -414,14 +511,19 @@ public class VentanaPrincipal extends JFrame {
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 			} else {
-				JOptionPane.showMessageDialog(this, "No hay ningún contacto seleccionado para generar el PDF", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "No hay ningún contacto seleccionado para generar el PDF", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} else {
-			JOptionPane.showMessageDialog(this, "No eres Premium, si quieres estos beneficios hazte Usuario Premium", "Espabila",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "No eres Premium, si quieres estos beneficios hazte Usuario Premium",
+					"Espabila", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
+	/**
+	 * Abre el diálogo de gestión de premium. Permite activar o desactivar la
+	 * suscripción premium del usuario actual.
+	 */
 	private void abrirPremium() {
 		if (!Controlador.INSTANCE.isPremiumUsuarioActual()) {
 			int respuestaActivar = JOptionPane.showConfirmDialog(this, "¿Desea activar premium?", "Gestión premium",
@@ -445,24 +547,42 @@ public class VentanaPrincipal extends JFrame {
 		}
 	}
 
+	/**
+	 * Abre la ventana de contactos individuales.
+	 */
 	private void abrirIndividuales() {
 		VentanaContactos vContactos = new VentanaContactos();
 		dispose();
 		vContactos.mostrarVentanaContactos(this.getSize(), this.getLocation());
 	}
 
+	/**
+	 * Abre la ventana de grupos.
+	 */
 	private void abrirGrupos() {
 		VentanaGrupos v = new VentanaGrupos();
 		dispose();
 		v.mostrarVentanaGrupos(this.getSize(), this.getLocation());
 	}
 
+	/**
+	 * Abre la ventana de búsqueda de usuarios.
+	 */
 	private void abrirBuscar() {
 		VentanaBuscar v = new VentanaBuscar();
 		dispose();
 		v.mostrarVentanaBuscar(this.getSize(), this.getLocation());
 	}
-	
+
+	/**
+	 * Crea un mensaje en el chat con el texto y el usuario con fecha
+	 * 
+	 * @param mensaje         - Texto del mensaje a mostrar.
+	 * @param usuarioConFecha - Texto del usuario con la fecha del mensaje.
+	 * @param tipo            - Tipo de mensaje (enviado o recibido).
+	 * @param emojiIndex      - Índice del emoji asociado al mensaje. Si es
+	 *                        Mensaje.ICONO_NULL, no se muestra emoji.
+	 */
 	private void crearMensaje(String mensaje, String usuarioConFecha, int tipo, int emojiIndex) {
 		Color color = (tipo == BubbleText.RECEIVED) ? Color.PINK : Color.CYAN;
 
@@ -480,6 +600,10 @@ public class VentanaPrincipal extends JFrame {
 		scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
 	}
 
+	/**
+	 * Recupera los mensajes del contacto seleccionado y los muestra en el panel de
+	 * chat.
+	 */
 	private void recuperarMensajes() {
 		chat.removeAll();
 		chat.revalidate();
@@ -487,7 +611,8 @@ public class VentanaPrincipal extends JFrame {
 
 		Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
 			String textoMensaje = Controlador.INSTANCE.getTextoMensaje(mensaje);
-			int emojiMensaje = Controlador.INSTANCE.getEmojiMensaje(mensaje); // Obtener el emoji de ESTE mensaje específico
+			int emojiMensaje = Controlador.INSTANCE.getEmojiMensaje(mensaje); // Obtener el emoji de ESTE mensaje
+																				// específico
 
 			if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.ENVIADO)) {
 				crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT,
@@ -506,15 +631,17 @@ public class VentanaPrincipal extends JFrame {
 
 	}
 
+	/**
+	 * Envía el texto ingresado en el área de texto al contacto seleccionado creando
+	 * un mensaje.
+	 */
 	private void enviarTexto() {
 		String texto = textArea.getText().trim();
 		if (texto.isEmpty()) {
 			return;
-		}
-		else if(Controlador.INSTANCE.isContactoIndividual(contacto)) {
-			Controlador.INSTANCE.registrarMensajeContacto((ContactoIndividual)contacto, texto, Mensaje.ICONO_NULL);
-		}
-		else if(Controlador.INSTANCE.isGrupo(contacto)) {
+		} else if (Controlador.INSTANCE.isContactoIndividual(contacto)) {
+			Controlador.INSTANCE.registrarMensajeContacto((ContactoIndividual) contacto, texto, Mensaje.ICONO_NULL);
+		} else if (Controlador.INSTANCE.isGrupo(contacto)) {
 			Controlador.INSTANCE.registrarMensajeGrupo((Grupo) contacto, texto, Mensaje.ICONO_NULL);
 		}
 		textArea.setText("");
@@ -522,6 +649,11 @@ public class VentanaPrincipal extends JFrame {
 		refrescarPanelContactos();
 	}
 
+	/**
+	 * Crea los contenedores para los contactos en la lista de contactos.
+	 * 
+	 * @param contacto - El contacto para el cual se crea el contenedor.
+	 */
 	@SuppressWarnings("deprecation")
 	private void crearContenedoresContactos(Contacto contacto) {
 		Boolean isAnadido = true;
@@ -543,8 +675,8 @@ public class VentanaPrincipal extends JFrame {
 
 		contenedor.addActionListener(e -> {
 			this.contacto = contacto;
-		    lblContactoChat.setText(Controlador.INSTANCE.getNombreContacto(contacto));
-		    recuperarMensajes();
+			lblContactoChat.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+			recuperarMensajes();
 		});
 
 		GridBagConstraints gbc_contenedor = new GridBagConstraints();
@@ -651,6 +783,11 @@ public class VentanaPrincipal extends JFrame {
 		contactos.repaint();
 	}
 
+	/**
+	 * Refresca el panel de contactos, ordenando y mostrando los contactos del
+	 * usuario actual. Los contactos con mensajes recientes se muestran primero,
+	 * seguidos de los que no tienen mensajes.
+	 */
 	private void refrescarPanelContactos() {
 		contactos.removeAll();
 
@@ -691,6 +828,12 @@ public class VentanaPrincipal extends JFrame {
 		contactos.repaint();
 	}
 
+	/**
+	 * Añade un nuevo contacto individual al usuario actual. Solicita el nombre y lo
+	 * añade a la lista de contactos.
+	 * 
+	 * @param contacto - Contacto individual que se va a añadir.
+	 */
 	private void anadirContacto(ContactoIndividual contacto) {
 		JTextField campoNombre = new JTextField();
 		JTextField campoMovil = new JTextField();
@@ -707,7 +850,7 @@ public class VentanaPrincipal extends JFrame {
 			String nuevoNombre = campoNombre.getText().trim();
 
 			if (!nuevoNombre.isEmpty()) {
-				Controlador.INSTANCE.actualizarNombreContacto(contacto, nuevoNombre);
+				Controlador.INSTANCE.cambiarNombreContactoIndividual(contacto, nuevoNombre);
 
 				JOptionPane.showMessageDialog(this, "Contacto agregado correctamente.", "Éxito",
 						JOptionPane.INFORMATION_MESSAGE);

@@ -64,25 +64,6 @@ public class Mensaje implements Comparable<Mensaje> {
 		this.tipo = tipo;
 	}
 	
-	@Override
-	public int hashCode() {
-		return Objects.hash(emoticono, id, momentoEnvio, texto, tipo);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Mensaje other = (Mensaje) obj;
-		return emoticono == other.emoticono && id == other.id &&
-				Objects.equals(momentoEnvio, other.momentoEnvio) &&
-				Objects.equals(texto, other.texto) && tipo == other.tipo;
-	}
-
 	/**
 	 * Devuelve el identificador asociado al mensaje.
 	 * @return el id del mensaje
@@ -162,6 +143,25 @@ public class Mensaje implements Comparable<Mensaje> {
 	 */
 	public void setTipo(TipoMensaje tipo) {
 		this.tipo = tipo;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(emoticono, id, momentoEnvio, texto, tipo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mensaje other = (Mensaje) obj;
+		return emoticono == other.emoticono && id == other.id &&
+				Objects.equals(momentoEnvio, other.momentoEnvio) &&
+				Objects.equals(texto, other.texto) && tipo == other.tipo;
 	}
 	
 	@Override

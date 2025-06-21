@@ -27,36 +27,57 @@ import umu.tds.apps.controlador.Controlador;
 public class VentanaLogin extends JFrame {
 
 	/**
-	 * 
+	 * Serial version UID para la serialización de la clase.
 	 */
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * Campo de texto para introducir el teléfono del usuario.
+	 */
 	private JTextField textFieldTelefono;
+	/**
+	 * Campo de contraseña para introducir la contraseña del usuario.
+	 */
 	private JPasswordField passwordField;
-	private JLabel etiquetaTelefono;
-	private JLabel etiquetaContrasena;
-	private JLabel imagenAppChat;
+	/**
+	 * Etiquetas que señalan los datos que se deben introducir para iniciar sesion.
+	 */
+	private JLabel etiquetaTelefono, etiquetaContrasena, imagenAppChat;
+	/**
+	 * Imagen que representa el logo de la aplicación.
+	 */
 	private ImageIcon imagenLogo;
+	/**
+	 * Layout y restricciones para el panel central de la ventana.
+	 */
 	private GridBagLayout gbl_panelCentral;
-	private GridBagConstraints gbc_imagenAppChat;
-	private GridBagConstraints gbc_etiquetaTelefono;
-	private GridBagConstraints gbc_textFieldTelefono;
-	private GridBagConstraints gbc_etiquetaContrasena;
-	private GridBagConstraints gbc_passwordField;
-	private GridBagConstraints gbc_botonRegistrar;
-	private GridBagConstraints gbc_botonAceptar;
-	private GridBagConstraints gbc_horizontalGlue;
+	private GridBagConstraints gbc_imagenAppChat, gbc_etiquetaTelefono, gbc_textFieldTelefono, gbc_etiquetaContrasena,
+			gbc_passwordField, gbc_botonRegistrar, gbc_botonAceptar, gbc_horizontalGlue;
+	/**
+	 * Componente de pegamento horizontal para alinear los botones en el panel.
+	 */
 	private Component horizontalGlue;
+	/**
+	 * Panel central de la ventana, donde se colocan los componentes.
+	 */
 	private JPanel panelCentral;
-	private JButton botonRegistrar;
-	private JButton botonAceptar;
+	/**
+	 * Botones para registrar un nuevo usuario o aceptar el inicio de sesión.
+	 */
+	private JButton botonRegistrar, botonAceptar;
 
 	/**
-	 * Create the application.
+	 * Crea la ventanaLogin.
 	 */
 	public VentanaLogin() {
 		initialize();
 	}
+	
+	/**
+	 * Muestra la ventana de login con el tamaño y ubicación especificados.
+	 * 
+	 * @param tam - Tamaño de la ventana.
+	 * @param ubi - Ubicación de la ventana.
+	 */
 	protected void mostrarLogin(Dimension tam, Point ubi) {
 		setVisible(true);
 		setSize(tam);
@@ -64,7 +85,7 @@ public class VentanaLogin extends JFrame {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Inicializa el frame de la ventana.
 	 */
 	private void initialize() {
 		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.png")).getImage());
@@ -163,6 +184,10 @@ public class VentanaLogin extends JFrame {
 
 	}
 	
+	/**
+	 * Método que se ejecuta al pulsar el botón de aceptar. Comprueba si los campos
+	 * están completos y si lo están, intenta iniciar sesión.
+	 */
 	private void accederLogin() {
 		String movil = textFieldTelefono.getText();
 		String contrasena = new String(passwordField.getPassword());
@@ -183,6 +208,10 @@ public class VentanaLogin extends JFrame {
 		}
 	}
 	
+	/**
+	 * Método que se ejecuta al pulsar el botón de registrar. Abre la ventana de
+	 * registro.
+	 */
 	private void accederRegistro() {
 		VentanaRegistro registro = new VentanaRegistro();
 		dispose();
