@@ -53,7 +53,7 @@ public enum ExportPDF {
 	private ExportPDF() {}
 
 	public boolean createPdfListado(Usuario usuario) {
-		File fichero = new File(FactoriaProveedorRutaDescargas.INSTANCE.getProveedor().getRutaDescargas(),
+		File fichero = new File(FactoriaProveedorRutaDescargas.INSTANCE.getRutaDescargas(),
 				INICIO_NOMBRE_PDF + usuario.getNombre() + PDF_EXTENSION);
 		try (PdfWriter pdfWriter = new PdfWriter(fichero)) {
 			PdfDocument pdfDocument = new PdfDocument(pdfWriter);
@@ -102,7 +102,7 @@ public enum ExportPDF {
 	}
 
 	public boolean createPdfChat(ContactoIndividual contacto) {
-		File fichero = new File(FactoriaProveedorRutaDescargas.INSTANCE.getProveedor().getRutaDescargas(),
+		File fichero = new File(FactoriaProveedorRutaDescargas.INSTANCE.getRutaDescargas(),
 				"Historial_" + contacto.getNombre() + ".pdf");
 
 		try (PdfWriter writer = new PdfWriter(fichero);

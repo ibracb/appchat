@@ -15,12 +15,16 @@ public enum FactoriaProveedorRutaDescargas {
 			ProveedorRutaDescargasMac::new
 			);
 	
-	public ProveedorRutaDescargas getProveedor() {
+	private ProveedorRutaDescargas getProveedor() {
 		return PROVEEDORES.stream()
 				.map(Supplier::get)
 				.filter(proveedor -> proveedor.isCompatible())
 				.findFirst()
 				.orElse(null);
+	}
+	
+	public String getRutaDescargas() {
+		return getProveedor().getRutaDescargas();
 	}
 	
 }

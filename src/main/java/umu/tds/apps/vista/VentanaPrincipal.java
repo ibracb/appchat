@@ -462,8 +462,7 @@ public class VentanaPrincipal extends JFrame {
 		dispose();
 		v.mostrarVentanaBuscar(this.getSize(), this.getLocation());
 	}
-
-	// Método corregido que recibe el emoji como parámetro
+	
 	private void crearMensaje(String mensaje, String usuarioConFecha, int tipo, int emojiIndex) {
 		Color color = (tipo == BubbleText.RECEIVED) ? Color.PINK : Color.CYAN;
 

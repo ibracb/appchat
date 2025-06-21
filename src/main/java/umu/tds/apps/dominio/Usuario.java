@@ -266,6 +266,10 @@ public class Usuario {
 		return descuento;
 	}
 	
+	public double getDescuentoCalculado() {
+		return getDescuento().getDescuento(PRECIO_INICIAL, this);
+	}
+	
 	/**
 	 * Establece el descuento que se le aplica al usuario.
 	 * @param descuento - El descuento a establecer.
