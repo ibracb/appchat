@@ -28,4 +28,11 @@ public interface Descuento {
 	 * @return El descuento finalmente aplicado al usuario
 	 */
 	public double getDescuento(double precio, Usuario usuario);
+	
+	/**
+	 * Devuelve el nombre del tipo de descuento.
+	 * @return El nombre del tipo de descuento
+	 */
+	public String getNombreDescuento();
+	
 }

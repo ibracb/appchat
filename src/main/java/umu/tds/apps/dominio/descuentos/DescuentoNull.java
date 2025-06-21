@@ -8,6 +8,11 @@ import umu.tds.apps.dominio.Usuario;
 public class DescuentoNull implements Descuento {
 	
 	/**
+	 * Nombre del tipo de descuento nulo.
+	 */
+	private static final String NOMBRE_DESCUENTO = "Descuento Nulo";
+	
+	/**
 	 * Entero que representa que un usuario no disfrutará de ningún descuento adicional.
 	 */
 	private static final int CERO_DESCUENTOS_ADICIONALES = 0;
@@ -30,6 +35,11 @@ public class DescuentoNull implements Descuento {
 	@Override
 	public double getDescuento(double precio, Usuario usuario) {
 		return DESCUENTO_INEXISTENTE;
+	}
+
+	@Override
+	public String getNombreDescuento() {
+		return NOMBRE_DESCUENTO;
 	}
 
 }

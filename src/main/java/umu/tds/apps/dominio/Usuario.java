@@ -535,7 +535,16 @@ public class Usuario {
 	public void removeContacto(Contacto contacto) {
 		contactos.remove(contacto);
 	}
-
+	
+	/**
+	 * Devuelve el nombre del tipo de descuento que se le aplica al usuario.
+	 * 
+	 * @return el nombre del tipo de descuento.
+	 */
+	public String getNombreDescuento() {
+		return descuento.getNombreDescuento();
+	}
+	
 	/**
 	 * Devuelve un conjunto de contactos individuales que han sido añadidos por el
 	 * usuario.

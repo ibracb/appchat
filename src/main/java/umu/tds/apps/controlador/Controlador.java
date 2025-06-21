@@ -791,4 +791,13 @@ public enum Controlador {
 		return contacto.getSaludo();
 	}
 	
+	/**
+	 * Obtiene el nombre del descuento del usuario actual.
+	 * 
+	 * @return el nombre del descuento del usuario actual.
+	 */
+	public String getNombreDescuentoUsuarioActual() {
+		return usuarioActual.getNombreDescuento();
+	}
+	
 }

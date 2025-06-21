@@ -547,7 +547,7 @@ public class VentanaPrincipal extends JFrame {
 			if (respuestaActivar == JOptionPane.YES_OPTION) {
 				Controlador.INSTANCE.activarPremiumUsuarioActual();
 				JOptionPane.showMessageDialog(this,
-						"Premium activado. Gracias por esos "
+						"Premium activado, aplicando el " + Controlador.INSTANCE.getNombreDescuentoUsuarioActual() + ". Gracias por esos "
 								+ (Usuario.PRECIO_INICIAL - Controlador.INSTANCE.getDescuentoCalculadoUsuarioActual())
 								+ " euros",
 						"Gestión premium", JOptionPane.INFORMATION_MESSAGE);

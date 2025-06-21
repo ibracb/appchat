@@ -8,6 +8,11 @@ import umu.tds.apps.dominio.Usuario;
 public class DescuentoPorMensaje implements Descuento {
 	
 	/**
+	 * Nombre del tipo de descuento por mensaje.
+	 */
+	private static final String NOMBRE_DESCUENTO = "Descuento por Mensaje";
+	
+	/**
 	 * 10% de descuento que se le aplica al precio inicial, tras haber alcanzado los 16 mensajes en el mes actual.
 	 */
 	private static final double DESCUENTO_FIJO_MENSAJE = 0.1;
@@ -35,6 +40,11 @@ public class DescuentoPorMensaje implements Descuento {
 	@Override
 	public double getDescuento(double precio, Usuario usuario) {
 		return precio*(DESCUENTO_FIJO_MENSAJE + DESCUENTO_ADICIONAL_POR_MENSAJE * getNumDescuentosAdicionales(usuario));
+	}
+
+	@Override
+	public String getNombreDescuento() {
+		return NOMBRE_DESCUENTO;
 	}
 
 }

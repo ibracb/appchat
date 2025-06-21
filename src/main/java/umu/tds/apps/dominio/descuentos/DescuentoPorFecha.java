@@ -11,6 +11,11 @@ import umu.tds.apps.utils.Utils;
 public class DescuentoPorFecha implements Descuento {
 	
 	/**
+	 * Nombre del tipo de descuento por fecha.
+	 */
+	private static final String NOMBRE_DESCUENTO = "Descuento por Fecha";
+	
+	/**
 	 * 10% de descuento que se le aplica al precio inicial, tras cumplirse 1 año de registro en AppChat.
 	 */
 	private static final double DESCUENTO_FIJO_FECHA = 0.1;
@@ -38,6 +43,11 @@ public class DescuentoPorFecha implements Descuento {
 	@Override
 	public double getDescuento(double precio, Usuario usuario) {
 		return precio*(DESCUENTO_FIJO_FECHA + DESCUENTO_ADICIONAL_POR_FECHA * getNumDescuentosAdicionales(usuario));
+	}
+
+	@Override
+	public String getNombreDescuento() {
+		return NOMBRE_DESCUENTO;
 	}
 
 }
