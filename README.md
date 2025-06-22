@@ -24,7 +24,7 @@ mvn install:install-file -Dfile=DriverPersistencia.jar -DpomFile=driverPersisten
 Finalmente, tiene a su disposición de unos usuarios iniciales para iniciar sesión, además de ciertos contactos añadidos y grupos, y intercambios de mensajes. Son los siguientes:
 |Nombre|Teléfono|Contraseña|
 |------|--------|----------|
-|mariabm|212121212|m|
+|maria bm|212121212|m|
 |ibra cb|313131313|i|
 |maria bm2|121212121|m|
 |ibra cb2|131313131|i|
