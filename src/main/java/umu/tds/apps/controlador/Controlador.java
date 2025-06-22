@@ -435,6 +435,12 @@ public enum Controlador {
 		modificarUsuario();
 	}
 
+	/**
+	 * Añade un contacto individual al usuario actual en un grupo.
+	 * 
+	 * @param contacto - El contacto individual a añadir.
+	 * @param grupo    - El grupo al que se añadirá el contacto.
+	 */
 	public void añadirContacto(ContactoIndividual contacto, Grupo grupo) {
 		usuarioActual.addContacto(contacto, grupo);
 	}
