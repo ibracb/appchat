@@ -8,10 +8,10 @@ Toda la documentación se encuentra en [la memoria](MemoriaTDS.pdf), pero igualm
 
 En primer lugar, aségurese de tener instalado Maven en su máquina. Puede vrificarlo ejecutando desde el terminal el comando `mvn --version`. Si no lo está, rogamos que se lo instale.
 
-En segundo lugar, debe instalar una librería de chat en su repositorio local de Maven. Para ello, ejecute dentro de este mismo directorio AppChat el siguiente comando desde el terminal:
+En segundo lugar, debe instalar una librería de chat en su repositorio local de Maven. Para ello, ejecute dentro de este mismo directorio ```AppChat``` (o bien ```AppChat-main```, que le puede salir eso si descarga el proyecto aquí) el siguiente comando desde el terminal:
 
 
-En tercer lugar, debe instalar el Driver de Persistencia de TDS en su repositorio local de Maven. Para ello, ejecute dentro de este mismo directorio AppChat el siguiente comando desde el terminal:  
+En tercer lugar, debe instalar el Driver de Persistencia de TDS en su repositorio local de Maven. Para ello, ejecute dentro del directorio ```AppChat/lib``` el siguiente comando desde el terminal:  
 ```
 mvn install:install-file -Dfile=chatWindowLib.jar -DgroupId=tds -DartifactId=chat-window -Dversion="1.0.0" -Dpackaging=jar -DgeneratePom=true
 ```
