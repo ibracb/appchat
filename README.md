@@ -1,8 +1,8 @@
 # AppChat
 
-Autoría: [María Ballester Martínez](https://github.com/Maria-Ballester), e [Ibrahim Cherif Barry](https://github.com/ibracb23).
+Autoría: [María Ballester Martínez](https://github.com/mariaballesteer), e [Ibrahim Cherif Barry](https://github.com/ibracb).
 
-Se trata de un proyecto puramente académico, de la asignatura de TDS. Consiste en un sistema de chat, inspirado en aplicaciones populares como WhatsApp.
+Proyecto académico, de la asignatura de Tecnologías de Desarrollo de Software, perteneciente al Grado de Ingeniería Informática en la Universidad de Murcia. Consiste en un sistema de chat, inspirado en aplicaciones populares como WhatsApp.
 
 Toda la documentación se encuentra en [la memoria](MemoriaTDS.pdf), pero igualmente consideramos importante redundar en cómo ejecutar AppChat sin problemas. Por ejemplo, en el sistema operativo Linux, simplemente tiene que ejecutar desde el shell la instrucción `sudo apt install maven`.
 
