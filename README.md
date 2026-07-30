@@ -86,6 +86,6 @@ Este README cubre la instalación y ejecución. Para la documentación técnica 
 
 - [`docs/arquitectura.md`](docs/arquitectura.md) — arquitectura en capas y estructura de paquetes
 - [`docs/diagrama-clases.md`](docs/diagrama-clases.md) — diagrama de clases del dominio
-- [`docs/diagrama-secuencia.md`](docs/diagrama-secuencia.md) — diagrama de secuencia (flujo crear grupo)
+- [`docs/diagrama-secuencia.md`](docs/diagrama-secuencia.md) — diagrama de secuencia (flujo añadir contacto a grupo)
 - [`docs/patrones-diseno.md`](docs/patrones-diseno.md) — patrones de diseño utilizados
 - [`docs/historias-de-usuario.md`](docs/historias-de-usuario.md) — historias de usuario y criterios de aceptación
