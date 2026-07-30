@@ -1,6 +1,6 @@
 # Diagrama de clases (dominio)
 
-Generado a partir del código fuente en `umu.tds.apps.dominio`, no del boceto original de la memoria, para que refleje fielmente el modelo final.
+Basado en el modelado de dominio del sistema.
 
 ```mermaid
 classDiagram
