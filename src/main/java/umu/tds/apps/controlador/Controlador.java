@@ -39,6 +39,12 @@ public enum Controlador {
 	 */
 	INSTANCE;
 
+	public enum ResultadoLogin {
+		EXITO,
+		CONTRASENA_INCORRECTA,
+		USUARIO_NO_ENCONTRADO
+	}
+
 	/**
 	 * Campo para acceder al adaptador de usuarios para TDS.
 	 */
@@ -139,39 +145,21 @@ public enum Controlador {
 	 * @param movil      - El teléfono móvil del usuario a iniciar sesión.
 	 * @param contraseña - La contraseña del usuario a iniciar sesión.
 	 */
-	public int loginUsuario(String movil, String contraseña) {
+	public ResultadoLogin loginUsuario(String movil, String contraseña) {
 		Usuario usuario = repositorioUsuarios.findUsuario(movil);
-		if (usuario != null) {
-			if (usuario.getContraseña().equals(contraseña)) {
-				usuarioActual = usuario;
-				return 0; // Inicio de sesión exitoso
-			} else {
-				return -1; // Contraseña incorrecta
-			}
+		if (usuario == null) {
+			return ResultadoLogin.USUARIO_NO_ENCONTRADO;
 		}
-		return -2; // Usuario no encontrado;
+		if (!usuario.getContraseña().equals(contraseña)) {
+			return ResultadoLogin.CONTRASENA_INCORRECTA;
+		}
+		usuarioActual = usuario;
+		return ResultadoLogin.EXITO;
 	}
 	
 	
-	/**
-	 * Establece el usuario actual que maneja el controlador.
-	 * 
-	 * @param usuarioActual - Usuario a establecer como actual.
-	 */
-	public void setUsuarioActual(Usuario usuarioActual) {
-		this.usuarioActual = usuarioActual;
-	}
 
-	/**
-	 * Borra un usuario de la base de datos y del repositorio.
-	 * 
-	 * @param usuario - Usuario a borrar.
-	 */
-	public void borrarUsuario(Usuario usuario) {
-		adaptadorUsuario.delete(usuario);
-		repositorioUsuarios.removeUsuario(usuario);
-	}
-
+	
 	/**
 	 * Llamada al adaptador de contactos individuales para registrar un contacto
 	 * individual en la base de datos.
@@ -385,22 +373,6 @@ public enum Controlador {
 	}
 
 	/**
-	 * Devuelve el nombre del usuario actual.
-	 * @return el nombre
-	 */
-	public String getNombreUsuarioActual() {
-		return usuarioActual.getNombre();
-	}
-	
-	/**
-	 * Devuelve la imagen del usuario actual.
-	 * @return la url de la imamgen de perfil del usuario actual
-	 */
-	public String getImagenUsuarioActual() {
-		return usuarioActual.getImagen();
-	}
-
-	/**
 	 * Cambia la imagen del usuario actual y lo actualiza en la base de datos.
 	 * @param imagen - La url de la nueva imagen del usuario actual.
 	 */
@@ -409,15 +381,6 @@ public enum Controlador {
 		modificarUsuario();
 	}
 	
-	/**
-	 * Comprueba si el usuario actual es premium.
-	 * 
-	 * @return true si el usuario actual es premium, false en caso contrario.
-	 */
-	public boolean isPremiumUsuarioActual() {
-		return usuarioActual.isPremium();
-	}
-
 	/**
 	 * Activa el estado premium del usuario actual y actualiza su descuento.
 	 */
@@ -456,15 +419,6 @@ public enum Controlador {
 	}
 
 	/**
-	 * Devuelve el descuento calculado del usuario actual.
-	 * 
-	 * @return el descuento.
-	 */
-	public double getDescuentoCalculadoUsuarioActual() {
-		return usuarioActual.getDescuentoCalculado();
-	}
-
-	/**
 	 * Recupera un contacto individual del usuario actual por su número de móvil.
 	 * 
 	 * @param movil - El número de móvil del contacto a recuperar.
@@ -491,14 +445,6 @@ public enum Controlador {
 	 */
 	public boolean generarPdfChat(ContactoIndividual contacto) {
 		return ExportPDF.INSTANCE.createPdfChat(contacto);
-	}
-
-	/**
-	 * Obtiene los grupos que ha creado el usuario actual.
-	 * @return conjunto de grupos
-	 */
-	public Set<Grupo> getGruposUsuarioActual() {
-		return usuarioActual.getGrupos();
 	}
 
 	/**
@@ -591,56 +537,6 @@ public enum Controlador {
 	}
 
 	/**
-	 * Obtiene el nombre del contacto.
-	 * 
-	 * @param contacto - El contacto cuyo nombre se desea obtener.
-	 * @return el nombre del contacto.
-	 */
-	public String getNombreContacto(Contacto contacto) {
-		return contacto.getNombre();
-	}
-
-	/**
-	 * Obtiene el texto del mensaje.
-	 * 
-	 * @param mensaje - El mensaje cuyo texto se desea obtener.
-	 * @return el texto del mensaje.
-	 */
-	public String getTextoMensaje(Mensaje mensaje) {
-		return mensaje.getTexto();
-	}
-
-	/**
-	 * Obtiene el tipo de mensaje.
-	 * 
-	 * @param mensaje - El mensaje cuyo tipo se desea obtener.
-	 * @return el tipo de mensaje.
-	 */
-	public TipoMensaje getTipoMensaje(Mensaje mensaje) {
-		return mensaje.getTipo();
-	}
-
-	/**
-	 * Obtiene el último mensaje de un contacto.
-	 * 
-	 * @param contacto - El contacto del que se desea obtener el último mensaje.
-	 * @return el último mensaje del contacto.
-	 */
-	public Mensaje getUltimoMensaje(Contacto contacto) {
-		return contacto.getUltimoMensaje();
-	}
-
-	/**
-	 * Obtiene los miembros de un grupo.
-	 * 
-	 * @param grupo - El grupo cuyos miembros se desean obtener.
-	 * @return un conjunto de contactos individuales que son miembros del grupo.
-	 */
-	public Set<ContactoIndividual> getMiembros(Grupo grupo) {
-		return grupo.getMiembros();
-	}
-
-	/**
 	 * Actualiza el descuento del usuario actual.
 	 */
 	public void actualizarDescuentoUsuarioActual() {
@@ -648,32 +544,12 @@ public enum Controlador {
 	}
 	
 	/**
-	 * Obtiene el número de miembros de un grupo.
-	 * 
-	 * @param grupo - El grupo del que se desea obtener el número de miembros.
-	 * @return el número de miembros del grupo.
-	 */
-	public int getNumMiembros(Grupo grupo) {
-		return getMiembros(grupo).size();
-	}
-
-	/**
 	 * Obtiene los contactos individuales añadidos por el usuario actual.
 	 * 
 	 * @return un conjunto de contactos individuales añadidos por el usuario actual.
 	 */
 	public Set<ContactoIndividual> getContactosIndividualesAñadidosUsuarioActual() {
 		return usuarioActual.getContactosIndividualesAñadidos();
-	}
-	
-	/**
-	 * Comprueba si un contacto individual ha sido añadido por el usuario actual.
-	 * 
-	 * @param contacto - El contacto individual a comprobar.
-	 * @return true si el contacto ha sido añadido, false en caso contrario.
-	 */
-	public boolean isContactoIndividualAñadido(ContactoIndividual contacto) {
-		return contacto.isAñadido();
 	}
 	
 	/**
@@ -690,46 +566,6 @@ public enum Controlador {
 			imagen = ((Grupo) contacto).getImagen();
 		}
         return imagen;
-	}
-	
-	/**
-	 * Comprueba si un contacto es un contacto individual.
-	 * 
-	 * @param contacto - El contacto a comprobar.
-	 * @return true si es un contacto individual, false en caso contrario.
-	 */
-	public boolean isContactoIndividual(Contacto contacto) {
-		return contacto instanceof ContactoIndividual;
-	}
-	
-	/**
-	 * Comprueba si un contacto es un grupo.
-	 * 
-	 * @param contacto - El contacto a comprobar.
-	 * @return true si es un grupo, false en caso contrario.
-	 */
-	public boolean isGrupo(Contacto contacto) {
-		return contacto instanceof Grupo;
-	}
-	
-	/**
-	 * Obtiene el emoticono de un mensaje.
-	 * 
-	 * @param mensaje - El mensaje del que se desea obtener el emoticono.
-	 * @return el emoticono del mensaje.
-	 */
-	public int getEmojiMensaje(Mensaje mensaje) {
-		return mensaje.getEmoticono();
-	}
-	
-	/**
-	 * Obtiene el nombre de un usuario.
-	 * 
-	 * @param usuario - El usuario del que se desea obtener el nombre.
-	 * @return el nombre del usuario.
-	 */
-	public String getNombreUsuario(Usuario usuario) {
-		return usuario.getNombre();
 	}
 	
 	/**
@@ -787,23 +623,5 @@ public enum Controlador {
 		modificarUsuario();
 	}
 	
-	/**
-	 * Obtiene el saludo de un contacto individual.
-	 * 
-	 * @param contacto - El contacto individual del que se desea obtener el saludo.
-	 * @return el saludo del contacto individual.
-	 */
-	public String getSaludoContacto(ContactoIndividual contacto) {
-		return contacto.getSaludo();
-	}
-	
-	/**
-	 * Obtiene el nombre del descuento del usuario actual.
-	 * 
-	 * @return el nombre del descuento del usuario actual.
-	 */
-	public String getNombreDescuentoUsuarioActual() {
-		return usuarioActual.getNombreDescuento();
-	}
 	
 }

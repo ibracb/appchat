@@ -101,7 +101,7 @@ public class VentanaGestionarMiembros extends JFrame {
 	 */
 	private void initialize() {
 		setBounds(100, 100, 798, 529);
-		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.png")).getImage());
 		setTitle("Gestionar Miembros del Grupo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setBackground(new Color(242, 216, 245));
@@ -168,7 +168,7 @@ public class VentanaGestionarMiembros extends JFrame {
 		botonContacto.setPreferredSize(new Dimension(100, 30));
 		botonContacto.setFont(new Font("Georgia", Font.BOLD, 12));
 		botonContacto.setBackground(new Color(209, 188, 214));
-		botonContacto.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+		botonContacto.setText(contacto.getNombre());
 		botonesContacto.put(botonContacto, contacto);
 		contenedorContactos.add(botonContacto);
 		contenedorContactos.revalidate();
@@ -224,7 +224,7 @@ public class VentanaGestionarMiembros extends JFrame {
 			}
 		} else if (modo.equals(MODO_ELIMINAR_MIEMBROS)) {
 			btnPrincipal.setText("Eliminar");
-			for (ContactoIndividual cI : Controlador.INSTANCE.getMiembros(grupo)) {
+			for (ContactoIndividual cI : grupo.getMiembros()) {
 				crearBotonContacto(cI);
 			}
 		}

@@ -60,7 +60,7 @@ public class VentanaContactos extends JFrame {
 	 */
     protected VentanaContactos() {
         setTitle("Contactos Individuales");
-        setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.png")).getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(new Color(242, 216, 245));
         setSize(400, 300);
@@ -72,7 +72,7 @@ public class VentanaContactos extends JFrame {
         listaContactos = new JList<>(modeloLista);
         listaContactos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listaContactos.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-            String texto = (value != null) ? Controlador.INSTANCE.getNombreContacto(value) : "Contacto inválido";
+            String texto = (value != null) ? value.getNombre() : "Contacto inválido";
             JLabel label = new JLabel(texto);
             if (isSelected) {
                 label.setBackground(list.getSelectionBackground());
@@ -172,7 +172,7 @@ public class VentanaContactos extends JFrame {
         if (seleccionado != null) {
             int confirm = JOptionPane.showConfirmDialog(
                     this,
-                    "¿Eliminar contacto \"" + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\"?",
+                    "¿Eliminar contacto \"" + seleccionado.getNombre() + "\"?",
                     "Confirmar eliminación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
@@ -191,9 +191,9 @@ public class VentanaContactos extends JFrame {
     private void mostrarInformacionContacto() {
     	ContactoIndividual seleccionado = listaContactos.getSelectedValue();
     	if (seleccionado != null) {
-    		String mensaje = "Nombre: \t" + Controlador.INSTANCE.getNombreContacto(seleccionado) +
+    		String mensaje = "Nombre: \t" + seleccionado.getNombre() +
     				"\nMóvil: \t" + Controlador.INSTANCE.getMovilContactoIndividual(seleccionado) +
-    				"\nSaludo: \t" + Controlador.INSTANCE.getSaludoContacto(seleccionado);
+    				"\nSaludo: \t" + seleccionado.getSaludo();
 
     		Object[] opciones = {"Aceptar", "Chatear", "Cambiar Nombre"};
     		int resultado = JOptionPane.showOptionDialog(
@@ -222,7 +222,7 @@ public class VentanaContactos extends JFrame {
 	 */
 	private void cambiarNombre(ContactoIndividual contacto) {
 		JTextField campoNuevoNombre = new JTextField();
-		campoNuevoNombre.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+		campoNuevoNombre.setText(contacto.getNombre());
 		Object[] campos = { "Nuevo Nombre:", campoNuevoNombre };
 
 		int resultado = JOptionPane.showConfirmDialog(this, campos, "Cambiar Nombre", JOptionPane.OK_CANCEL_OPTION);

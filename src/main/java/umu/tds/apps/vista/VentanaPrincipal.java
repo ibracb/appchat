@@ -170,7 +170,7 @@ public class VentanaPrincipal extends JFrame {
 		menuBar = new JMenuBar();
 		panel.add(menuBar);
 
-		MTuContacto = new JMenu(Controlador.INSTANCE.getNombreUsuarioActual());
+		MTuContacto = new JMenu(Controlador.INSTANCE.getUsuarioActual().getNombre());
 		MTuContacto.setFont(new Font("Georgia", Font.BOLD, 12));
 		MTuContacto.setPreferredSize(new Dimension(170, 30));
 		MTuContacto.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -251,7 +251,7 @@ public class VentanaPrincipal extends JFrame {
 		panelCentral.add(panelInfo, BorderLayout.NORTH);
 
 		if (contacto != null) {
-			lblContactoChat = new JLabel(Controlador.INSTANCE.getNombreContacto(contacto));
+			lblContactoChat = new JLabel(contacto.getNombre());
 		} else {
 			lblContactoChat = new JLabel("");
 		}
@@ -367,9 +367,9 @@ public class VentanaPrincipal extends JFrame {
 	private void enviarEmoji(int emojiIndex) {
 		if (contacto == null)
 			return;
-		else if (Controlador.INSTANCE.isContactoIndividual(contacto)) {
+		else if (contacto instanceof ContactoIndividual) {
 			Controlador.INSTANCE.registrarMensajeContacto((ContactoIndividual) contacto, "", emojiIndex);
-		} else if (Controlador.INSTANCE.isGrupo(contacto)) {
+		} else if (contacto instanceof Grupo) {
 			Controlador.INSTANCE.registrarMensajeGrupo((Grupo) contacto, "", emojiIndex);
 		}
 		recuperarMensajes();
@@ -426,7 +426,7 @@ public class VentanaPrincipal extends JFrame {
 			actualizarImagenEnInterfaz(image);
 
 			JOptionPane.showMessageDialog(this,
-					"Imagen de " + Controlador.INSTANCE.getNombreUsuarioActual() + " modificada", "Cambio de imagen OK",
+					"Imagen de " + Controlador.INSTANCE.getUsuarioActual().getNombre() + " modificada", "Cambio de imagen OK",
 					JOptionPane.INFORMATION_MESSAGE);
 
 		} catch (Exception e) {
@@ -468,7 +468,7 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	@SuppressWarnings("deprecation")
 	private void cargarImagenPerfilUsuario() {
-		String rutaImagen = Controlador.INSTANCE.getImagenUsuarioActual();
+		String rutaImagen = Controlador.INSTANCE.getUsuarioActual().getImagen();
 		if (rutaImagen != null && !rutaImagen.isEmpty()) {
 			try {
 				URL url = new URL(rutaImagen);
@@ -487,7 +487,7 @@ public class VentanaPrincipal extends JFrame {
 	 * iniciar la ventana y después de cambiar la imagen.
 	 */
 	private void refrescarImagen() {
-		String rutaImagen = Controlador.INSTANCE.getImagenUsuarioActual();
+		String rutaImagen = Controlador.INSTANCE.getUsuarioActual().getImagen();
 		ImageIcon iconoOriginal = new ImageIcon(rutaImagen);
 		Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH);
 		ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
@@ -498,7 +498,7 @@ public class VentanaPrincipal extends JFrame {
 	 * Genera un PDF con el listado de contactos del usuario actual.
 	 */
 	private void gestionarPdfListado() {
-		if (Controlador.INSTANCE.isPremiumUsuarioActual()) {
+		if (Controlador.INSTANCE.getUsuarioActual().isPremium()) {
 			if (Controlador.INSTANCE.generarPdfListado()) {
 				JOptionPane.showMessageDialog(this,
 						"Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo", "Pdf ok",
@@ -516,8 +516,8 @@ public class VentanaPrincipal extends JFrame {
 	 * Genera un PDF del chat actual con el contacto seleccionado.
 	 */
 	private void gestionarPdfChat() {
-		if (Controlador.INSTANCE.isPremiumUsuarioActual()) {
-			if (contacto != null && Controlador.INSTANCE.isContactoIndividual(contacto)) {
+		if (Controlador.INSTANCE.getUsuarioActual().isPremium()) {
+			if (contacto != null && contacto instanceof ContactoIndividual) {
 				if (Controlador.INSTANCE.generarPdfChat((ContactoIndividual) contacto)) {
 					JOptionPane.showMessageDialog(this,
 							"Se ha generado el pdf exitosamente, en la carpeta de Descargas. Disfrútalo", "Pdf ok",
@@ -541,14 +541,14 @@ public class VentanaPrincipal extends JFrame {
 	 * suscripción premium del usuario actual.
 	 */
 	private void abrirPremium() {
-		if (!Controlador.INSTANCE.isPremiumUsuarioActual()) {
+		if (!Controlador.INSTANCE.getUsuarioActual().isPremium()) {
 			int respuestaActivar = JOptionPane.showConfirmDialog(this, "¿Desea activar premium?", "Gestión premium",
 					JOptionPane.YES_NO_OPTION);
 			if (respuestaActivar == JOptionPane.YES_OPTION) {
 				Controlador.INSTANCE.activarPremiumUsuarioActual();
 				JOptionPane.showMessageDialog(this,
-						"Premium activado, aplicando el " + Controlador.INSTANCE.getNombreDescuentoUsuarioActual() + ". Gracias por esos "
-								+ (Usuario.PRECIO_INICIAL - Controlador.INSTANCE.getDescuentoCalculadoUsuarioActual())
+						"Premium activado, aplicando el " + Controlador.INSTANCE.getUsuarioActual().getNombreDescuento() + ". Gracias por esos "
+								+ (Usuario.PRECIO_INICIAL - Controlador.INSTANCE.getUsuarioActual().getDescuentoCalculado())
 								+ " euros",
 						"Gestión premium", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -626,15 +626,15 @@ public class VentanaPrincipal extends JFrame {
 		chat.repaint();
 
 		Controlador.INSTANCE.getMensajesInvertidos(contacto).forEach(mensaje -> {
-			String textoMensaje = Controlador.INSTANCE.getTextoMensaje(mensaje);
-			int emojiMensaje = Controlador.INSTANCE.getEmojiMensaje(mensaje); // Obtener el emoji de ESTE mensaje
+			String textoMensaje = mensaje.getTexto();
+			int emojiMensaje = mensaje.getEmoticono(); // Obtener el emoji de ESTE mensaje
 																				// específico
 
-			if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.ENVIADO)) {
-				crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreUsuarioActual(), BubbleText.SENT,
+			if (mensaje.getTipo().equals(TipoMensaje.ENVIADO)) {
+				crearMensaje(textoMensaje, Controlador.INSTANCE.getUsuarioActual().getNombre(), BubbleText.SENT,
 						emojiMensaje);
-			} else if (Controlador.INSTANCE.getTipoMensaje(mensaje).equals(TipoMensaje.RECIBIDO)) {
-				crearMensaje(textoMensaje, Controlador.INSTANCE.getNombreContacto(contacto), BubbleText.RECEIVED,
+			} else if (mensaje.getTipo().equals(TipoMensaje.RECIBIDO)) {
+				crearMensaje(textoMensaje, contacto.getNombre(), BubbleText.RECEIVED,
 						emojiMensaje);
 			}
 		});
@@ -655,9 +655,13 @@ public class VentanaPrincipal extends JFrame {
 		String texto = textArea.getText().trim();
 		if (texto.isEmpty()) {
 			return;
-		} else if (Controlador.INSTANCE.isContactoIndividual(contacto)) {
+		}
+		if (contacto == null) {
+			return;
+		}
+		if (contacto instanceof ContactoIndividual) {
 			Controlador.INSTANCE.registrarMensajeContacto((ContactoIndividual) contacto, texto, Mensaje.ICONO_NULL);
-		} else if (Controlador.INSTANCE.isGrupo(contacto)) {
+		} else if (contacto instanceof Grupo) {
 			Controlador.INSTANCE.registrarMensajeGrupo((Grupo) contacto, texto, Mensaje.ICONO_NULL);
 		}
 		textArea.setText("");
@@ -674,9 +678,9 @@ public class VentanaPrincipal extends JFrame {
 	private void crearContenedoresContactos(Contacto contacto) {
 		Boolean isAnadido = true;
 		if (contacto instanceof ContactoIndividual) {
-			isAnadido = Controlador.INSTANCE.isContactoIndividualAñadido((ContactoIndividual) contacto);
+			isAnadido = ((ContactoIndividual) contacto).isAñadido();
 		}
-		Mensaje msg = Controlador.INSTANCE.getUltimoMensaje(contacto);
+		Mensaje msg = contacto.getUltimoMensaje();
 		boolean tieneMensaje = msg != null;
 
 		JButton contenedor = new JButton();
@@ -691,7 +695,7 @@ public class VentanaPrincipal extends JFrame {
 
 		contenedor.addActionListener(e -> {
 			this.contacto = contacto;
-			lblContactoChat.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+			lblContactoChat.setText(contacto.getNombre());
 			recuperarMensajes();
 		});
 
@@ -724,7 +728,7 @@ public class VentanaPrincipal extends JFrame {
 
 		gbc_contenedor.gridx = 1;
 		gbc_contenedor.anchor = GridBagConstraints.CENTER;
-		contenedor.add(new JLabel(Controlador.INSTANCE.getNombreContacto(contacto)), gbc_contenedor);
+		contenedor.add(new JLabel(contacto.getNombre()), gbc_contenedor);
 
 		gbc_contenedor.gridx = 2;
 		gbc_contenedor.anchor = GridBagConstraints.EAST;
@@ -746,8 +750,8 @@ public class VentanaPrincipal extends JFrame {
 		panelTextoBoton.setOpaque(false); // para heredar el fondo del contenedor
 
 		if (tieneMensaje) {
-			if (Controlador.INSTANCE.getEmojiMensaje(msg) != Mensaje.ICONO_NULL) {
-				ImageIcon original = BubbleText.getEmoji(Controlador.INSTANCE.getEmojiMensaje(msg));
+			if (msg.getEmoticono() != Mensaje.ICONO_NULL) {
+				ImageIcon original = BubbleText.getEmoji(msg.getEmoticono());
 				if (original != null) {
 					Image scaledImage = original.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 					ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -763,7 +767,7 @@ public class VentanaPrincipal extends JFrame {
 					panelTextoBoton.add(lblEmoji);
 				}
 			} else {
-				JTextArea texto = new JTextArea(Controlador.INSTANCE.getTextoMensaje(msg));
+				JTextArea texto = new JTextArea(msg.getTexto());
 				texto.setLineWrap(true);
 				texto.setWrapStyleWord(true);
 				texto.setEditable(false);
@@ -817,7 +821,7 @@ public class VentanaPrincipal extends JFrame {
 		List<Contacto> sinMensajes = new ArrayList<>();
 
 		for (Contacto c : listaContactos) {
-			Mensaje m = Controlador.INSTANCE.getUltimoMensaje(c);
+			Mensaje m = c.getUltimoMensaje();
 			if (m != null && m.getMomentoEnvio() != null) {
 				conMensajes.add(c);
 			} else {
@@ -827,8 +831,8 @@ public class VentanaPrincipal extends JFrame {
 
 		// Ordenar los contactos con mensajes por fecha (más recientes primero)
 		conMensajes.sort((c1, c2) -> {
-			LocalDateTime tiempo1 = Controlador.INSTANCE.getUltimoMensaje(c1).getMomentoEnvio();
-			LocalDateTime tiempo2 = Controlador.INSTANCE.getUltimoMensaje(c2).getMomentoEnvio();
+			LocalDateTime tiempo1 = c1.getUltimoMensaje().getMomentoEnvio();
+			LocalDateTime tiempo2 = c2.getUltimoMensaje().getMomentoEnvio();
 			return tiempo2.compareTo(tiempo1); // Más reciente primero
 		});
 
@@ -855,7 +859,7 @@ public class VentanaPrincipal extends JFrame {
 		JTextField campoMovil = new JTextField();
 
 		// Prellenar campoMovil con el nombre del contacto, que actúa como número
-		campoMovil.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+		campoMovil.setText(contacto.getNombre());
 		campoMovil.setEditable(false);
 
 		Object[] campos = { "Nombre:", campoNombre, "Móvil:", campoMovil };

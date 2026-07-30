@@ -195,15 +195,15 @@ public class VentanaLogin extends JFrame {
 	        JOptionPane.showMessageDialog(this, "Falta algún campo por completar: teléfono y contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
 	        return;
 	    }
-		int loginExitoso = Controlador.INSTANCE.loginUsuario(movil, contrasena);
-		if (loginExitoso == 0) {
-			JOptionPane.showMessageDialog(this, "¡Hola de nuevo, " + Controlador.INSTANCE.getNombreUsuarioActual() + "!");
+		Controlador.ResultadoLogin resultado = Controlador.INSTANCE.loginUsuario(movil, contrasena);
+		if (resultado == Controlador.ResultadoLogin.EXITO) {
+			JOptionPane.showMessageDialog(this, "¡Hola de nuevo, " + Controlador.INSTANCE.getUsuarioActual().getNombre() + "!");
 			VentanaPrincipal vPrincipal = new VentanaPrincipal();
 			dispose();
 			vPrincipal.mostrarVentanaPrincipal(this.getSize(), this.getLocation());
-		} else if (loginExitoso == -1) {
+		} else if (resultado == Controlador.ResultadoLogin.CONTRASENA_INCORRECTA) {
 			JOptionPane.showMessageDialog(this, "La contraseña no es correcta", "Error", JOptionPane.ERROR_MESSAGE);
-		} else if (loginExitoso == -2) {
+		} else if (resultado == Controlador.ResultadoLogin.USUARIO_NO_ENCONTRADO) {
 			JOptionPane.showMessageDialog(this, "El usuario no existe. Regístrese primero.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}

@@ -1,26 +1,74 @@
 # AppChat
 
+![Java](https://img.shields.io/badge/Java-21-blue)
+![Maven](https://img.shields.io/badge/Maven-3-red)
+![Swing](https://img.shields.io/badge/UI-Swing-orange)
+![TDS](https://img.shields.io/badge/TDS-Persistencia-purple)
+
 Autoría: [María Ballester Martínez](https://github.com/mariaballesteer), e [Ibrahim Cherif Barry](https://github.com/ibracb).
 
-Proyecto académico, de la asignatura de Tecnologías de Desarrollo de Software, perteneciente al Grado de Ingeniería Informática en la Universidad de Murcia. Consiste en un sistema de chat, inspirado en aplicaciones populares como WhatsApp.
+- Proyecto académico de la asignatura Tecnologías de Desarrollo de Software, Grado de Ingeniería Informática, Universidad de Murcia.
+- Sistema de chat de escritorio (Java Swing) inspirado en aplicaciones populares como WhatsApp: usuarios, contactos individuales, grupos, chat de mensajería, búsqueda con filtros, exportación de chats a PDF y una suscripción Premium con descuentos.
 
-Toda la documentación se encuentra en [la memoria](MemoriaTDS.pdf), pero igualmente consideramos importante redundar en cómo ejecutar AppChat sin problemas. Por ejemplo, en el sistema operativo Linux, simplemente tiene que ejecutar desde el shell la instrucción `sudo apt install maven`.
+## Arquitectura (resumen)
 
-En primer lugar, aségurese de tener instalado Maven en su máquina. Puede vrificarlo ejecutando desde el terminal el comando `mvn --version`. Si no lo está, rogamos que se lo instale.
+AppChat sigue una arquitectura en capas basada en el principio de separación Modelo-Vista-Controlador (MVC): la Vista delega en el Controlador, y este coordina la Persistencia, el Modelo y los Servicios.
 
-En segundo lugar, debe instalar una librería de chat en su repositorio local de Maven. Para ello, ejecute dentro del directorio ```AppChat``` (o bien ```AppChat-main```, que le puede salir eso si descarga el proyecto en GitHub) el siguiente comando desde el terminal:
+```mermaid
+flowchart TD
+    Vista --> Controlador
+    Controlador --> Persistencia
+    Controlador --> Modelo
+    Controlador --> Servicio
+    Persistencia --> BD[(Base de datos)]
 ```
-mvn install:install-file -Dfile=chatWindowLib.jar -DgroupId=tds -DartifactId=chat-window -Dversion="1.0.0" -Dpackaging=jar -DgeneratePom=true
+
+Más detalle, incluyendo la estructura de paquetes, en [`docs/arquitectura.md`](docs/arquitectura.md).
+
+## Requisitos previos
+
+- **Java 21+** — verificar con `java --version`
+- **Maven 3+** — verificar con `mvn --version`
+
+## Instalación de dependencias
+
+Hay que instalar dos librerías en el repositorio local de Maven antes de compilar. Ejecute los siguientes comandos desde la raíz del proyecto:
+
+```bash
+mvn install:install-file -Dfile=lib/chatWindowLib.jar -DgroupId=tds -DartifactId=chat-window -Dversion="1.0.0" -Dpackaging=jar -DgeneratePom=true
 ```
 
-En tercer lugar, debe instalar el Driver de Persistencia de TDS en su repositorio local de Maven. Para ello, ejecute dentro del directorio ```AppChat/lib``` el siguiente comando desde el terminal:  
-```
-mvn install:install-file -Dfile=DriverPersistencia.jar -DpomFile=driverPersistencia-2.0.pom
+```bash
+mvn install:install-file -Dfile=lib/DriverPersistencia.jar -DpomFile=lib/driverPersistencia-2.0.pom
 ```
 
-Una vez hecho todo esto, ya puede ejecutar AppChat. Diríjase al paquete `umu.tds.apps.aplicacion`, y ejecute la clase `AppChat.java`.
+## Iniciar el servidor de persistencia
 
-Finalmente, tiene a su disposición de unos usuarios iniciales para iniciar sesión, además de ciertos contactos añadidos y grupos, y intercambios de mensajes. Son los siguientes:
+AppChat necesita un servidor de persistencia RMI para la base de datos. En otra terminal, ejecute:
+
+```bash
+java -jar ServidorPersistenciaH2.jar
+```
+
+El servidor se queda ejecutándose en primer plano. Déjelo abierto mientras usa la aplicación.
+
+## Ejecución
+
+### Opción 1 — Con Maven (recomendada)
+```bash
+mvn compile exec:java -Dexec.mainClass="umu.tds.apps.app.AppChat"
+```
+
+### Opción 2 — Empaquetado (releases)
+```bash
+mvn package
+java -jar target/AppChat-1.0-SNAPSHOT.jar
+```
+
+## Usuarios de prueba
+
+Al arrancar, la aplicación carga una serie de usuarios, contactos, grupos y mensajes de ejemplo:
+
 |Nombre|Teléfono|Contraseña|
 |------|--------|----------|
 |maria bm|212121212|m|
@@ -31,3 +79,13 @@ Finalmente, tiene a su disposición de unos usuarios iniciales para iniciar sesi
 |maria jose tr|999999999|mj|
 |alex ll|777777777|a|
 |jorge sr|666666666|j|
+
+## Documentación
+
+Este README cubre la instalación y ejecución. Para la documentación técnica completa, consulta `docs/`:
+
+- [`docs/arquitectura.md`](docs/arquitectura.md) — arquitectura en capas y estructura de paquetes
+- [`docs/diagrama-clases.md`](docs/diagrama-clases.md) — diagrama de clases del dominio
+- [`docs/diagrama-secuencia.md`](docs/diagrama-secuencia.md) — diagrama de secuencia (flujo crear grupo)
+- [`docs/patrones-diseno.md`](docs/patrones-diseno.md) — patrones de diseño utilizados
+- [`docs/historias-de-usuario.md`](docs/historias-de-usuario.md) — historias de usuario y criterios de aceptación

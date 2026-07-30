@@ -65,7 +65,7 @@ public class VentanaGrupos extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setTitle("Grupos");
-		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.png")).getImage());
 		setBackground(new Color(242, 216, 245));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -135,7 +135,7 @@ public class VentanaGrupos extends JFrame {
 	 */
 	private void cargarGrupos() {
 		modeloLista.clear();
-		Controlador.INSTANCE.getGruposUsuarioActual().stream().filter(c -> c != null).forEach(modeloLista::addElement);
+		Controlador.INSTANCE.getUsuarioActual().getGrupos().stream().filter(c -> c != null).forEach(modeloLista::addElement);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class VentanaGrupos extends JFrame {
 		Grupo seleccionado = listaGrupos.getSelectedValue();
 		if (seleccionado != null) {
 			int confirm = JOptionPane.showConfirmDialog(this,
-					"¿Eliminar grupo \"" + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\"?",
+					"¿Eliminar grupo \"" + seleccionado.getNombre() + "\"?",
 					"Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 			if (confirm == JOptionPane.YES_OPTION) {
 				Controlador.INSTANCE.borrarGrupo(seleccionado);
@@ -198,8 +198,8 @@ public class VentanaGrupos extends JFrame {
 	private void mostrarInformacionGrupo() {
 		Grupo seleccionado = listaGrupos.getSelectedValue();
 		if (seleccionado != null) {
-			String mensaje = "Nombre:\t" + Controlador.INSTANCE.getNombreContacto(seleccionado) + "\nMiembros:\t"
-					+ Controlador.INSTANCE.getNumMiembros(seleccionado);
+			String mensaje = "Nombre:\t" + seleccionado.getNombre() + "\nMiembros:\t"
+					+ seleccionado.getMiembros().size();
 			Object[] opciones = { "Aceptar", "Chatear", "Cambiar Imagen", "Cambiar Nombre" };
 			int resultado = JOptionPane.showOptionDialog(this, mensaje, "Información del Grupo",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
@@ -222,7 +222,7 @@ public class VentanaGrupos extends JFrame {
 	 */
 	private void cambiarNombreGrupo(Grupo seleccionado) {
 		JTextField campoNuevoNombre = new JTextField();
-		Controlador.INSTANCE.getNombreContacto(seleccionado);
+		seleccionado.getNombre();
 		Object[] campos = { "Nuevo Nombre:", campoNuevoNombre };
 
 		int resultado = JOptionPane.showConfirmDialog(this, campos, "Cambiar Nombre", JOptionPane.OK_CANCEL_OPTION);

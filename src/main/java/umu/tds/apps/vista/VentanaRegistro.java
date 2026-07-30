@@ -133,7 +133,7 @@ public class VentanaRegistro extends JFrame {
 	private void initialize() {
 		getContentPane().setBackground(new Color(242, 216, 245));
 		setBounds(100, 100, 613, 464);
-		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.png")).getImage());
 		setTitle("Registrarse en AppChat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

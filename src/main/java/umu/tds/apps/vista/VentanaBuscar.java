@@ -101,7 +101,7 @@ public class VentanaBuscar extends JFrame {
 	 */
 	private void initialize() {
 		setBounds(100, 100, 798, 529);
-		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.PNG")).getImage());
+		setIconImage(new ImageIcon(getClass().getResource("/imagenes/iconoPestanas.png")).getImage());
 		setTitle("Buscar en AppChat");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -279,9 +279,9 @@ public class VentanaBuscar extends JFrame {
 		JLabel lblEmisor = new JLabel("");
 		lblEmisor.setFont(new Font("Arial", Font.BOLD, 12));
 		if (emisor == null) {
-			lblEmisor.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+			lblEmisor.setText(contacto.getNombre());
 		} else {
-			lblEmisor.setText(Controlador.INSTANCE.getNombreUsuario(emisor));
+			lblEmisor.setText(emisor.getNombre());
 		}
 		botonMensaje.add(lblEmisor, gbc);
 
@@ -291,9 +291,9 @@ public class VentanaBuscar extends JFrame {
 		JLabel lblReceptor = new JLabel("");
 		lblReceptor.setFont(new Font("Arial", Font.BOLD, 12));
 		if (receptor == null) {
-			lblReceptor.setText(Controlador.INSTANCE.getNombreContacto(contacto));
+			lblReceptor.setText(contacto.getNombre());
 		} else {
-			lblReceptor.setText(Controlador.INSTANCE.getNombreUsuario(receptor));
+			lblReceptor.setText(receptor.getNombre());
 		}
 		botonMensaje.add(lblReceptor, gbc);
 
@@ -307,12 +307,12 @@ public class VentanaBuscar extends JFrame {
 		
 		if (msg.getTexto() == null || msg.getTexto().isEmpty()) {
 			JLabel texto = new JLabel("");
-			texto.setIcon(BubbleText.getEmoji(Controlador.INSTANCE.getEmojiMensaje(msg)));
+			texto.setIcon(BubbleText.getEmoji(msg.getEmoticono()));
 			texto.setBackground(Color.WHITE);
 			botonMensaje.add(texto, gbc);
 		} else {
 			JTextArea texto = new JTextArea("");
-			texto.setText(Controlador.INSTANCE.getTextoMensaje(msg));
+			texto.setText(msg.getTexto());
 			texto.setLineWrap(true);
 			texto.setWrapStyleWord(true);
 			texto.setEditable(false);
