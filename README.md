@@ -4,6 +4,7 @@
 ![Maven](https://img.shields.io/badge/Maven-3-red)
 ![Swing](https://img.shields.io/badge/UI-Swing-orange)
 ![TDS](https://img.shields.io/badge/TDS-Persistencia-purple)
+![Universidad de Murcia](https://img.shields.io/badge/Universidad%20de%20Murcia-E03B23?style=flat&logo=graduation-cap&logoColor=white)
 
 - Autoría: [María Ballester Martínez](https://github.com/mariaballesteer), e [Ibrahim Cherif Barry](https://github.com/ibracb).
 
