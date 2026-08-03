@@ -2,7 +2,7 @@ package umu.tds.apps.persistencia;
 
 import java.util.Set;
 
-import umu.tds.apps.dominio.ContactoIndividual;
+import umu.tds.apps.modelo.ContactoIndividual;
 
 /**
  * Interfaz para el manejo de la persistencia de los contactos individuales de AppChat.

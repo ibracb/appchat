@@ -24,8 +24,8 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import umu.tds.apps.controlador.Controlador;
-import umu.tds.apps.dominio.ContactoIndividual;
-import umu.tds.apps.dominio.Grupo;
+import umu.tds.apps.modelo.ContactoIndividual;
+import umu.tds.apps.modelo.Grupo;
 
 public class VentanaGestionarMiembros extends JFrame {
 	/**

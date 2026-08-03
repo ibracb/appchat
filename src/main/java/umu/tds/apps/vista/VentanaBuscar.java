@@ -30,10 +30,10 @@ import com.toedter.calendar.JDateChooser;
 
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
-import umu.tds.apps.dominio.Contacto;
-import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.TipoMensaje;
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Contacto;
+import umu.tds.apps.modelo.Mensaje;
+import umu.tds.apps.modelo.TipoMensaje;
+import umu.tds.apps.modelo.Usuario;
 
 public class VentanaBuscar extends JFrame {
 

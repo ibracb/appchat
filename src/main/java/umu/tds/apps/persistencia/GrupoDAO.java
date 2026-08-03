@@ -2,7 +2,7 @@ package umu.tds.apps.persistencia;
 
 import java.util.Set;
 
-import umu.tds.apps.dominio.Grupo;
+import umu.tds.apps.modelo.Grupo;
 
 /**
  * Interfaz para el manejo de la persistencia de los grupos de AppChat.

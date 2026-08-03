@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import umu.tds.apps.dominio.Mensaje;
+import umu.tds.apps.modelo.Mensaje;
 import umu.tds.apps.persistencia.MensajeDAO;
 
 /**

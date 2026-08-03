@@ -1,9 +1,9 @@
-package umu.tds.apps.dominio.descuentos;
+package umu.tds.apps.modelo.descuentos;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Usuario;
 
 /**
  * Tiene la responsabilidad de asignar el descuento correspondiente al usuario.

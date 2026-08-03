@@ -2,7 +2,7 @@ package umu.tds.apps.persistencia;
 
 import java.util.Set;
 
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Usuario;
 
 /**
  * Interfaz para el manejo de la persistencia de los usuarios de AppChat.

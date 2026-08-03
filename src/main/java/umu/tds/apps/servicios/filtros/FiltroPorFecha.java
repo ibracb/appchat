@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import umu.tds.apps.dominio.Contacto;
-import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Contacto;
+import umu.tds.apps.modelo.Mensaje;
+import umu.tds.apps.modelo.Usuario;
 
 /**
  * Filtro que permite filtrar mensajes por una fecha específica.

@@ -38,12 +38,12 @@ import javax.swing.SwingUtilities;
 
 import tds.BubbleText;
 import umu.tds.apps.controlador.Controlador;
-import umu.tds.apps.dominio.Contacto;
-import umu.tds.apps.dominio.ContactoIndividual;
-import umu.tds.apps.dominio.Grupo;
-import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.TipoMensaje;
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Contacto;
+import umu.tds.apps.modelo.ContactoIndividual;
+import umu.tds.apps.modelo.Grupo;
+import umu.tds.apps.modelo.Mensaje;
+import umu.tds.apps.modelo.TipoMensaje;
+import umu.tds.apps.modelo.Usuario;
 
 /**
  * Ventana principal de la aplicación que muestra el chat y los contactos.

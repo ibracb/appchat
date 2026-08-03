@@ -4,9 +4,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import umu.tds.apps.dominio.Contacto;
-import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Contacto;
+import umu.tds.apps.modelo.Mensaje;
+import umu.tds.apps.modelo.Usuario;
 
 /**
  * Clase que representa un filtro compuesto que combina múltiples filtros.

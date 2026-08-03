@@ -1,6 +1,6 @@
-package umu.tds.apps.dominio.descuentos;
+package umu.tds.apps.modelo.descuentos;
 
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Usuario;
 
 /**
  * Clase que modela un tipo de descuento que se aplica en función de la cantidad de mensajes enviados.

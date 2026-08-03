@@ -1,8 +1,8 @@
-package umu.tds.apps.dominio.descuentos;
+package umu.tds.apps.modelo.descuentos;
 
 import java.time.temporal.ChronoUnit;
 
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Usuario;
 import umu.tds.apps.utils.Utils;
 
 /**

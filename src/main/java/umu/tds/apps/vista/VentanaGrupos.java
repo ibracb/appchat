@@ -21,7 +21,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import umu.tds.apps.controlador.Controlador;
-import umu.tds.apps.dominio.Grupo;
+import umu.tds.apps.modelo.Grupo;
 
 /**
  * Clase que representa la ventana de grupos de la aplicación, donde se pueden

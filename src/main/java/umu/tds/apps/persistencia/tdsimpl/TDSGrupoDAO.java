@@ -12,9 +12,9 @@ import beans.Entidad;
 import beans.Propiedad;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
-import umu.tds.apps.dominio.ContactoIndividual;
-import umu.tds.apps.dominio.Grupo;
-import umu.tds.apps.dominio.Mensaje;
+import umu.tds.apps.modelo.ContactoIndividual;
+import umu.tds.apps.modelo.Grupo;
+import umu.tds.apps.modelo.Mensaje;
 import umu.tds.apps.persistencia.GrupoDAO;
 import umu.tds.apps.persistencia.PoolDAO;
 

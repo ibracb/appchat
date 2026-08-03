@@ -1,4 +1,4 @@
-package umu.tds.apps.dominio;
+package umu.tds.apps.modelo;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -7,8 +7,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import umu.tds.apps.dominio.descuentos.Descuento;
-import umu.tds.apps.dominio.descuentos.FactoriaDescuentos;
+import umu.tds.apps.modelo.descuentos.Descuento;
+import umu.tds.apps.modelo.descuentos.FactoriaDescuentos;
 import umu.tds.apps.utils.Utils;
 
 /**

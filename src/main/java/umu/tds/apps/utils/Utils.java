@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class Utils {
 	
 	/**
-	 * Identificador por defecto (0) para cualquier entidad del dominio nada más ser creada.
+	 * Identificador por defecto (0) para cualquier entidad del modelo nada más ser creada.
 	 */
 	public static final int ID_DEFAULT = 0;	
 	

@@ -1,6 +1,6 @@
-# Diagrama de clases (dominio)
+# Diagrama de clases del modelo
 
-Basado en el modelado de dominio del sistema.
+Modelado del sistema.
 
 ```mermaid
 classDiagram
@@ -96,9 +96,9 @@ classDiagram
     FactoriaDescuentos ..> Descuento : crea
 ```
 
-## Notas sobre el modelo
+## Notas sobre el modelado
 
-- `Contacto` es abstracta y raíz común de `ContactoIndividual` y `Grupo` — permite que `Usuario` guarde ambos en la misma colección (`Set<Contacto>`).
+- [`Contacto`](../src/main/java/umu/tds/apps/modelo/Contacto.java) es abstracta y raíz común de [`ContactoIndividual`](../src/main/java/umu/tds/apps/modelo/ContactoIndividual.java) y [`Grupo`](../src/main/java/umu/tds/apps/modelo/Grupo.java) — permite que [`Usuario`](../src/main/java/umu/tds/apps/modelo/Usuario.java) guarde ambos en la misma colección (`Set<Contacto>`).
 - Un `ContactoIndividual` referencia al `Usuario` real de AppChat al que representa (así se obtiene su móvil o saludo actualizados).
 - `Grupo` mantiene su propia colección de `ContactoIndividual` como miembros, independiente de los contactos del usuario que creó el grupo.
-- El descuento de un `Usuario` se calcula mediante `FactoriaDescuentos` (patrón Strategy + Factory), ver [patrones-diseno.md](patrones-diseno.md).
+- El descuento de un `Usuario` se calcula mediante [`FactoriaDescuentos`](../src/main/java/umu/tds/apps/modelo/descuentos/FactoriaDescuentos.java) (patrón Strategy + Factory), ver [patrones-diseno.md](patrones-diseno.md).

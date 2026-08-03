@@ -1,6 +1,6 @@
-package umu.tds.apps.dominio.descuentos;
+package umu.tds.apps.modelo.descuentos;
 
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Usuario;
 
 /**
  * Interfaz que declara las funcionalidades genéricas de un Descuento.

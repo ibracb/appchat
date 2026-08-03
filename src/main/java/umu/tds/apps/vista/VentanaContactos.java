@@ -21,7 +21,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import umu.tds.apps.controlador.Controlador;
-import umu.tds.apps.dominio.ContactoIndividual;
+import umu.tds.apps.modelo.ContactoIndividual;
 
 /**
  * Ventana para mostrar y gestionar contactos individuales. Permite agregar,

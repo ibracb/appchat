@@ -1,4 +1,4 @@
-package umu.tds.apps.dominio;
+package umu.tds.apps.modelo;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

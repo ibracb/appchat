@@ -1,4 +1,4 @@
-package umu.tds.apps.dominio;
+package umu.tds.apps.modelo;
 
 /**
  * Enumerado que modela si un determinado mensaje ha sido enviado o recibido por el usuario.

@@ -2,9 +2,9 @@ package umu.tds.apps.servicios.filtros;
 
 import java.util.Map;
 
-import umu.tds.apps.dominio.Contacto;
-import umu.tds.apps.dominio.Mensaje;
-import umu.tds.apps.dominio.Usuario;
+import umu.tds.apps.modelo.Contacto;
+import umu.tds.apps.modelo.Mensaje;
+import umu.tds.apps.modelo.Usuario;
 
 /**
  * Interfaz que define un filtro para mensajes de un usuario.
