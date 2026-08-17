@@ -1,39 +1,53 @@
 # AppChat
 
+<p align="center">
+  <img src="assets/appchat-logo.png" alt="AppChat logo" width="128">
+</p>
+
+> A straightforward desktop chat app, inspired by WhatsApp, for staying in touch with your contacts and groups.
+
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Maven](https://img.shields.io/badge/Maven-3-red)
 ![Swing](https://img.shields.io/badge/UI-Swing-orange)
-![TDS](https://img.shields.io/badge/TDS-Persistencia-purple)
-![Universidad de Murcia](https://img.shields.io/badge/Universidad%20de%20Murcia-E03B23?style=flat&logo=graduation-cap&logoColor=white)
+![TDS](https://img.shields.io/badge/TDS-Persistence-purple)
+![University of Murcia](https://img.shields.io/badge/University%20of%20Murcia-E03B23?style=flat&logo=graduation-cap&logoColor=white)
 
-- Autoría: [María Ballester Martínez](https://github.com/mariaballesteer), e [Ibrahim Cherif Barry](https://github.com/ibracb).
+## About
 
-- Proyecto académico de la asignatura Tecnologías de Desarrollo de Software, Grado de Ingeniería Informática, Universidad de Murcia. Curso 2024/2025.
-- Sistema de chat de escritorio (Java Swing) inspirado en aplicaciones populares como WhatsApp: usuarios, contactos individuales, grupos, chat de mensajería, búsqueda con filtros, exportación de chats a PDF y una suscripción Premium con descuentos.
+AppChat is a desktop chat application inspired by popular apps like WhatsApp. Its purpose is to make it easy to stay in touch with the people around you: it brings your contacts and groups together in one place and lets you exchange messages simply and naturally. An optional Premium subscription adds a few extras for regular users.
 
-## Arquitectura (resumen)
+## Demo
 
-AppChat sigue una arquitectura en capas basada en el principio de separación Modelo-Vista-Controlador (MVC): la Vista delega en el Controlador, y este coordina la Persistencia, el Modelo y los Servicios.
+Login, open the main window (chats on the left, current chat on the right) and send messages.
 
-```mermaid
-flowchart TD
-    Vista --> Controlador
-    Controlador --> Persistencia
-    Controlador --> Modelo
-    Controlador --> Servicio
-    Persistencia --> BD[(Base de datos)]
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/812f0e06-9e84-40ac-8831-4c17fb2d3a58"
+    controls width="800"></video>
+</p>
+
+## Project structure
+
+```
+appchat/
+├── .mvn/                      # Maven wrapper config
+├── assets/                    # Image assets (logo, etc.)
+├── docs/                      # Additional documentation
+├── lib/                       # Local libraries installed into the Maven repository
+├── src/                       # Source code
+├── .gitignore                 # Files and folders ignored by Git
+├── pom.xml                    # Maven build configuration
+├── README.md                  # Main documentation
+└── ServidorPersistenciaH2.jar # RMI persistence server
 ```
 
-Más detalle, incluyendo la estructura de paquetes, en [`docs/arquitectura.md`](docs/arquitectura.md).
+## Requirements
 
-## Requisitos previos
+- **Java 21+** — check with `java --version`
+- **Maven 3+** — check with `mvn --version`
 
-- **Java 21+** — verificar con `java --version`
-- **Maven 3+** — verificar con `mvn --version`
+## Installing dependencies
 
-## Instalación de dependencias
-
-Hay que instalar dos librerías en el repositorio local de Maven antes de compilar. Ejecute los siguientes comandos desde la raíz del proyecto:
+Two libraries must be installed into the local Maven repository before compiling. Run the following commands from the project root:
 
 ```bash
 mvn install:install-file -Dfile=lib/chatWindowLib.jar -DgroupId=tds -DartifactId=chat-window -Dversion="1.0.0" -Dpackaging=jar -DgeneratePom=true
@@ -43,32 +57,32 @@ mvn install:install-file -Dfile=lib/chatWindowLib.jar -DgroupId=tds -DartifactId
 mvn install:install-file -Dfile=lib/DriverPersistencia.jar -DpomFile=lib/driverPersistencia-2.0.pom
 ```
 
-## Iniciar el servidor de persistencia
+## Starting the persistence server
 
-AppChat necesita un servidor de persistencia RMI para la base de datos. En otra terminal, ejecute:
+AppChat needs an RMI persistence server for the database. In another terminal, run:
 
 ```bash
 java -jar ServidorPersistenciaH2.jar
 ```
 
-El servidor se queda ejecutándose en primer plano. Déjelo abierto mientras usa la aplicación.
+The server keeps running in the foreground. Leave it open while you use the application.
 
-## Ejecución
+## Running
 
-La aplicación necesita **dos terminales abiertas a la vez**:
+The application needs **two terminals open at the same time**:
 
-1. **Terminal 1** — el servidor de persistencia (sección anterior), que debe quedar corriendo.
-2. **Terminal 2** — la aplicación:
+1. **Terminal 1** — the persistence server (previous section), which must be left running.
+2. **Terminal 2** — the application:
 
 ```bash
 mvn compile exec:java -Dexec.mainClass="umu.tds.apps.app.AppChat"
 ```
 
-## Usuarios de prueba
+## Test users
 
-Al arrancar, la aplicación carga una serie de usuarios, contactos, grupos y mensajes de ejemplo:
+On startup, the application loads a set of example users, contacts, groups and messages:
 
-|Nombre|Teléfono|Contraseña|
+|Name|Phone|Password|
 |------|--------|----------|
 |maria bm|212121212|m|
 |ibra cb|313131313|i|
@@ -79,12 +93,24 @@ Al arrancar, la aplicación carga una serie de usuarios, contactos, grupos y men
 |alex ll|777777777|a|
 |jorge sr|666666666|j|
 
-## Documentación
+## Documentation
 
-Este README cubre la instalación y ejecución. Para la documentación técnica completa, consulta `docs/`:
+This README covers installation and running. For the complete technical documentation, see [`docs/`](docs/):
 
-- [`docs/arquitectura.md`](docs/arquitectura.md) — arquitectura en capas y estructura de paquetes
-- [`docs/diagrama-clases.md`](docs/diagrama-clases.md) — diagrama de clases del modelo
-- [`docs/diagrama-secuencia.md`](docs/diagrama-secuencia.md) — diagrama de secuencia (flujo añadir contacto a grupo)
-- [`docs/patrones-diseno.md`](docs/patrones-diseno.md) — patrones de diseño utilizados
-- [`docs/historias-de-usuario.md`](docs/historias-de-usuario.md) — historias de usuario y criterios de aceptación
+- [User stories](docs/01-user-stories.md) — user stories and acceptance criteria.
+- [Class diagram](docs/02-class-diagram.md) — the class diagram of the model.
+- [Sequence diagram](docs/03-sequence-diagram.md) — the sequence diagram (flow of adding a contact to a group).
+- [Architecture](docs/04-architecture.md) — the layered architecture and the package structure.
+- [Design patterns](docs/05-design-patterns.md) — the design patterns used.
+
+## Academic context
+
+- **Subject:** Software Development Technologies
+- **Degree:** BSc in Computer Engineering
+- **University:** University of Murcia
+- **Year:** 2024–2025
+
+## Authors
+
+- **Ibrahim Cherif Barry** - [ibracb](https://github.com/ibracb)
+- **María Ballester Martínez** - [mariaballesteer](https://github.com/mariaballesteer)

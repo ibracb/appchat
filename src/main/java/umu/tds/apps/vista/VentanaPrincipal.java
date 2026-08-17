@@ -338,7 +338,7 @@ public class VentanaPrincipal extends JFrame {
 		JPanel panelEmojis = new JPanel();
 		panelEmojis.setLayout(new GridLayout(0, 5, 5, 5)); // 5 columnas, filas automáticas
 
-		for (int i = 0; i <= BubbleText.MAXICONO; i++) {
+		for (int i = 1; i <= BubbleText.MAXICONO; i++) {
 			JButton emojiButton = new JButton(BubbleText.getEmoji(i));
 			final int emojiIndex = i;
 			emojiButton.setPreferredSize(new Dimension(50, 50));
