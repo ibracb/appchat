@@ -45,7 +45,15 @@ appchat/
 - **Java 21+** — check with `java --version`
 - **Maven 3+** — check with `mvn --version`
 
-## Installing dependencies
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/ibracb/appchat.git
+cd appchat
+```
+
+## Setting up dependencies
 
 Two libraries must be installed into the local Maven repository before compiling. Run the following commands from the project root:
 
