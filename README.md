@@ -35,9 +35,9 @@ appchat/
 ├── lib/                       # Local libraries installed into the Maven repository
 ├── src/                       # Source code
 ├── .gitignore                 # Files and folders ignored by Git
-├── pom.xml                    # Maven build configuration
 ├── README.md                  # Main documentation
-└── ServidorPersistenciaH2.jar # RMI persistence server
+├── ServidorPersistenciaH2.jar # RMI persistence server
+└── pom.xml                    # Maven build configuration
 ```
 
 ## Requirements
