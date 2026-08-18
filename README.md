@@ -4,7 +4,7 @@
   <img src="assets/appchat-logo.png" alt="AppChat logo" width="128">
 </p>
 
-> A straightforward desktop chat app, inspired by WhatsApp, for staying in touch with your contacts and groups.
+> A desktop chat app, inspired by WhatsApp, for staying in touch with your contacts and groups.
 
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Maven](https://img.shields.io/badge/Maven-3-red)
@@ -12,7 +12,7 @@
 ![TDS](https://img.shields.io/badge/TDS-Persistence-purple)
 ![University of Murcia](https://img.shields.io/badge/University%20of%20Murcia-E03B23?style=flat&logo=graduation-cap&logoColor=white)
 
-## About
+## Overview
 
 AppChat is a desktop chat application inspired by popular apps like WhatsApp. Its purpose is to make it easy to stay in touch with the people around you: it brings your contacts and groups together in one place and lets you exchange messages simply and naturally. An optional Premium subscription adds a few extras for regular users.
 
