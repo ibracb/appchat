@@ -9,7 +9,6 @@
 ![Java](https://img.shields.io/badge/Java-21-blue)
 ![Maven](https://img.shields.io/badge/Maven-3-red)
 ![Swing](https://img.shields.io/badge/UI-Swing-orange)
-![TDS](https://img.shields.io/badge/TDS-Persistence-purple)
 ![University of Murcia](https://img.shields.io/badge/University%20of%20Murcia-E03B23?style=flat&logo=graduation-cap&logoColor=white)
 
 ## Overview
