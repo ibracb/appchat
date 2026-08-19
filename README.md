@@ -17,8 +17,6 @@ AppChat is a desktop chat application inspired by popular apps like WhatsApp. It
 
 ## Demo
 
-Login, open the main window (chats on the left, current chat on the right) and send messages.
-
 <p align="center">
   <video src="https://github.com/user-attachments/assets/812f0e06-9e84-40ac-8831-4c17fb2d3a58"
     controls width="800"></video>
