@@ -83,9 +83,9 @@ The application needs **two terminals open at the same time**:
 mvn compile exec:java -Dexec.mainClass="umu.tds.apps.app.AppChat"
 ```
 
-## Test users
+## Test data
 
-On startup, the application loads a set of example users, contacts, groups and messages:
+On startup, the application loads a set of example users. Each user has his own contacts, groups and messages. Here are the example users:
 
 |Name|Phone|Password|
 |------|--------|----------|
